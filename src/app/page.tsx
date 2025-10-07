@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Room from '@/components/Room';
-import ChatSystem from '@/components/ChatSystem';
-import DisjoncteurPuzzle from '@/components/DisjoncteurPuzzle';
-import CasierPuzzle from '@/components/CasierPuzzle';
-import { useSocket } from '@/hooks/useSocket';
+import { useState, useEffect } from "react";
+import Room from "@/components/Room";
+import ChatSystem from "@/components/ChatSystem";
+import DisjoncteurPuzzle from "@/components/DisjoncteurPuzzle";
+import CasierPuzzle from "@/components/CasierPuzzle";
+import { useSocket } from "@/hooks/useSocket";
 
 // Configuration des salles de Tchernobyl2 - sera définie dans le composant
 
@@ -17,7 +17,9 @@ export default function Home() {
   const [gameStarted, setGameStarted] = useState(false); // Timer démarre après le code
   const [gameEnded, setGameEnded] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
-  const [helpMessages, setHelpMessages] = useState<{[key: string]: string[]}>({});
+  const [helpMessages, setHelpMessages] = useState<{ [key: string]: string[] }>(
+    {}
+  );
   const [totalHelpUsed, setTotalHelpUsed] = useState(0);
   const [helpCooldown, setHelpCooldown] = useState<Date | undefined>(undefined);
   const [disjoncteurOpen, setDisjoncteurOpen] = useState(false);
@@ -25,271 +27,436 @@ export default function Home() {
   const [disjoncteurResolu, setDisjoncteurResolu] = useState(false);
   const [accesAdmin, setAccesAdmin] = useState(false);
   const [accessGranted, setAccessGranted] = useState(false);
-  const [accessCode, setAccessCode] = useState('');
-  const [accessError, setAccessError] = useState('');
+  const [accessCode, setAccessCode] = useState("");
+  const [accessError, setAccessError] = useState("");
   const [attempts, setAttempts] = useState(0);
   const [blockedUntil, setBlockedUntil] = useState<Date | undefined>(undefined);
   const [players, setPlayers] = useState<any[]>([]);
   const [chatMessages, setChatMessages] = useState<any[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState('');
+  const [modalContent, setModalContent] = useState("");
 
   // Configuration des salles de Tchernobyl2
-const rooms = [
-  {
-    id: 1,
-      name: 'Entrée - Hall Principal',
-      imageSrc: '/images/Hall.png',
-      description: 'Hall d\'entrée de l\'usine abandonnée. Des combinaisons de protection traînent au sol.',
-    hotspots: [
-      {
-          id: 'invitation',
-          x: 20,
-          y: 40,
-          width: 3,
-          height: 4,
-          label: 'Enveloppe sur le bureau',
-          action: () => showModal('📧 INVITATION DÉCRYPTÉE\n\n"Bienvenue dans Tchernobyl2. Le code du coffre-fort est divisé en 4 parties. Trouvez-les dans les salles :\n- Salle Serveur\n- Salle Laboratoire\n- Salle Archives\n- Salle Vestiaires\n\nTemps restant : 60 minutes"'),
-        },
+  const rooms = [
+    {
+      id: 1,
+      name: "Entrée - Hall Principal",
+      imageSrc: "/images/Hall.png",
+      description:
+        "Hall d'entrée de l'usine abandonnée. Des combinaisons de protection traînent au sol.",
+      hotspots: [
         {
-          id: 'coffre',
-        x: 70,
-          y: 30,
-          width: 2,
-          height: 3,
-          label: 'Coffre-fort à 4 chiffres',
+          id: "porte_serveur",
+          x: 89,
+          y: 41,
+          width: 8,
+          height: 48,
+          label: "🚪 Porte vers Salle Serveur",
           action: () => {
-            if (inventory.length === 4) {
-              setGameEnded(true);
-              showModal('🎉 COFFRE-FORT OUVERT !\n\n✅ Mission accomplie !\n\nVous avez trouvé la souche génétique du Covid-20 et créé le vaccin qui sauvera l\'humanité !\n\n🏆 FÉLICITATIONS !');
-            } else {
-              showModal(`🔐 COFFRE-FORT\n\nCode requis : 4 chiffres\n\nCodes collectés : ${inventory.length}/4\n\nVous devez encore collecter ${4 - inventory.length} morceau(x) de code !`);
+            setCurrentRoomIndex(1);
+            setChatMessages([]);
+            if (socket) {
+              (socket as any).emit("playerMove", { room: rooms[1].name });
             }
           },
         },
         {
-          id: 'combinaison',
-          x: 15,
-          y: 70,
-          width: 2,
-          height: 2,
-          label: 'Combinaison de protection',
-          action: () => showModal('🦺 COMBINAISON DE PROTECTION\n\nTemps de protection : 60 minutes\nRadioactivité détectée : ÉLEVÉE\n\n⚠️ Attention : Votre temps est limité !'),
-      },
-    ],
-  },
-  {
-    id: 2,
-      name: 'Salle Serveur',
-      imageSrc: '/images/serveur.png',
-      description: 'Salle des serveurs informatiques. Des ordinateurs clignotent dans l\'obscurité.',
+          id: "porte_laboratoire",
+          x: 2,
+          y: 40,
+          width: 7,
+          height: 45,
+          label: "🚪 Porte vers Salle Laboratoire",
+          action: () => {
+            setCurrentRoomIndex(2);
+            setChatMessages([]);
+            if (socket) {
+              (socket as any).emit("playerMove", { room: rooms[2].name });
+            }
+          },
+        },
+        {
+          id: "porte_archives",
+          x: 81,
+          y: 45,
+          width: 4.5,
+          height: 38,
+          label: "🚪 Porte vers Salle Archives",
+          action: () => {
+            setCurrentRoomIndex(3);
+            setChatMessages([]);
+            if (socket) {
+              (socket as any).emit("playerMove", { room: rooms[3].name });
+            }
+          },
+        },
+        {
+          id: "porte_vestiaires",
+          x: 13,
+          y: 45,
+          width: 5,
+          height: 36,
+          label: "🚪 Porte vers Salle Vestiaires",
+          action: () => {
+            setCurrentRoomIndex(4);
+            setChatMessages([]);
+            if (socket) {
+              (socket as any).emit("playerMove", { room: rooms[4].name });
+            }
+          },
+        },
+        {
+          id: "porte_securise",
+          x: 40,
+          y: 21,
+          width: 19,
+          height: 33,
+          label: "🚪 Porte vers Salle Sécurisée",
+          action: () => {
+            setCurrentRoomIndex(5);
+            setChatMessages([]);
+            if (socket) {
+              (socket as any).emit("playerMove", { room: rooms[5].name });
+            }
+          },
+        },
+      ],
+    },
+    {
+      id: 2,
+      name: "Salle Serveur",
+      imageSrc: "/images/serveur.png",
+      description:
+        "Salle des serveurs informatiques. Des ordinateurs clignotent dans l'obscurité.",
       hotspots: [
         {
-          id: 'pc',
+          id: "pc",
           x: 25,
           y: 35,
           width: 4,
           height: 5,
-          label: 'Ordinateur principal',
+          label: "Ordinateur principal",
           action: () => {
             if (!disjoncteurResolu) {
-              showModal('💻 ORDINATEUR PRINCIPAL\n\n❌ Pas d\'alimentation électrique !\n\nVous devez d\'abord réparer le disjoncteur.');
+              showModal(
+                "💻 ORDINATEUR PRINCIPAL\n\n❌ Pas d'alimentation électrique !\n\nVous devez d'abord réparer le disjoncteur."
+              );
               return;
             }
             if (!accesAdmin) {
-              showModal('💻 ORDINATEUR PRINCIPAL\n\n❌ Accès administrateur requis !\n\nVous devez d\'abord obtenir les droits d\'accès dans la salle administrateur.');
+              showModal(
+                "💻 ORDINATEUR PRINCIPAL\n\n❌ Accès administrateur requis !\n\nVous devez d'abord obtenir les droits d'accès dans la salle administrateur."
+              );
               return;
             }
-            showModal('💻 ORDINATEUR PRINCIPAL\n\n✅ Accès administrateur confirmé !\n\nOutils disponibles :\n- Déchiffreur de fichiers\n- Lecteur d\'archives\n- Accès aux dossiers');
+            showModal(
+              "💻 ORDINATEUR PRINCIPAL\n\n✅ Accès administrateur confirmé !\n\nOutils disponibles :\n- Déchiffreur de fichiers\n- Lecteur d'archives\n- Accès aux dossiers"
+            );
           },
         },
         {
-          id: 'disjoncteur',
+          id: "disjoncteur",
           x: 70,
           y: 40,
           width: 3,
           height: 4,
-          label: 'Tableau de disjoncteurs',
+          label: "Tableau de disjoncteurs",
           action: () => setDisjoncteurOpen(true),
         },
         {
-          id: 'serveur',
+          id: "serveur",
           x: 45,
           y: 60,
           width: 3,
           height: 3,
-          label: 'Serveur de données',
+          label: "Serveur de données",
           action: () => {
             if (!disjoncteurResolu) {
-              showModal('🖥️ SERVEUR DE DONNÉES\n\n❌ Pas d\'alimentation électrique !\n\nVous devez d\'abord réparer le disjoncteur pour accéder aux serveurs.');
+              showModal(
+                "🖥️ SERVEUR DE DONNÉES\n\n❌ Pas d'alimentation électrique !\n\nVous devez d'abord réparer le disjoncteur pour accéder aux serveurs."
+              );
               return;
             }
-            addToInventory('Code [1]');
-            showModal('🖥️ SERVEUR DE DONNÉES\n\n✅ Alimentation rétablie !\nFichiers d\'archives accessibles\nRapports de laboratoire disponibles\n\n✅ Code partiel trouvé : [1]');
+            addToInventory("Code [1]");
+            showModal(
+              "🖥️ SERVEUR DE DONNÉES\n\n✅ Alimentation rétablie !\nFichiers d'archives accessibles\nRapports de laboratoire disponibles\n\n✅ Code partiel trouvé : [1]"
+            );
+          },
+        },
+        {
+          id: "retour_hall",
+          x: 5,
+          y: 5,
+          width: 8,
+          height: 12,
+          label: "🚪 Retour au Hall Principal",
+          action: () => {
+            setCurrentRoomIndex(0);
+            setChatMessages([]);
+            if (socket) {
+              (socket as any).emit("playerMove", { room: rooms[0].name });
+            }
           },
         },
       ],
     },
     {
       id: 3,
-      name: 'Salle Laboratoire',
-      imageSrc: '/images/labo1.png',
-      description: 'Laboratoire de recherche. Des éprouvettes et des rapports scientifiques jonchent les tables.',
-    hotspots: [
-      {
-          id: 'rapports',
-        x: 20,
+      name: "Salle Laboratoire",
+      imageSrc: "/images/labo1.png",
+      description:
+        "Laboratoire de recherche. Des éprouvettes et des rapports scientifiques jonchent les tables.",
+      hotspots: [
+        {
+          id: "rapports",
+          x: 20,
           y: 45,
           width: 5,
           height: 4,
-          label: 'Pile de rapports',
-          action: () => showModal('📋 RAPPORTS DE RECHERCHE\n\nÉquations testées :\n- Équation A : ÉCHEC\n- Équation B : ÉCHEC\n- Équation C : SUCCÈS ✅\n\nDossier correspondant : "Équation_C_Succès"'),
+          label: "Pile de rapports",
+          action: () =>
+            showModal(
+              '📋 RAPPORTS DE RECHERCHE\n\nÉquations testées :\n- Équation A : ÉCHEC\n- Équation B : ÉCHEC\n- Équation C : SUCCÈS ✅\n\nDossier correspondant : "Équation_C_Succès"'
+            ),
         },
         {
-          id: 'chimie',
+          id: "chimie",
           x: 60,
           y: 30,
           width: 4,
           height: 5,
-          label: 'Station de chimie',
-          action: () => showModal('🧪 STATION DE CHIMIE\n\nProduits disponibles :\n- Acide chlorhydrique\n- Hydroxyde de sodium\n- Eau distillée\n\nMélange requis pour faire fondre la serrure !'),
+          label: "Station de chimie",
+          action: () =>
+            showModal(
+              "🧪 STATION DE CHIMIE\n\nProduits disponibles :\n- Acide chlorhydrique\n- Hydroxyde de sodium\n- Eau distillée\n\nMélange requis pour faire fondre la serrure !"
+            ),
         },
         {
-          id: 'equation',
-        x: 75,
+          id: "equation",
+          x: 75,
           y: 60,
           width: 3,
           height: 3,
-          label: 'Tableau d\'équations',
+          label: "Tableau d'équations",
           action: () => {
-            addToInventory('Code [2]');
-            showModal('🧮 ÉQUATION VALIDE\n\nH₂SO₄ + 2NaOH → Na₂SO₄ + 2H₂O\n\nValeurs : H=1, S=16, O=8, Na=11\n\n✅ Code partiel trouvé : [2]');
+            addToInventory("Code [2]");
+            showModal(
+              "🧮 ÉQUATION VALIDE\n\nH₂SO₄ + 2NaOH → Na₂SO₄ + 2H₂O\n\nValeurs : H=1, S=16, O=8, Na=11\n\n✅ Code partiel trouvé : [2]"
+            );
+          },
+        },
+        {
+          id: "retour_hall",
+          x: 5,
+          y: 5,
+          width: 8,
+          height: 12,
+          label: "🚪 Retour au Hall Principal",
+          action: () => {
+            setCurrentRoomIndex(0);
+            setChatMessages([]);
+            if (socket) {
+              (socket as any).emit("playerMove", { room: rooms[0].name });
+            }
           },
         },
       ],
     },
     {
       id: 4,
-      name: 'Salle Archives',
-      imageSrc: '/images/serveurOFF.png',
-      description: 'Archives poussiéreuses. Des dossiers et des documents anciens sont empilés partout.',
+      name: "Salle Archives",
+      imageSrc: "/images/serveurOFF.png",
+      description:
+        "Archives poussiéreuses. Des dossiers et des documents anciens sont empilés partout.",
       hotspots: [
         {
-          id: 'dossier_equation',
+          id: "dossier_equation",
           x: 25,
           y: 40,
-        width: 20,
+          width: 20,
           height: 15,
           label: 'Dossier "Équation_C_Succès"',
-          action: () => showModal('📁 DOSSIER ÉQUATION\n\nFichier de sauvegarde : "equation_backup.txt"\nAccès via salle serveur\n\nContient les détails de l\'équation réussie !'),
+          action: () =>
+            showModal(
+              '📁 DOSSIER ÉQUATION\n\nFichier de sauvegarde : "equation_backup.txt"\nAccès via salle serveur\n\nContient les détails de l\'équation réussie !'
+            ),
         },
         {
-          id: 'produits_chimiques',
+          id: "produits_chimiques",
           x: 60,
           y: 35,
           width: 18,
           height: 20,
           label: 'Dossier "Produits chimiques"',
-          action: () => showModal('🧪 DOSSIER PRODUITS CHIMIQUES\n\nProduits listés :\n- Acide sulfurique (corrosif)\n- Hydroxyde de sodium (piquant)\n- Eau distillée (inodore)\n\nParticipants : Dr. Smith, Dr. Johnson'),
+          action: () =>
+            showModal(
+              "🧪 DOSSIER PRODUITS CHIMIQUES\n\nProduits listés :\n- Acide sulfurique (corrosif)\n- Hydroxyde de sodium (piquant)\n- Eau distillée (inodore)\n\nParticipants : Dr. Smith, Dr. Johnson"
+            ),
         },
         {
-          id: 'archives',
-        x: 45,
-        y: 65,
+          id: "archives",
+          x: 45,
+          y: 65,
           width: 15,
           height: 12,
-          label: 'Archives générales',
+          label: "Archives générales",
           action: () => {
-            addToInventory('Code [3]');
-            showModal('📚 ARCHIVES GÉNÉRALES\n\nDocuments de recherche\nRapports d\'expériences\n\n✅ Code partiel trouvé : [3]');
+            addToInventory("Code [3]");
+            showModal(
+              "📚 ARCHIVES GÉNÉRALES\n\nDocuments de recherche\nRapports d'expériences\n\n✅ Code partiel trouvé : [3]"
+            );
+          },
+        },
+        {
+          id: "retour_hall",
+          x: 5,
+          y: 5,
+          width: 8,
+          height: 12,
+          label: "🚪 Retour au Hall Principal",
+          action: () => {
+            setCurrentRoomIndex(0);
+            setChatMessages([]);
+            if (socket) {
+              (socket as any).emit("playerMove", { room: rooms[0].name });
+            }
           },
         },
       ],
     },
     {
       id: 5,
-      name: 'Salle Vestiaires',
-      imageSrc: '/images/serveurOFF.png',
-      description: 'Vestiaires abandonnés. Des blouses de laboratoire tachées traînent sur les bancs.',
+      name: "Salle Vestiaires",
+      imageSrc: "/images/serveurOFF.png",
+      description:
+        "Vestiaires abandonnés. Des blouses de laboratoire tachées traînent sur les bancs.",
       hotspots: [
         {
-          id: 'blouses',
+          id: "blouses",
           x: 30,
           y: 45,
           width: 5,
           height: 4,
-          label: 'Blouses tachées',
-          action: () => showModal('👕 BLOUSES DE LABORATOIRE\n\nBlouse A : Taches bleues (Dr. Smith)\nBlouse B : Taches rouges (Dr. Johnson)\nBlouse C : Taches vertes (Dr. Wilson)\n\nLes couleurs correspondent aux produits chimiques !'),
+          label: "Blouses tachées",
+          action: () =>
+            showModal(
+              "👕 BLOUSES DE LABORATOIRE\n\nBlouse A : Taches bleues (Dr. Smith)\nBlouse B : Taches rouges (Dr. Johnson)\nBlouse C : Taches vertes (Dr. Wilson)\n\nLes couleurs correspondent aux produits chimiques !"
+            ),
         },
         {
-          id: 'casiers',
+          id: "casiers",
           x: 65,
           y: 30,
           width: 4,
           height: 5,
-          label: 'Casiers numérotés',
+          label: "Casiers numérotés",
           action: () => setCasierOpen(true),
         },
         {
-          id: 'indice_mur',
+          id: "indice_mur",
           x: 15,
           y: 25,
-        width: 15,
-        height: 10,
-          label: 'Indice sur le mur',
-          action: () => showModal('💡 INDICE CASIER\n\n"2 chiffres pairs, 1 chiffre impair\nNe contient pas le chiffre 4"\n\nExemples : 268, 682, 826...'),
+          width: 15,
+          height: 10,
+          label: "Indice sur le mur",
+          action: () =>
+            showModal(
+              '💡 INDICE CASIER\n\n"2 chiffres pairs, 1 chiffre impair\nNe contient pas le chiffre 4"\n\nExemples : 268, 682, 826...'
+            ),
+        },
+        {
+          id: "retour_hall",
+          x: 5,
+          y: 5,
+          width: 8,
+          height: 12,
+          label: "🚪 Retour au Hall Principal",
+          action: () => {
+            setCurrentRoomIndex(0);
+            setChatMessages([]);
+            if (socket) {
+              (socket as any).emit("playerMove", { room: rooms[0].name });
+            }
+          },
         },
       ],
     },
     {
       id: 6,
-      name: 'Salle Administrateur',
-      imageSrc: '/images/serveurOFF.png',
-      description: 'Bureau de l\'administrateur. Une porte verrouillée par 3 jauges attend.',
+      name: "Salle Administrateur",
+      imageSrc: "/images/serveurOFF.png",
+      description:
+        "Bureau de l'administrateur. Une porte verrouillée par 3 jauges attend.",
       hotspots: [
         {
-          id: 'jauges',
+          id: "jauges",
           x: 40,
           y: 35,
           width: 6,
           height: 5,
-          label: 'Serrure à 3 jauges',
+          label: "Serrure à 3 jauges",
           action: () => {
             if (inventory.length < 3) {
-              showModal('🔐 SERRURE À 3 JAUGES\n\n❌ Codes insuffisants !\n\nVous devez d\'abord collecter au moins 3 codes dans les autres salles.');
+              showModal(
+                "🔐 SERRURE À 3 JAUGES\n\n❌ Codes insuffisants !\n\nVous devez d'abord collecter au moins 3 codes dans les autres salles."
+              );
               return;
             }
-            showModal('🔐 SERRURE À 3 JAUGES\n\n✅ Codes suffisants détectés !\n\nJauge 1 : H (Hydrogène) = 1\nJauge 2 : S (Soufre) = 16\nJauge 3 : O (Oxygène) = 8\n\nRéglez les valeurs selon l\'équation trouvée !\n\n🎉 Accès administrateur obtenu !');
+            showModal(
+              "🔐 SERRURE À 3 JAUGES\n\n✅ Codes suffisants détectés !\n\nJauge 1 : H (Hydrogène) = 1\nJauge 2 : S (Soufre) = 16\nJauge 3 : O (Oxygène) = 8\n\nRéglez les valeurs selon l'équation trouvée !\n\n🎉 Accès administrateur obtenu !"
+            );
             setAccesAdmin(true);
           },
         },
         {
-          id: 'tiroir',
+          id: "tiroir",
           x: 20,
           y: 60,
           width: 2,
           height: 3,
-          label: 'Tiroir verrouillé',
+          label: "Tiroir verrouillé",
           action: () => {
-            if (!inventory.includes('Code [4]')) {
-              showModal('🗄️ TIROIR VERROUILLÉ\n\n❌ Clé du casier requise !\n\nVous devez d\'abord résoudre l\'énigme des casiers dans la salle vestiaires.');
+            if (!inventory.includes("Code [4]")) {
+              showModal(
+                "🗄️ TIROIR VERROUILLÉ\n\n❌ Clé du casier requise !\n\nVous devez d'abord résoudre l'énigme des casiers dans la salle vestiaires."
+              );
               return;
             }
-            showModal('🗄️ TIROIR OUVERT !\n\n✅ Clé du casier trouvée !\n\nContient des documents importants sur la souche génétique !');
+            showModal(
+              "🗄️ TIROIR OUVERT !\n\n✅ Clé du casier trouvée !\n\nContient des documents importants sur la souche génétique !"
+            );
           },
         },
         {
-          id: 'bureau',
+          id: "bureau",
           x: 70,
           y: 50,
           width: 15,
           height: 12,
-          label: 'Bureau de l\'admin',
-          action: () => showModal('🖥️ BUREAU ADMINISTRATEUR\n\nAccès aux fichiers système\nOutils de déchiffrage avancés\n\nCode final requis pour le coffre-fort !'),
-      },
-    ],
-  },
-];
+          label: "Bureau de l'admin",
+          action: () =>
+            showModal(
+              "🖥️ BUREAU ADMINISTRATEUR\n\nAccès aux fichiers système\nOutils de déchiffrage avancés\n\nCode final requis pour le coffre-fort !"
+            ),
+        },
+        {
+          id: "retour_hall",
+          x: 5,
+          y: 5,
+          width: 8,
+          height: 12,
+          label: "🚪 Retour au Hall Principal",
+          action: () => {
+            setCurrentRoomIndex(0);
+            setChatMessages([]);
+            if (socket) {
+              (socket as any).emit("playerMove", { room: rooms[0].name });
+            }
+          },
+        },
+      ],
+    },
+  ];
 
   const currentRoom = rooms[currentRoomIndex];
 
@@ -301,7 +468,7 @@ const rooms = [
       if (new Date() >= blockedUntil) {
         setBlockedUntil(undefined);
         setAttempts(0);
-        setAccessError('');
+        setAccessError("");
       }
     }, 1000);
 
@@ -327,7 +494,7 @@ const rooms = [
 
     const socketInstance = socket as any;
 
-    socketInstance.on('gameState', (state: any) => {
+    socketInstance.on("gameState", (state: any) => {
       setTimeLeft(state.timeLeft);
       setInventory(state.inventory);
       setDisjoncteurResolu(state.disjoncteurResolu);
@@ -336,35 +503,37 @@ const rooms = [
       setGameEnded(state.gameEnded);
     });
 
-    socketInstance.on('playersList', (playersList: any) => {
+    socketInstance.on("playersList", (playersList: any) => {
       setPlayers(playersList);
     });
 
-    socketInstance.on('chatMessage', (message: any) => {
-      setChatMessages(prev => [...prev, message]);
+    socketInstance.on("chatMessage", (message: any) => {
+      setChatMessages((prev) => [...prev, message]);
     });
 
-    socketInstance.on('playerJoined', (player: any) => {
-      console.log('Nouveau joueur:', player.name);
+    socketInstance.on("playerJoined", (player: any) => {
+      console.log("Nouveau joueur:", player.name);
     });
 
-    socketInstance.on('playerLeft', (playerId: any) => {
-      console.log('Joueur parti:', playerId);
+    socketInstance.on("playerLeft", (playerId: any) => {
+      console.log("Joueur parti:", playerId);
     });
 
     return () => {
-      socketInstance.off('gameState');
-      socketInstance.off('playersList');
-      socketInstance.off('chatMessage');
-      socketInstance.off('playerJoined');
-      socketInstance.off('playerLeft');
+      socketInstance.off("gameState");
+      socketInstance.off("playersList");
+      socketInstance.off("chatMessage");
+      socketInstance.off("playerJoined");
+      socketInstance.off("playerLeft");
     };
   }, [socket]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return `${mins.toString().padStart(2, "0")}:${secs
+      .toString()
+      .padStart(2, "0")}`;
   };
 
   const showModal = (content: string) => {
@@ -382,7 +551,7 @@ const rooms = [
       setChatMessages([]);
       // Émettre le changement de pièce
       if (socket) {
-        (socket as any).emit('playerMove', { room: rooms[newIndex].name });
+        (socket as any).emit("playerMove", { room: rooms[newIndex].name });
       }
     }
   };
@@ -395,16 +564,16 @@ const rooms = [
       setChatMessages([]);
       // Émettre le changement de pièce
       if (socket) {
-        (socket as any).emit('playerMove', { room: rooms[newIndex].name });
+        (socket as any).emit("playerMove", { room: rooms[newIndex].name });
       }
     }
   };
 
   const addToInventory = (item: string) => {
     if (!inventory.includes(item)) {
-      setInventory(prev => [...prev, item]);
+      setInventory((prev) => [...prev, item]);
       if (socket) {
-        (socket as any).emit('addToInventory', item);
+        (socket as any).emit("addToInventory", item);
       }
     }
   };
@@ -412,8 +581,12 @@ const rooms = [
   const handleAccessCode = () => {
     // Vérifier si l'utilisateur est encore bloqué
     if (blockedUntil && new Date() < blockedUntil) {
-      const remainingTime = Math.ceil((blockedUntil.getTime() - new Date().getTime()) / 1000);
-      setAccessError(`🔒 Accès bloqué ! Réessayez dans ${remainingTime} secondes.`);
+      const remainingTime = Math.ceil(
+        (blockedUntil.getTime() - new Date().getTime()) / 1000
+      );
+      setAccessError(
+        `🔒 Accès bloqué ! Réessayez dans ${remainingTime} secondes.`
+      );
       return;
     }
 
@@ -423,7 +596,7 @@ const rooms = [
       setAttempts(0);
     }
 
-    if (accessCode === '1234') {
+    if (accessCode === "1234") {
       setAccessGranted(true);
       setGameStarted(true);
       setTimeLeft(60 * 60); // Réinitialiser le timer à 60 minutes
@@ -431,7 +604,7 @@ const rooms = [
       setGameEnded(false); // Réinitialiser l'état de fin
       setDisjoncteurResolu(false); // Réinitialiser les états
       setAccesAdmin(false);
-      setAccessError('');
+      setAccessError("");
       setAttempts(0); // Réinitialiser les tentatives
       setBlockedUntil(undefined); // Réinitialiser le blocage
       // Déclencher le cooldown initial de 5 minutes dès l'entrée du code
@@ -439,21 +612,25 @@ const rooms = [
       initialCooldown.setMinutes(initialCooldown.getMinutes() + 5);
       setHelpCooldown(initialCooldown);
     } else {
-      setAttempts(prev => prev + 1);
+      setAttempts((prev) => prev + 1);
       if (attempts >= 2) {
         const blockTime = new Date();
         blockTime.setMinutes(blockTime.getMinutes() + 1); // Bloquer pendant 1 minute
         setBlockedUntil(blockTime);
-        setAccessError('⚠️ Trop de tentatives ! Accès bloqué pendant 1 minute.');
+        setAccessError(
+          "⚠️ Trop de tentatives ! Accès bloqué pendant 1 minute."
+        );
       } else {
-        setAccessError(`Code d'accès incorrect. Tentatives restantes : ${3 - attempts - 1}`);
+        setAccessError(
+          `Code d'accès incorrect. Tentatives restantes : ${3 - attempts - 1}`
+        );
       }
-      setAccessCode('');
+      setAccessCode("");
     }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleAccessCode();
     }
   };
@@ -464,33 +641,45 @@ const rooms = [
       <main className="h-screen w-screen bg-gradient-to-br from-gray-900 via-red-900 to-black flex items-center justify-center">
         <div className="text-center text-white max-w-2xl mx-auto px-8">
           <h1 className="text-6xl font-bold mb-6 text-red-400">TCHERNOBYL2</h1>
-          <h2 className="text-2xl mb-8 text-gray-300">Accès Restreint - Mission Classifiée</h2>
-          
+          <h2 className="text-2xl mb-8 text-gray-300">
+            Accès Restreint - Mission Classifiée
+          </h2>
+
           <div className="bg-black bg-opacity-50 p-8 rounded-lg mb-8">
-            <h3 className="text-xl font-bold mb-4 text-yellow-400">🔐 ACCÈS SÉCURISÉ</h3>
-            
+            <h3 className="text-xl font-bold mb-4 text-yellow-400">
+              🔐 ACCÈS SÉCURISÉ
+            </h3>
+
             {/* Timer d'urgence */}
             <div className="bg-red-900 bg-opacity-70 p-4 rounded-lg mb-6 border-l-4 border-red-500">
               <div className="flex items-center justify-center gap-4">
                 <div className="text-3xl">⏰</div>
-                <div className="text-2xl font-bold text-red-300">{formatTime(timeLeft)}</div>
+                <div className="text-2xl font-bold text-red-300">
+                  {formatTime(timeLeft)}
+                </div>
               </div>
               <div className="text-center text-red-200 text-sm mt-2">
                 ⚠️ TEMPS LIMITÉ - Radioactivité en cours !
               </div>
             </div>
-            
+
             <p className="text-lg mb-6">
-              <strong>2119</strong> - Installation Tchernobyl2<br/>
-              <strong>Classification :</strong> ULTRA SECRET<br/>
+              <strong>2119</strong> - Installation Tchernobyl2
+              <br />
+              <strong>Classification :</strong> ULTRA SECRET
+              <br />
               <strong>Accès :</strong> Personnel autorisé uniquement
             </p>
-            
+
             <div className="bg-red-900 bg-opacity-50 p-4 rounded border-l-4 border-red-500 mb-6">
-              <p className="text-red-200 font-bold">⚠️ ATTENTION : Zone de haute sécurité</p>
-              <p className="text-red-200 text-sm">Radioactivité détectée - Accès limité à 60 minutes</p>
+              <p className="text-red-200 font-bold">
+                ⚠️ ATTENTION : Zone de haute sécurité
+              </p>
+              <p className="text-red-200 text-sm">
+                Radioactivité détectée - Accès limité à 60 minutes
+              </p>
             </div>
-            
+
             {/* Messages d'urgence selon le temps restant */}
             {timeLeft < 300 && (
               <div className="bg-red-800 bg-opacity-70 p-3 rounded border-l-4 border-red-600 mb-4">
@@ -501,21 +690,30 @@ const rooms = [
             )}
             {timeLeft < 60 && (
               <div className="bg-red-900 bg-opacity-80 p-3 rounded border-l-4 border-red-700 mb-4">
-                <p className="text-red-400 font-bold animate-pulse" style={{animationDuration: '0.8s'}}>
+                <p
+                  className="text-red-400 font-bold animate-pulse"
+                  style={{ animationDuration: "0.8s" }}
+                >
                   💀 CRITIQUE ! Moins d'1 minute !
                 </p>
               </div>
             )}
             {timeLeft < 10 && (
               <div className="bg-red-950 bg-opacity-90 p-3 rounded border-l-4 border-red-800 mb-4">
-                <p className="text-red-500 font-bold animate-pulse" style={{animationDuration: '0.4s'}}>
+                <p
+                  className="text-red-500 font-bold animate-pulse"
+                  style={{ animationDuration: "0.4s" }}
+                >
                   ⚡ EXPLOSION IMMINENTE !
                 </p>
               </div>
             )}
             {timeLeft === 0 && (
               <div className="bg-black bg-opacity-90 p-3 rounded border-l-4 border-red-900 mb-4">
-                <p className="text-red-600 font-bold animate-pulse" style={{animationDuration: '0.2s'}}>
+                <p
+                  className="text-red-600 font-bold animate-pulse"
+                  style={{ animationDuration: "0.2s" }}
+                >
                   💥 MISSION ÉCHOUÉE - EXPLOSION !
                 </p>
               </div>
@@ -536,32 +734,33 @@ const rooms = [
                   maxLength={4}
                 />
               </div>
-              
+
               {accessError && (
                 <div className="text-red-400 text-sm animate-pulse">
                   ❌ {accessError}
                 </div>
               )}
-              
+
               {attempts > 0 && (
                 <div className="text-yellow-400 text-xs">
                   🔒 Tentatives : {attempts}/3
                 </div>
               )}
-              
+
               <button
                 onClick={handleAccessCode}
                 disabled={blockedUntil && new Date() < blockedUntil}
                 className={`font-bold py-3 px-8 rounded-lg text-lg transition-all duration-200 w-full ${
                   blockedUntil && new Date() < blockedUntil
-                    ? 'bg-gray-600 text-gray-400 cursor-not-allowed' 
-                    : 'bg-red-600 hover:bg-red-700 text-white hover:scale-105'
+                    ? "bg-gray-600 text-gray-400 cursor-not-allowed"
+                    : "bg-red-600 hover:bg-red-700 text-white hover:scale-105"
                 }`}
               >
-                {blockedUntil && new Date() < blockedUntil 
-                  ? `🔒 BLOQUÉ (${Math.ceil((blockedUntil.getTime() - new Date().getTime()) / 1000)}s)`
-                  : 'ACCÉDER À LA MISSION'
-                }
+                {blockedUntil && new Date() < blockedUntil
+                  ? `🔒 BLOQUÉ (${Math.ceil(
+                      (blockedUntil.getTime() - new Date().getTime()) / 1000
+                    )}s)`
+                  : "ACCÉDER À LA MISSION"}
               </button>
             </div>
           </div>
@@ -575,7 +774,9 @@ const rooms = [
     return (
       <main className="h-screen w-screen bg-gradient-to-br from-black via-red-950 to-black flex items-center justify-center">
         <div className="text-center text-white mx-auto px-8">
-          <h1 className="text-6xl font-bold text-red-600">VOUS ÊTES CONTAMINÉ</h1>
+          <h1 className="text-6xl font-bold text-red-600">
+            VOUS ÊTES CONTAMINÉ
+          </h1>
         </div>
       </main>
     );
@@ -586,19 +787,25 @@ const rooms = [
       <Room
         imageSrc={currentRoom.imageSrc}
         hotspots={currentRoom.hotspots}
-        onNavigateLeft={currentRoomIndex > 0 ? handleNavigateLeft : undefined}
-        onNavigateRight={currentRoomIndex < rooms.length - 1 ? handleNavigateRight : undefined}
-        showLeftArrow={currentRoomIndex > 0}
-        showRightArrow={currentRoomIndex < rooms.length - 1}
+        showBackButton={currentRoomIndex > 0}
+        onBack={currentRoomIndex > 0 ? () => {
+          setCurrentRoomIndex(0);
+          setChatMessages([]);
+          if (socket) {
+            (socket as any).emit('playerMove', { room: rooms[0].name });
+          }
+        } : undefined}
       />
-      
+
       {/* Interface de jeu */}
       <div className="absolute top-4 left-4 bg-black bg-opacity-80 text-white p-4 rounded-lg">
         <div className="flex items-center gap-4 mb-2">
           <div className="text-2xl">⏰</div>
-          <div className="text-xl font-bold text-red-400">{formatTime(timeLeft)}</div>
+          <div className="text-xl font-bold text-red-400">
+            {formatTime(timeLeft)}
+          </div>
         </div>
-        
+
         {/* Messages d'urgence sous le timer */}
         {timeLeft < 300 && timeLeft >= 60 && (
           <div className="text-xs text-red-400 font-bold animate-pulse">
@@ -635,7 +842,10 @@ const rooms = [
         ) : (
           <div className="space-y-1">
             {inventory.map((item, index) => (
-              <div key={index} className="text-sm bg-green-600 bg-opacity-30 px-2 py-1 rounded">
+              <div
+                key={index}
+                className="text-sm bg-green-600 bg-opacity-30 px-2 py-1 rounded"
+              >
                 {item}
               </div>
             ))}
@@ -643,30 +853,35 @@ const rooms = [
         )}
       </div>
 
-
       {/* Joueurs présents dans la pièce */}
       <div className="absolute bottom-4 left-4 bg-black bg-opacity-80 text-white p-3 rounded-lg">
         <div className="text-sm font-bold mb-2">👥 {currentRoom.name}</div>
         <div className="text-xs space-y-1">
-          {players.filter(player => player.room === currentRoom.name).length === 0 ? (
+          {players.filter((player) => player.room === currentRoom.name)
+            .length === 0 ? (
             <div className="text-gray-400">Vous êtes seul ici</div>
           ) : (
             players
-              .filter(player => player.room === currentRoom.name)
+              .filter((player) => player.room === currentRoom.name)
               .map((player, index) => (
                 <div key={player.id} className="flex items-center gap-2">
-                  <div className={`w-2 h-2 rounded-full ${
-                    index === 0 ? 'bg-green-500' : 
-                    index === 1 ? 'bg-blue-500' : 
-                    index === 2 ? 'bg-yellow-500' : 'bg-purple-500'
-                  }`}></div>
+                  <div
+                    className={`w-2 h-2 rounded-full ${
+                      index === 0
+                        ? "bg-green-500"
+                        : index === 1
+                        ? "bg-blue-500"
+                        : index === 2
+                        ? "bg-yellow-500"
+                        : "bg-purple-500"
+                    }`}
+                  ></div>
                   <span className="text-gray-300">{player.name}</span>
                 </div>
               ))
           )}
         </div>
       </div>
-
 
       {/* Système de chat avec aide intégrée */}
       <ChatSystem
@@ -676,7 +891,7 @@ const rooms = [
         messages={chatMessages}
         onSendMessage={(message) => {
           if (socket) {
-            (socket as any).emit('chatMessage', message);
+            (socket as any).emit("chatMessage", message);
           }
         }}
         helpMessages={helpMessages}
@@ -688,15 +903,15 @@ const rooms = [
           // Vérifier si on peut encore utiliser l'aide
           if (totalHelpUsed < 5) {
             // Ajouter uniquement à l'historique d'aide de la salle (pas d'envoi dans le chat)
-            setHelpMessages(prev => ({
+            setHelpMessages((prev) => ({
               ...prev,
-              [currentRoom.name]: [...(prev[currentRoom.name] || []), message]
+              [currentRoom.name]: [...(prev[currentRoom.name] || []), message],
             }));
-            
+
             // Vérifier si c'est un vrai indice ou un message de cooldown
             if (!helpCooldown || new Date() >= helpCooldown) {
               // C'est un vrai indice, incrémenter le compteur et définir le cooldown
-              setTotalHelpUsed(prev => prev + 1);
+              setTotalHelpUsed((prev) => prev + 1);
               const cooldownTime = new Date();
               cooldownTime.setMinutes(cooldownTime.getMinutes() + 5);
               setHelpCooldown(cooldownTime);
@@ -712,7 +927,9 @@ const rooms = [
         onClose={() => setDisjoncteurOpen(false)}
         onSuccess={() => {
           setDisjoncteurResolu(true);
-          showModal('⚡ COURANT RÉTABLI !\n\nLe disjoncteur fonctionne à nouveau !\nVous pouvez maintenant accéder aux ordinateurs !');
+          showModal(
+            "⚡ COURANT RÉTABLI !\n\nLe disjoncteur fonctionne à nouveau !\nVous pouvez maintenant accéder aux ordinateurs !"
+          );
           setDisjoncteurOpen(false);
         }}
       />
@@ -721,8 +938,10 @@ const rooms = [
         isOpen={casierOpen}
         onClose={() => setCasierOpen(false)}
         onSuccess={() => {
-          addToInventory('Code [4]');
-          showModal('🔐 CASIER OUVERT !\n\n✅ Code partiel trouvé : [4]\n\nVous avez trouvé la clé du casier !');
+          addToInventory("Code [4]");
+          showModal(
+            "🔐 CASIER OUVERT !\n\n✅ Code partiel trouvé : [4]\n\nVous avez trouvé la clé du casier !"
+          );
           setCasierOpen(false);
         }}
       />
@@ -731,12 +950,14 @@ const rooms = [
       {modalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-base-300 rounded-lg shadow-2xl max-w-2xl w-full mx-4 p-6">
-            <h3 className="font-bold text-lg mb-4 text-base-content">Information</h3>
+            <h3 className="font-bold text-lg mb-4 text-base-content">
+              Information
+            </h3>
             <div className="whitespace-pre-line text-base-content mb-6">
               {modalContent}
             </div>
             <div className="flex justify-end">
-              <button 
+              <button
                 className="btn btn-primary"
                 onClick={() => setModalOpen(false)}
               >
@@ -744,7 +965,7 @@ const rooms = [
               </button>
             </div>
           </div>
-      </div>
+        </div>
       )}
     </main>
   );

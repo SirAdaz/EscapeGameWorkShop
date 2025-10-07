@@ -1,9 +1,8 @@
 'use client';
 
-import Image from 'next/image';
-import Hotspot from './Hotspot';
+import { useState } from 'react';
 
-interface HotspotData {
+interface Hotspot {
   id: string;
   x: number;
   y: number;
@@ -15,71 +14,94 @@ interface HotspotData {
 
 interface RoomProps {
   imageSrc: string;
-  hotspots: HotspotData[];
-  onNavigateLeft?: () => void;
-  onNavigateRight?: () => void;
-  showLeftArrow?: boolean;
-  showRightArrow?: boolean;
+  hotspots: Hotspot[];
+  showBackButton?: boolean;
+  onBack?: () => void;
 }
 
 export default function Room({
   imageSrc,
   hotspots,
-  onNavigateLeft,
-  onNavigateRight,
-  showLeftArrow = false,
-  showRightArrow = false,
+  showBackButton = false,
+  onBack
 }: RoomProps) {
+  const [hoveredArea, setHoveredArea] = useState<string | null>(null);
+
+  // Fonction pour convertir les coordonnées en pourcentages responsive
+  const convertToResponsive = (hotspot: any) => {
+    // Si les coordonnées sont en pixels (grandes valeurs), les convertir en pourcentages
+    if (hotspot.x > 100) {
+      // Dimensions de référence de l'image originale
+      // Ajuste ces valeurs selon les dimensions réelles de ton image Hall.png
+      const imageWidth = 1920;  // Largeur originale de l'image (à ajuster)
+      const imageHeight = 1080; // Hauteur originale de l'image (à ajuster)
+      
+      return {
+        x: (hotspot.x / imageWidth) * 100,
+        y: (hotspot.y / imageHeight) * 100,
+        width: (hotspot.width / imageWidth) * 100,
+        height: (hotspot.height / imageHeight) * 100
+      };
+    } else {
+      // Déjà en pourcentages
+      return {
+        x: hotspot.x,
+        y: hotspot.y,
+        width: hotspot.width,
+        height: hotspot.height
+      };
+    }
+  };
+
   return (
-    <div className="relative h-screen w-screen overflow-hidden cursor-default">
+    <div className="relative h-screen w-screen overflow-hidden">
       {/* Image de fond */}
-      <Image
-        src={imageSrc}
-        alt="Pièce de l'escape game"
-        fill
-        className="object-cover"
-        priority
+      <img 
+        src={imageSrc} 
+        alt="Room" 
+        className="absolute inset-0 w-full h-auto object-cover object-center"
       />
+      
+      {/* Zones cliquables CSS */}
+      {hotspots.map((hotspot) => {
+        const responsiveCoords = convertToResponsive(hotspot);
+        return (
+          <div
+            key={hotspot.id}
+            className="absolute cursor-crosshair hover:bg-yellow-400 hover:bg-opacity-20 transition-all duration-200"
+            style={{
+              left: `${responsiveCoords.x}%`,
+              top: `${responsiveCoords.y}%`,
+              width: `${responsiveCoords.width}%`,
+              height: `${responsiveCoords.height}%`,
+              zIndex: 10
+            }}
+            onClick={hotspot.action}
+            onMouseEnter={() => setHoveredArea(hotspot.id)}
+            onMouseLeave={() => setHoveredArea(null)}
+          />
+        );
+      })}
 
-      {/* Hotspots interactifs */}
-      {hotspots.map((hotspot) => (
-        <Hotspot
-          key={hotspot.id}
-          x={hotspot.x}
-          y={hotspot.y}
-          width={hotspot.width}
-          height={hotspot.height}
-          onClick={hotspot.action}
-          label={hotspot.label}
-        />
-      ))}
-
-      {/* Flèche de navigation gauche */}
-      {showLeftArrow && onNavigateLeft && (
-        <button
-          onClick={onNavigateLeft}
-          className="absolute left-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white text-4xl p-4 rounded-full transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-yellow-300"
-          aria-label="Pièce précédente"
-        >
-          ⬅️
-        </button>
+      {/* Bouton de retour en bas au centre */}
+      {showBackButton && onBack && (
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-30">
+          <button
+            onClick={onBack}
+            className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-200 hover:scale-105 flex items-center gap-2"
+          >
+            <span>←</span>
+            Retour au Hall Principal
+          </button>
+        </div>
       )}
 
-      {/* Flèche de navigation droite */}
-      {showRightArrow && onNavigateRight && (
-        <button
-          onClick={onNavigateRight}
-          className="absolute right-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white text-4xl p-4 rounded-full transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-yellow-300"
-          aria-label="Pièce suivante"
-        >
-          ➡️
-        </button>
+      {/* Tooltip pour l'élément survolé */}
+      {hoveredArea && (
+        <div className="absolute pointer-events-none z-20 bg-black bg-opacity-80 text-white px-3 py-2 rounded-lg text-sm font-bold animate-pulse">
+          {hotspots.find(h => h.id === hoveredArea)?.label}
+        </div>
       )}
-
-      {/* Indicateur de pièce (optionnel) */}
-      <div className="absolute top-4 left-4 bg-black bg-opacity-50 text-white px-4 py-2 rounded-lg">
-        <span className="text-sm font-medium">Escape Game</span>
-      </div>
     </div>
   );
 }
