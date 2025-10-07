@@ -39,7 +39,7 @@ const rooms = [
   {
     id: 1,
       name: 'Entrée - Hall Principal',
-      imageSrc: '/images/eder-pozo-perez-kULiKsPCzIc-unsplash.jpg',
+      imageSrc: '/images/Hall.png',
       description: 'Hall d\'entrée de l\'usine abandonnée. Des combinaisons de protection traînent au sol.',
     hotspots: [
       {
