@@ -81,15 +81,3 @@ Dans un monde post-apocalyptique 2119, une souche mutée du Covid-20 menace l'hu
 ## 📝 Développement
 
 Ce projet a été développé dans le cadre d'un workshop EPSI 2025-26 sur les technologies web modernes.
-
-## 🚀 Déploiement
-
-Le projet peut être déployé sur :
-- Vercel (recommandé pour Next.js)
-- Netlify
-- Heroku
-- Tout hébergeur supportant Node.js
-
-## 📄 Licence
-
-Ce projet est sous licence MIT.
