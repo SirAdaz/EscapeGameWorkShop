@@ -572,49 +572,38 @@ const rooms = [
       
       {/* Interface de jeu */}
       <div className="absolute top-4 left-4 bg-black bg-opacity-80 text-white p-4 rounded-lg">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 mb-2">
           <div className="text-2xl">⏰</div>
           <div className="text-xl font-bold text-red-400">{formatTime(timeLeft)}</div>
         </div>
-      </div>
-
-
-      {/* Messages d'urgence uniquement */}
-      {timeLeft < 300 && (
-        <div className="absolute top-4 right-4 bg-red-900 bg-opacity-90 text-white p-3 rounded-lg">
+        
+        {/* Messages d'urgence sous le timer */}
+        {timeLeft < 300 && timeLeft >= 60 && (
           <div className="text-xs text-red-400 font-bold animate-pulse">
             ⚠️ URGENCE ! Moins de 5 minutes !
           </div>
-        </div>
-      )}
-      {timeLeft < 60 && (
-        <div className="absolute top-4 right-4 bg-red-900 bg-opacity-90 text-white p-3 rounded-lg">
+        )}
+        {timeLeft < 60 && timeLeft >= 10 && (
           <div className="text-xs text-red-600 font-bold animate-bounce">
             🚨 CRITIQUE ! Moins d'1 minute !
           </div>
-        </div>
-      )}
-      {timeLeft < 10 && (
-        <div className="absolute top-4 right-4 bg-red-900 bg-opacity-90 text-white p-3 rounded-lg">
+        )}
+        {timeLeft < 10 && timeLeft >= 3 && (
           <div className="text-xs text-red-800 font-bold animate-ping">
             💀 DERNIÈRES SECONDES !
           </div>
-        </div>
-      )}
-      {timeLeft < 3 && (
-        <div className="absolute top-4 right-4 bg-red-900 bg-opacity-90 text-white p-3 rounded-lg">
+        )}
+        {timeLeft < 3 && timeLeft > 0 && (
           <div className="text-xs text-red-900 font-bold animate-spin">
             ⚡ EXPLOSION IMMINENTE !
           </div>
-        </div>
-      )}
-      {timeLeft === 0 && (
-        <div className="absolute top-4 right-4 bg-red-900 bg-opacity-90 text-white p-3 rounded-lg">
+        )}
+        {timeLeft === 0 && (
           <div className="text-xs text-red-950 font-bold animate-pulse">
             💥 MISSION ÉCHOUÉE !
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Inventaire */}
       <div className="absolute top-4 right-4 bg-black bg-opacity-80 text-white p-4 rounded-lg max-w-xs">
