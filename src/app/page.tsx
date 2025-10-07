@@ -381,7 +381,7 @@ const rooms = [
     if (accessCode === '1234') {
       setAccessGranted(true);
       setGameStarted(true);
-      setTimeLeft(60 * 60); // Réinitialiser le timer à 60 minutes
+        setTimeLeft(60 * 60); // Réinitialiser le timer à 60 minutes
       setInventory([]); // Réinitialiser l'inventaire
       setGameEnded(false); // Réinitialiser l'état de fin
       setDisjoncteurResolu(false); // Réinitialiser les états
@@ -447,21 +447,21 @@ const rooms = [
             )}
             {timeLeft < 60 && (
               <div className="bg-red-900 bg-opacity-80 p-3 rounded border-l-4 border-red-700 mb-4">
-                <p className="text-red-400 font-bold animate-bounce">
+                <p className="text-red-400 font-bold animate-pulse" style={{animationDuration: '0.8s'}}>
                   💀 CRITIQUE ! Moins d'1 minute !
                 </p>
               </div>
             )}
             {timeLeft < 10 && (
               <div className="bg-red-950 bg-opacity-90 p-3 rounded border-l-4 border-red-800 mb-4">
-                <p className="text-red-500 font-bold animate-ping">
+                <p className="text-red-500 font-bold animate-pulse" style={{animationDuration: '0.4s'}}>
                   ⚡ EXPLOSION IMMINENTE !
                 </p>
               </div>
             )}
             {timeLeft === 0 && (
               <div className="bg-black bg-opacity-90 p-3 rounded border-l-4 border-red-900 mb-4">
-                <p className="text-red-600 font-bold animate-pulse">
+                <p className="text-red-600 font-bold animate-pulse" style={{animationDuration: '0.2s'}}>
                   💥 MISSION ÉCHOUÉE - EXPLOSION !
                 </p>
               </div>
