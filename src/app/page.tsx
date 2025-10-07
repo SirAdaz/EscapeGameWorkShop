@@ -17,6 +17,8 @@ export default function Home() {
   const [gameStarted, setGameStarted] = useState(false); // Timer démarre après le code
   const [gameEnded, setGameEnded] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
+  const [helpMessages, setHelpMessages] = useState<{[key: string]: string[]}>({});
+  const [totalHelpUsed, setTotalHelpUsed] = useState(0);
   const [disjoncteurOpen, setDisjoncteurOpen] = useState(false);
   const [casierOpen, setCasierOpen] = useState(false);
   const [disjoncteurResolu, setDisjoncteurResolu] = useState(false);
@@ -648,7 +650,7 @@ const rooms = [
       </div>
 
 
-      {/* Système de chat pour la collaboration */}
+      {/* Système de chat avec aide intégrée */}
       <ChatSystem
         currentRoom={currentRoom.name}
         isOpen={chatOpen}
@@ -657,6 +659,22 @@ const rooms = [
         onSendMessage={(message) => {
           if (socket) {
             (socket as any).emit('chatMessage', message);
+          }
+        }}
+        helpMessages={helpMessages}
+        timeLeft={timeLeft}
+        totalHelpUsed={totalHelpUsed}
+        maxHelpAllowed={5}
+        onSendHelpMessage={(message) => {
+          // Vérifier si on peut encore utiliser l'aide
+          if (totalHelpUsed < 5) {
+            // Ajouter uniquement à l'historique d'aide de la salle (pas d'envoi dans le chat)
+            setHelpMessages(prev => ({
+              ...prev,
+              [currentRoom.name]: [...(prev[currentRoom.name] || []), message]
+            }));
+            // Incrémenter le compteur d'aide utilisée
+            setTotalHelpUsed(prev => prev + 1);
           }
         }}
       />
