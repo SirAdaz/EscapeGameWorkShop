@@ -25,6 +25,7 @@ export default function Home() {
   const [accessCode, setAccessCode] = useState('');
   const [accessError, setAccessError] = useState('');
   const [attempts, setAttempts] = useState(0);
+  const [blockedUntil, setBlockedUntil] = useState<Date | undefined>(undefined);
   const [players, setPlayers] = useState<any[]>([]);
   const [chatMessages, setChatMessages] = useState<any[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
@@ -289,6 +290,21 @@ const rooms = [
 
   const currentRoom = rooms[currentRoomIndex];
 
+  // Mise à jour du temps de blocage en temps réel
+  useEffect(() => {
+    if (!blockedUntil) return;
+
+    const interval = setInterval(() => {
+      if (new Date() >= blockedUntil) {
+        setBlockedUntil(undefined);
+        setAttempts(0);
+        setAccessError('');
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [blockedUntil]);
+
   // Gestion des événements Socket.io
   useEffect(() => {
     if (!socket) return;
@@ -378,19 +394,37 @@ const rooms = [
   };
 
   const handleAccessCode = () => {
+    // Vérifier si l'utilisateur est encore bloqué
+    if (blockedUntil && new Date() < blockedUntil) {
+      const remainingTime = Math.ceil((blockedUntil.getTime() - new Date().getTime()) / 1000);
+      setAccessError(`🔒 Accès bloqué ! Réessayez dans ${remainingTime} secondes.`);
+      return;
+    }
+
+    // Si le blocage est terminé, le réinitialiser
+    if (blockedUntil && new Date() >= blockedUntil) {
+      setBlockedUntil(undefined);
+      setAttempts(0);
+    }
+
     if (accessCode === '1234') {
       setAccessGranted(true);
       setGameStarted(true);
-        setTimeLeft(60 * 60); // Réinitialiser le timer à 60 minutes
+      setTimeLeft(60 * 60); // Réinitialiser le timer à 60 minutes
       setInventory([]); // Réinitialiser l'inventaire
       setGameEnded(false); // Réinitialiser l'état de fin
       setDisjoncteurResolu(false); // Réinitialiser les états
       setAccesAdmin(false);
       setAccessError('');
+      setAttempts(0); // Réinitialiser les tentatives
+      setBlockedUntil(undefined); // Réinitialiser le blocage
     } else {
       setAttempts(prev => prev + 1);
       if (attempts >= 2) {
-        setAccessError('⚠️ Trop de tentatives ! Accès bloqué temporairement.');
+        const blockTime = new Date();
+        blockTime.setMinutes(blockTime.getMinutes() + 1); // Bloquer pendant 1 minute
+        setBlockedUntil(blockTime);
+        setAccessError('⚠️ Trop de tentatives ! Accès bloqué pendant 1 minute.');
       } else {
         setAccessError(`Code d'accès incorrect. Tentatives restantes : ${3 - attempts - 1}`);
       }
@@ -497,26 +531,19 @@ const rooms = [
               
               <button
                 onClick={handleAccessCode}
-                disabled={attempts >= 3}
+                disabled={blockedUntil && new Date() < blockedUntil}
                 className={`font-bold py-3 px-8 rounded-lg text-lg transition-all duration-200 w-full ${
-                  attempts >= 3 
+                  blockedUntil && new Date() < blockedUntil
                     ? 'bg-gray-600 text-gray-400 cursor-not-allowed' 
                     : 'bg-red-600 hover:bg-red-700 text-white hover:scale-105'
                 }`}
               >
-                {attempts >= 3 ? '🔒 ACCÈS BLOQUÉ' : '🚀 ACCÉDER À LA MISSION'}
+                {blockedUntil && new Date() < blockedUntil 
+                  ? `🔒 BLOQUÉ (${Math.ceil((blockedUntil.getTime() - new Date().getTime()) / 1000)}s)`
+                  : 'ACCÉDER À LA MISSION'
+                }
               </button>
             </div>
-          </div>
-
-          <div className="text-xs text-gray-500">
-            <p>🔒 Système de sécurité Tchernobyl2 v2.1.19</p>
-            <p>⏰ Session limitée à 60 minutes</p>
-            {attempts >= 3 && (
-              <p className="text-red-500 font-bold animate-pulse">
-                🚨 SÉCURITÉ : Accès temporairement suspendu
-              </p>
-            )}
           </div>
         </div>
       </main>
