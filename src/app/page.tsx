@@ -526,34 +526,9 @@ const rooms = [
   // Écran de fin de jeu
   if (gameEnded) {
     return (
-      <main className="h-screen w-screen bg-gradient-to-br from-gray-900 via-red-900 to-black flex items-center justify-center">
-        <div className="text-center text-white max-w-2xl mx-auto px-8">
-          <h1 className="text-5xl font-bold mb-6 text-red-400">MISSION TERMINÉE</h1>
-          <div className="bg-black bg-opacity-50 p-8 rounded-lg">
-            <p className="text-xl mb-6">
-              {timeLeft === 0 
-                ? "⏰ TEMPS ÉCOULÉ - Mission échouée !" 
-                : "🎉 MISSION RÉUSSIE - L'humanité est sauvée !"
-              }
-            </p>
-            <button
-              onClick={() => {
-                setAccessGranted(false);
-                setGameStarted(false);
-                setGameEnded(false);
-                setTimeLeft(60 * 60);
-                setInventory([]);
-                setDisjoncteurResolu(false);
-                setAccesAdmin(false);
-                setAttempts(0);
-                setAccessCode('');
-                setAccessError('');
-              }}
-              className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition-all duration-200"
-            >
-              🔄 REJOUER
-            </button>
-          </div>
+      <main className="h-screen w-screen bg-gradient-to-br from-black via-red-950 to-black flex items-center justify-center">
+        <div className="text-center text-white mx-auto px-8">
+          <h1 className="text-6xl font-bold text-red-600">VOUS ÊTES CONTAMINÉ</h1>
         </div>
       </main>
     );
