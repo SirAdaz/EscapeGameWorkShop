@@ -19,6 +19,7 @@ export default function Home() {
   const [chatOpen, setChatOpen] = useState(false);
   const [helpMessages, setHelpMessages] = useState<{[key: string]: string[]}>({});
   const [totalHelpUsed, setTotalHelpUsed] = useState(0);
+  const [helpCooldown, setHelpCooldown] = useState<Date | undefined>(undefined);
   const [disjoncteurOpen, setDisjoncteurOpen] = useState(false);
   const [casierOpen, setCasierOpen] = useState(false);
   const [disjoncteurResolu, setDisjoncteurResolu] = useState(false);
@@ -307,6 +308,19 @@ const rooms = [
     return () => clearInterval(interval);
   }, [blockedUntil]);
 
+  // Mise à jour du cooldown d'aide en temps réel
+  useEffect(() => {
+    if (!helpCooldown) return;
+
+    const interval = setInterval(() => {
+      if (new Date() >= helpCooldown) {
+        setHelpCooldown(undefined);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [helpCooldown]);
+
   // Gestion des événements Socket.io
   useEffect(() => {
     if (!socket) return;
@@ -420,6 +434,10 @@ const rooms = [
       setAccessError('');
       setAttempts(0); // Réinitialiser les tentatives
       setBlockedUntil(undefined); // Réinitialiser le blocage
+      // Déclencher le cooldown initial de 5 minutes dès l'entrée du code
+      const initialCooldown = new Date();
+      initialCooldown.setMinutes(initialCooldown.getMinutes() + 5);
+      setHelpCooldown(initialCooldown);
     } else {
       setAttempts(prev => prev + 1);
       if (attempts >= 2) {
@@ -665,6 +683,7 @@ const rooms = [
         timeLeft={timeLeft}
         totalHelpUsed={totalHelpUsed}
         maxHelpAllowed={5}
+        helpCooldown={helpCooldown}
         onSendHelpMessage={(message) => {
           // Vérifier si on peut encore utiliser l'aide
           if (totalHelpUsed < 5) {
@@ -673,8 +692,16 @@ const rooms = [
               ...prev,
               [currentRoom.name]: [...(prev[currentRoom.name] || []), message]
             }));
-            // Incrémenter le compteur d'aide utilisée
-            setTotalHelpUsed(prev => prev + 1);
+            
+            // Vérifier si c'est un vrai indice ou un message de cooldown
+            if (!helpCooldown || new Date() >= helpCooldown) {
+              // C'est un vrai indice, incrémenter le compteur et définir le cooldown
+              setTotalHelpUsed(prev => prev + 1);
+              const cooldownTime = new Date();
+              cooldownTime.setMinutes(cooldownTime.getMinutes() + 5);
+              setHelpCooldown(cooldownTime);
+            }
+            // Si c'est un message de cooldown, ne pas incrémenter le compteur
           }
         }}
       />

@@ -22,9 +22,10 @@ interface ChatSystemProps {
   timeLeft?: number;
   totalHelpUsed?: number;
   maxHelpAllowed?: number;
+  helpCooldown?: Date;
 }
 
-export default function ChatSystem({ currentRoom, isOpen, onToggle, messages, onSendMessage, helpMessages, onSendHelpMessage, timeLeft = 60 * 60, totalHelpUsed = 0, maxHelpAllowed = 5 }: ChatSystemProps) {
+export default function ChatSystem({ currentRoom, isOpen, onToggle, messages, onSendMessage, helpMessages, onSendHelpMessage, timeLeft = 60 * 60, totalHelpUsed = 0, maxHelpAllowed = 5, helpCooldown }: ChatSystemProps) {
   const [newMessage, setNewMessage] = useState('');
   const [activeTab, setActiveTab] = useState<'chat' | 'help'>('chat');
 
@@ -71,13 +72,27 @@ export default function ChatSystem({ currentRoom, isOpen, onToggle, messages, on
 
   const handleSendHelp = () => {
     if (onSendHelpMessage && totalHelpUsed < maxHelpAllowed) {
-      const helpMessage = getHelpMessage(timeLeft);
-      onSendHelpMessage(helpMessage);
+      if (!helpCooldown || new Date() >= helpCooldown) {
+        // Cooldown terminé, donner un vrai indice
+        const helpMessage = getHelpMessage(timeLeft);
+        onSendHelpMessage(helpMessage);
+      } else {
+        // En cooldown, donner un message préfait
+        const cooldownMessage = "⏰ Vous ne pouvez pas avoir d'aide pour l'instant. Continuez de chercher !";
+        onSendHelpMessage(cooldownMessage);
+      }
     }
   };
 
   const canUseHelp = totalHelpUsed < maxHelpAllowed;
   const helpRemaining = maxHelpAllowed - totalHelpUsed;
+  
+  const getCooldownTime = () => {
+    if (!helpCooldown) return 0;
+    const now = new Date();
+    const diff = helpCooldown.getTime() - now.getTime();
+    return Math.max(0, Math.ceil(diff / 1000));
+  };
 
   if (!isOpen) {
     return (
