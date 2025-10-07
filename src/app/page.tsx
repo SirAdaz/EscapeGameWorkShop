@@ -81,7 +81,7 @@ const rooms = [
   {
     id: 2,
       name: 'Salle Serveur',
-      imageSrc: '/images/a-friend-NZYbv1ftbmg-unsplash.jpg',
+      imageSrc: '/images/serveur.png',
       description: 'Salle des serveurs informatiques. Des ordinateurs clignotent dans l\'obscurité.',
       hotspots: [
         {
@@ -133,7 +133,7 @@ const rooms = [
     {
       id: 3,
       name: 'Salle Laboratoire',
-      imageSrc: '/images/national-cancer-institute-NaqHdUS5mno-unsplash.jpg',
+      imageSrc: '/images/labo1.png',
       description: 'Laboratoire de recherche. Des éprouvettes et des rapports scientifiques jonchent les tables.',
     hotspots: [
       {
@@ -171,7 +171,7 @@ const rooms = [
     {
       id: 4,
       name: 'Salle Archives',
-      imageSrc: '/images/marissa-lewis-Fm17vn1lmAQ-unsplash.jpg',
+      imageSrc: '/images/serveurOFF.png',
       description: 'Archives poussiéreuses. Des dossiers et des documents anciens sont empilés partout.',
       hotspots: [
         {
@@ -209,7 +209,7 @@ const rooms = [
     {
       id: 5,
       name: 'Salle Vestiaires',
-      imageSrc: '/images/eder-pozo-perez-kULiKsPCzIc-unsplash.jpg',
+      imageSrc: '/images/serveurOFF.png',
       description: 'Vestiaires abandonnés. Des blouses de laboratoire tachées traînent sur les bancs.',
       hotspots: [
         {
@@ -244,7 +244,7 @@ const rooms = [
     {
       id: 6,
       name: 'Salle Administrateur',
-      imageSrc: '/images/a-friend-NZYbv1ftbmg-unsplash.jpg',
+      imageSrc: '/images/serveurOFF.png',
       description: 'Bureau de l\'administrateur. Une porte verrouillée par 3 jauges attend.',
       hotspots: [
         {
@@ -744,7 +744,7 @@ const rooms = [
               </button>
             </div>
           </div>
-        </div>
+      </div>
       )}
     </main>
   );
