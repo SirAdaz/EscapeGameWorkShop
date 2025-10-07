@@ -203,7 +203,7 @@ export default function Home() {
     {
       id: 3,
       name: "Salle Laboratoire",
-      imageSrc: "/images/labo1.png",
+      imageSrc: "/images/labo2.png",
       description:
         "Laboratoire de recherche. Des éprouvettes et des rapports scientifiques jonchent les tables.",
       hotspots: [
@@ -265,7 +265,7 @@ export default function Home() {
     {
       id: 4,
       name: "Salle Archives",
-      imageSrc: "/images/serveurOFF.png",
+      imageSrc: "/images/archive.png",
       description:
         "Archives poussiéreuses. Des dossiers et des documents anciens sont empilés partout.",
       hotspots: [
@@ -327,7 +327,7 @@ export default function Home() {
     {
       id: 5,
       name: "Salle Vestiaires",
-      imageSrc: "/images/serveurOFF.png",
+      imageSrc: "/images/vestiaire.png",
       description:
         "Vestiaires abandonnés. Des blouses de laboratoire tachées traînent sur les bancs.",
       hotspots: [
