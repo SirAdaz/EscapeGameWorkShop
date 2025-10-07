@@ -69,6 +69,9 @@ io.on('connection', (socket) => {
   // Envoyer l'état actuel au nouveau joueur
   socket.emit('gameState', gameState);
   
+  // Rejoindre la room Socket.io correspondant à la salle
+  socket.join(player.room);
+  
   // Notifier tous les joueurs du nouveau joueur
   io.emit('playerJoined', player);
   
@@ -82,7 +85,9 @@ io.on('connection', (socket) => {
       room: player.room
     };
     
-    io.emit('chatMessage', chatMessage);
+    // Envoyer le message seulement aux joueurs de la même salle
+    socket.to(player.room).emit('chatMessage', chatMessage);
+    socket.emit('chatMessage', chatMessage); // Envoyer aussi à l'expéditeur
   });
   
   // Gestion des actions de jeu
@@ -106,12 +111,19 @@ io.on('connection', (socket) => {
   socket.on('playerMove', (data) => {
     // Mettre à jour la position du joueur
     if (players[socket.id]) {
+      const oldRoom = players[socket.id].room;
       players[socket.id].room = data.room;
+      
       // Mettre à jour dans gameState aussi
       const playerIndex = gameState.players.findIndex(p => p.id === socket.id);
       if (playerIndex !== -1) {
         gameState.players[playerIndex].room = data.room;
       }
+      
+      // Changer de room Socket.io
+      socket.leave(oldRoom);
+      socket.join(data.room);
+      
       // Notifier tous les joueurs du changement
       io.emit('playersList', Object.values(players));
     }

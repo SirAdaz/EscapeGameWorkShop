@@ -52,8 +52,9 @@ export default function ChatSystem({ currentRoom, isOpen, onToggle, messages, on
       {/* Header */}
       <div className="bg-blue-600 text-white p-3 rounded-t-lg flex justify-between items-center">
         <div>
-          <div className="font-bold">💬 Chat d'Équipe</div>
+          <div className="font-bold">💬 Chat de Salle</div>
           <div className="text-xs opacity-70">Salle: {currentRoom}</div>
+          <div className="text-xs opacity-50">Messages visibles uniquement dans cette salle</div>
         </div>
         <button
           onClick={onToggle}

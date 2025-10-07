@@ -346,6 +346,8 @@ const rooms = [
     if (currentRoomIndex > 0) {
       const newIndex = currentRoomIndex - 1;
       setCurrentRoomIndex(newIndex);
+      // Réinitialiser le chat pour la nouvelle salle
+      setChatMessages([]);
       // Émettre le changement de pièce
       if (socket) {
         (socket as any).emit('playerMove', { room: rooms[newIndex].name });
@@ -357,6 +359,8 @@ const rooms = [
     if (currentRoomIndex < rooms.length - 1) {
       const newIndex = currentRoomIndex + 1;
       setCurrentRoomIndex(newIndex);
+      // Réinitialiser le chat pour la nouvelle salle
+      setChatMessages([]);
       // Émettre le changement de pièce
       if (socket) {
         (socket as any).emit('playerMove', { room: rooms[newIndex].name });
