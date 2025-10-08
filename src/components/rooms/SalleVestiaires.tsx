@@ -14,10 +14,10 @@ export const createSalleVestiaires = (
   hotspots: [
     {
       id: "blouses",
-      x: 30,
-      y: 45,
-      width: 5,
-      height: 4,
+      x: 73,
+      y: 55,
+      width: 12,
+      height: 35,
       label: "Blouses tachées",
       action: () =>
         showModal(
@@ -26,39 +26,12 @@ export const createSalleVestiaires = (
     },
     {
       id: "casiers",
-      x: 65,
-      y: 30,
+      x: 64,
+      y: 31,
       width: 4,
-      height: 5,
+      height: 20,
       label: "Casiers numérotés",
       action: () => showModal("Le casier est ouvert ! Vous trouvez une clé de laboratoire."),
-    },
-    {
-      id: "indice_mur",
-      x: 15,
-      y: 25,
-      width: 15,
-      height: 10,
-      label: "Indice sur le mur",
-      action: () =>
-        showModal(
-          '💡 INDICE CASIER\n\n"2 chiffres pairs, 1 chiffre impair\nNe contient pas le chiffre 4"\n\nExemples : 268, 682, 826...'
-        ),
-    },
-    {
-      id: "retour_hall",
-      x: 5,
-      y: 5,
-      width: 8,
-      height: 12,
-      label: "🚪 Retour au Hall Principal",
-      action: () => {
-        setCurrentRoomIndex(0);
-        setChatMessages([]);
-        if (socket) {
-          socket.emit("playerMove", { room: "Entrée - Hall Principal" });
-        }
-      },
     },
   ],
 });
