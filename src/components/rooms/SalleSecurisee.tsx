@@ -12,58 +12,21 @@ export const createSalleSecurisee = (
   name: "Salle Sécurisée",
   imageSrc: "/images/salleSecurise.png",
   description:
-    "Bureau de l'administrateur. Une porte verrouillée par 3 jauges attend.",
+    "Salle sécurisée. Un ordinateur est installé avec un code à 4 chiffres.",
   hotspots: [
     {
-      id: "jauges",
-      x: 40,
-      y: 35,
-      width: 6,
-      height: 5,
-      label: "Serrure à 3 jauges",
+      id: "ordinateur",
+      x: 82,
+      y: 48,
+      width: 14,
+      height: 25,
+      label: "Ordinateur",
       action: () => {
-        if (inventory.length < 3) {
-          showModal(
-            "🔐 SERRURE À 3 JAUGES\n\n❌ Codes insuffisants !\n\nVous devez d'abord collecter au moins 3 codes dans les autres salles."
-          );
-          return;
-        }
         showModal(
-          "🔐 SERRURE À 3 JAUGES\n\n✅ Codes suffisants détectés !\n\nJauge 1 : H (Hydrogène) = 1\nJauge 2 : S (Soufre) = 16\nJauge 3 : O (Oxygène) = 8\n\nRéglez les valeurs selon l'équation trouvée !\n\n🎉 Accès administrateur obtenu !"
+          "Ordinateur verrouillé, vous devez entrer le code"
         );
         setAccesAdmin(true);
       },
-    },
-    {
-      id: "tiroir",
-      x: 20,
-      y: 60,
-      width: 2,
-      height: 3,
-      label: "Tiroir verrouillé",
-      action: () => {
-        if (!inventory.includes("Code [4]")) {
-          showModal(
-            "🗄️ TIROIR VERROUILLÉ\n\n❌ Clé du casier requise !\n\nVous devez d'abord résoudre l'énigme des casiers dans la salle vestiaires."
-          );
-          return;
-        }
-        showModal(
-          "🗄️ TIROIR OUVERT !\n\n✅ Clé du casier trouvée !\n\nContient des documents importants sur la souche génétique !"
-        );
-      },
-    },
-    {
-      id: "bureau",
-      x: 70,
-      y: 50,
-      width: 15,
-      height: 12,
-      label: "Bureau de l'admin",
-      action: () =>
-        showModal(
-          "🖥️ BUREAU ADMINISTRATEUR\n\nAccès aux fichiers système\nOutils de déchiffrage avancés\n\nCode final requis pour le coffre-fort !"
-        ),
     },
   ],
 });
