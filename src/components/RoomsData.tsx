@@ -29,7 +29,6 @@ export interface RoomsDataProps {
   setChatMessages: (messages: any[]) => void;
   socket: Socket | null;
   showModal: (content: string) => void;
-  setDisjoncteurOpen: (open: boolean) => void;
   addToInventory: (item: string) => void;
   setAccesAdmin: (admin: boolean) => void;
   disjoncteurResolu: boolean;
@@ -42,7 +41,6 @@ export const createRoomsData = ({
   setChatMessages,
   socket,
   showModal,
-    setDisjoncteurOpen,
     addToInventory,
   setAccesAdmin,
   disjoncteurResolu,
@@ -56,7 +54,6 @@ export const createRoomsData = ({
       setChatMessages,
       socket,
       showModal,
-      setDisjoncteurOpen,
       addToInventory,
       disjoncteurResolu,
       accesAdmin

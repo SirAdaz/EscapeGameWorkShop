@@ -61,8 +61,6 @@ export const useGameState = () => {
     setGameEnded,
     accessGranted,
     setAccessGranted,
-    setDisjoncteurOpen,
-    setCasierOpen,
     disjoncteurResolu,
     setDisjoncteurResolu,
     accesAdmin,

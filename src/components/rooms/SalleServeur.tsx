@@ -5,7 +5,6 @@ export const createSalleServeur = (
   setChatMessages: (messages: any[]) => void,
   socket: any,
   showModal: (content: string) => void,
-  setDisjoncteurOpen: (open: boolean) => void,
   addToInventory: (item: string) => void,
   disjoncteurResolu: boolean,
   accesAdmin: boolean
@@ -48,7 +47,7 @@ export const createSalleServeur = (
       width: 3,
       height: 4,
       label: "Tableau de disjoncteurs",
-      action: () => setDisjoncteurOpen(true),
+      action: () => showModal("Le disjoncteur est ouvert ! Vous pouvez maintenant accéder aux serveurs."),
     },
     {
       id: "serveur",

@@ -5,7 +5,6 @@ interface UseRoomsProps {
   setChatMessages: (messages: any[]) => void;
   socket: any;
   showModal: (content: string) => void;
-  setDisjoncteurOpen: (open: boolean) => void;
   addToInventory: (item: string, socket: any) => void;
   setAccesAdmin: (admin: boolean) => void;
   disjoncteurResolu: boolean;
@@ -18,7 +17,6 @@ export const useRooms = ({
   setChatMessages,
   socket,
   showModal,
-  setDisjoncteurOpen,
   addToInventory,
   setAccesAdmin,
   disjoncteurResolu,
@@ -31,7 +29,6 @@ export const useRooms = ({
     setChatMessages,
     socket,
     showModal,
-    setDisjoncteurOpen,
     addToInventory,
     setAccesAdmin,
     disjoncteurResolu,
