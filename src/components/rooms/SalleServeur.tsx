@@ -17,10 +17,10 @@ export const createSalleServeur = (
   hotspots: [
     {
       id: "pc",
-      x: 25,
-      y: 35,
-      width: 4,
-      height: 5,
+      x: 44,
+      y: 49,
+      width: 13,
+      height: 20,
       label: "Ordinateur principal",
       action: () => {
         if (!disjoncteurResolu) {
@@ -42,19 +42,19 @@ export const createSalleServeur = (
     },
     {
       id: "disjoncteur",
-      x: 70,
-      y: 40,
-      width: 3,
-      height: 4,
+      x: 9,
+      y: 29,
+      width: 9,
+      height: 37,
       label: "Tableau de disjoncteurs",
       action: () => showModal("Le disjoncteur est ouvert ! Vous pouvez maintenant accéder aux serveurs."),
     },
     {
       id: "serveur",
-      x: 45,
-      y: 60,
-      width: 3,
-      height: 3,
+      x: 80,
+      y: 20,
+      width: 18,
+      height: 78,
       label: "Serveur de données",
       action: () => {
         if (!disjoncteurResolu) {
