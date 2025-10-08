@@ -55,8 +55,6 @@ const startGameTimer = () => {
 };
 
 io.on('connection', (socket) => {
-  console.log('Joueur connecté:', socket.id);
-  
   // Ajouter le joueur à la liste
   playerCounter++;
   const player = {
@@ -128,17 +126,10 @@ io.on('connection', (socket) => {
   
   // Gestion des messages d'aide
   socket.on('helpMessage', (data) => {
-    console.log('Serveur reçoit helpMessage:', data);
     // Mettre à jour l'état global des aides
     helpState.helpMessages = data.helpMessages;
     helpState.totalHelpUsed = data.totalHelpUsed;
     helpState.helpCooldown = data.helpCooldown;
-    
-    console.log('Serveur diffuse helpMessage:', {
-      helpMessages: helpState.helpMessages,
-      totalHelpUsed: helpState.totalHelpUsed,
-      helpCooldown: helpState.helpCooldown
-    });
     
     // Diffuser à tous les joueurs
     io.emit('helpMessage', {
@@ -171,8 +162,6 @@ io.on('connection', (socket) => {
   
   // Déconnexion
   socket.on('disconnect', () => {
-    console.log('Joueur déconnecté:', socket.id);
-    
     // Retirer le joueur de la liste
     delete players[socket.id];
     gameState.players = gameState.players.filter(p => p.id !== socket.id);
@@ -214,6 +203,4 @@ io.on('connection', (socket) => {
 });
 
 const PORT = process.env.PORT || 3001;
-server.listen(PORT, () => {
-  console.log(`Serveur Socket.io démarré sur le port ${PORT}`);
-});
+server.listen(PORT, () => {});
