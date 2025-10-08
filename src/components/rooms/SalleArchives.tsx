@@ -15,10 +15,10 @@ export const createSalleArchives = (
   hotspots: [
     {
       id: "dossier_equation",
-      x: 25,
-      y: 40,
-      width: 20,
-      height: 15,
+      x: 49,
+      y: 52,
+      width: 6,
+      height: 10,
       label: 'Dossier "Équation_C_Succès"',
       action: () =>
         showModal(
@@ -27,29 +27,15 @@ export const createSalleArchives = (
     },
     {
       id: "produits_chimiques",
-      x: 60,
-      y: 35,
-      width: 18,
-      height: 20,
+      x: 73,
+      y: 63,
+      width: 7,
+      height: 8,
       label: 'Dossier "Produits chimiques"',
       action: () =>
         showModal(
           "🧪 DOSSIER PRODUITS CHIMIQUES\n\nProduits listés :\n- Acide sulfurique (corrosif)\n- Hydroxyde de sodium (piquant)\n- Eau distillée (inodore)\n\nParticipants : Dr. Smith, Dr. Johnson"
         ),
-    },
-    {
-      id: "archives",
-      x: 45,
-      y: 65,
-      width: 15,
-      height: 12,
-      label: "Archives générales",
-      action: () => {
-        addToInventory("Code [3]");
-        showModal(
-          "📚 ARCHIVES GÉNÉRALES\n\nDocuments de recherche\nRapports d'expériences\n\n✅ Code partiel trouvé : [3]"
-        );
-      },
     },
   ],
 });
