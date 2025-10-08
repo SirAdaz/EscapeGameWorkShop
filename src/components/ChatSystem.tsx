@@ -2,14 +2,6 @@
 
 import { useState, useEffect } from 'react';
 
-interface Message {
-  id: number;
-  player: string;
-  message: string;
-  timestamp: string | Date;
-  room: string;
-}
-
 interface ChatSystemProps {
   currentRoom: string;
   messages: any[];
@@ -150,9 +142,6 @@ export default function ChatSystem({ currentRoom, messages, onSendMessage, socke
   const canUseHelp = totalHelpUsed < 5;
   const helpRemaining = 5 - totalHelpUsed;
   
-  // Debug: afficher les valeurs
-  console.log('Debug aide:', { totalHelpUsed, helpCooldown, canUseHelp, helpRemaining });
-  
   const getCooldownTime = () => {
     if (!helpCooldown) return 0;
     const now = new Date();
@@ -173,18 +162,13 @@ export default function ChatSystem({ currentRoom, messages, onSendMessage, socke
   }
 
   return (
-    <div className="fixed bottom-4 right-4 bg-gray-800 rounded-lg shadow-2xl w-80 h-96 flex flex-col">
+    <div className="fixed z-40 bottom-4 right-4 bg-gray-800 rounded-lg shadow-2xl w-80 h-96 flex flex-col">
       {/* Header */}
       <div className="bg-blue-600 text-white p-3 rounded-t-lg">
         <div className="flex justify-between items-center mb-2">
           <div>
             <div className="font-bold">💬 Chat de Salle</div>
             <div className="text-xs opacity-70">Salle: {currentRoom}</div>
-            {activeTab === 'help' && (
-              <div className="text-xs opacity-50">
-                💡 Aide: {helpRemaining}/5 restants
-              </div>
-            )}
           </div>
           <button
             onClick={() => setIsOpen(false)}
