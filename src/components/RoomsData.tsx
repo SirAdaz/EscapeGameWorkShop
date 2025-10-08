@@ -75,7 +75,8 @@ export const createRoomsData = ({
       setCurrentRoomIndex,
       setChatMessages,
       socket,
-      showModal
+      showModal,
+      addToInventory
     ),
     createSalleSecurisee(
       setCurrentRoomIndex,

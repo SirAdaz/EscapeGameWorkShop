@@ -4,7 +4,8 @@ export const createSalleVestiaires = (
   setCurrentRoomIndex: (index: number) => void,
   setChatMessages: (messages: any[]) => void,
   socket: any,
-  showModal: (content: string) => void
+  showModal: (content: string) => void,
+  addToInventory: (item: string) => void
 ): Room => ({
   id: 5,
   name: "Salle Vestiaires",
@@ -31,7 +32,10 @@ export const createSalleVestiaires = (
       width: 4,
       height: 20,
       label: "Casiers numérotés",
-      action: () => showModal("Le casier est ouvert ! Vous trouvez une clé de laboratoire."),
+      action: () => {
+        addToInventory("clef trouver dans un casier");
+        showModal("Casiers");
+      }
     },
   ],
 });

@@ -1,3 +1,4 @@
+import Casiers from './Casiers';
 import ProduitsChimiquesRapport from './ProduitsChimiquesRapport';
 
 interface ModalProps {
@@ -21,6 +22,9 @@ export default function Modal({ isOpen, content, onClose }: ModalProps) {
           }
           {
             content === "DOSSIER PRODUITS CHIMIQUES" && <ProduitsChimiquesRapport />
+          }
+          {
+            content === "Casiers" && <Casiers />
           }
         </div>
         <div className="flex justify-end">
