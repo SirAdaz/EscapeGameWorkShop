@@ -9,7 +9,7 @@ export const createSalleLaboratoire = (
 ): Room => ({
   id: 3,
   name: "Salle Laboratoire",
-  imageSrc: "/images/labo2.png",
+  imageSrc: "/images/labo1.png",
   description:
     "Laboratoire de recherche. Des éprouvettes et des rapports scientifiques jonchent les tables.",
   hotspots: [

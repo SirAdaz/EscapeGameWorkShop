@@ -1,7 +1,6 @@
 import { Room } from "../RoomsData";
 
-export const createSalleToilettes = (
-  ): Room => ({
+export const createSalleToilettes = (): Room => ({
     id: 7,
     name: "Salle Toilettes",
     imageSrc: "/images/toilettes.jpg",

@@ -8,6 +8,7 @@ import Inventory from "@/components/Inventory";
 import AccessCode from "@/components/AccessCode";
 import PlayersInRoom from "@/components/PlayersInRoom";
 import GameOver from "@/components/GameOver";
+import { LaboratoireNavigation } from "@/components/LaboratoireNavigation";
 import { useSocket } from "@/hooks/useSocket";
 import { useGameSocket } from "@/hooks/useGameSocket";
 import { useGameState } from "@/hooks/useGameState";
@@ -116,6 +117,28 @@ export default function Home() {
 
       {/* Interface de jeu */}
       <Timer timeLeft={timeLeft} />
+
+      {/* Navigation pour les salles de laboratoire */}
+      <LaboratoireNavigation
+        currentRoomIndex={currentRoomIndex}
+        onToggleView={() => {
+          if (currentRoomIndex === 2) {
+            // Aller au niveau 2
+            setCurrentRoomIndex(7);
+            setChatMessages([]);
+            if (socket) {
+              (socket as any).emit("playerMove", { room: "Salle Laboratoire - Détail" });
+            }
+          } else if (currentRoomIndex === 7) {
+            // Retour au niveau 1
+            setCurrentRoomIndex(2);
+            setChatMessages([]);
+            if (socket) {
+              (socket as any).emit("playerMove", { room: "Salle Laboratoire" });
+            }
+          }
+        }}
+      />
 
       {/* Inventaire */}
       <Inventory items={inventory} />
