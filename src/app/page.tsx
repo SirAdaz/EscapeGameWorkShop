@@ -1,7 +1,7 @@
 "use client";
 
 import Room from "@/components/Room";
-import DualChatSystem from "@/components/DualChatSystem";
+import ChatSystem from "@/components/ChatSystem";
 import Timer from "@/components/Timer";
 import Modal from "@/components/Modal";
 import Inventory from "@/components/Inventory";
@@ -117,8 +117,8 @@ export default function Home() {
         players={players}
       />
 
-      {/* Système de chat dual (normal + aide) */}
-      <DualChatSystem
+      {/* Système de chat avec onglets */}
+      <ChatSystem
         currentRoom={currentRoom.name}
         messages={chatMessages}
         onSendMessage={(message) => {

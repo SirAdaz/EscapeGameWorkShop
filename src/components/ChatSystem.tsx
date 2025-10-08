@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface Message {
   id: number;
@@ -12,22 +12,33 @@ interface Message {
 
 interface ChatSystemProps {
   currentRoom: string;
-  isOpen: boolean;
-  onToggle: () => void;
-  socket?: any;
   messages: any[];
   onSendMessage: (message: string) => void;
-  helpMessages?: {[key: string]: string[]};
-  onSendHelpMessage?: (message: string) => void;
-  timeLeft?: number;
-  totalHelpUsed?: number;
-  maxHelpAllowed?: number;
-  helpCooldown?: Date;
+  socket: any;
+  timeLeft: number;
+  initialHelpCooldown?: Date;
 }
 
-export default function ChatSystem({ currentRoom, isOpen, onToggle, messages, onSendMessage, helpMessages, onSendHelpMessage, timeLeft = 60 * 60, totalHelpUsed = 0, maxHelpAllowed = 5, helpCooldown }: ChatSystemProps) {
+export default function ChatSystem({ currentRoom, messages, onSendMessage, socket, timeLeft, initialHelpCooldown }: ChatSystemProps) {
+  const [isOpen, setIsOpen] = useState(false);
   const [newMessage, setNewMessage] = useState('');
   const [activeTab, setActiveTab] = useState<'chat' | 'help'>('chat');
+  const [helpMessages, setHelpMessages] = useState<{ [key: string]: string[] }>({});
+  const [totalHelpUsed, setTotalHelpUsed] = useState(0);
+  const [helpCooldown, setHelpCooldown] = useState<Date | undefined>(initialHelpCooldown);
+
+  // Mise à jour du cooldown d'aide en temps réel
+  useEffect(() => {
+    if (!helpCooldown) return;
+
+    const interval = setInterval(() => {
+      if (new Date() >= helpCooldown) {
+        setHelpCooldown(undefined);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [helpCooldown]);
 
   const sendMessage = () => {
     if (newMessage.trim()) {
@@ -71,21 +82,42 @@ export default function ChatSystem({ currentRoom, isOpen, onToggle, messages, on
   };
 
   const handleSendHelp = () => {
-    if (onSendHelpMessage && totalHelpUsed < maxHelpAllowed) {
+    // Vérifier si on peut encore utiliser l'aide
+    if (totalHelpUsed < 5) {
+      // Vérifier si c'est un vrai indice ou un message de cooldown
       if (!helpCooldown || new Date() >= helpCooldown) {
-        // Cooldown terminé, donner un vrai indice
+        // C'est un vrai indice, incrémenter le compteur et définir le cooldown
+        setTotalHelpUsed((prev) => prev + 1);
+        const cooldownTime = new Date();
+        cooldownTime.setMinutes(cooldownTime.getMinutes() + 5);
+        setHelpCooldown(cooldownTime);
+        
+        // Ajouter l'indice à l'historique d'aide de la salle
         const helpMessage = getHelpMessage(timeLeft);
-        onSendHelpMessage(helpMessage);
+        setHelpMessages((prev) => ({
+          ...prev,
+          [currentRoom]: [...(prev[currentRoom] || []), helpMessage],
+        }));
       } else {
-        // En cooldown, donner un message préfait
-        const cooldownMessage = "⏰ Vous ne pouvez pas avoir d'aide pour l'instant. Continuez de chercher !";
-        onSendHelpMessage(cooldownMessage);
+        // Pendant le cooldown, afficher un message d'encouragement
+        const cooldownMessage = "🔍 Continuez à chercher ! Vous pourrez obtenir de l'aide plus tard.";
+        setHelpMessages((prev) => ({
+          ...prev,
+          [currentRoom]: [...(prev[currentRoom] || []), cooldownMessage],
+        }));
       }
+    } else {
+      // Limite d'aide atteinte
+      const limitMessage = "❌ Vous avez atteint la limite d'aide (5/5). Continuez à explorer !";
+      setHelpMessages((prev) => ({
+        ...prev,
+        [currentRoom]: [...(prev[currentRoom] || []), limitMessage],
+      }));
     }
   };
 
-  const canUseHelp = totalHelpUsed < maxHelpAllowed;
-  const helpRemaining = maxHelpAllowed - totalHelpUsed;
+  const canUseHelp = totalHelpUsed < 5;
+  const helpRemaining = 5 - totalHelpUsed;
   
   const getCooldownTime = () => {
     if (!helpCooldown) return 0;
@@ -97,7 +129,7 @@ export default function ChatSystem({ currentRoom, isOpen, onToggle, messages, on
   if (!isOpen) {
     return (
       <button
-        onClick={onToggle}
+        onClick={() => setIsOpen(true)}
         className="fixed bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg hover:scale-110 transition-all duration-200"
         title="Ouvrir le chat d'équipe"
       >
@@ -116,12 +148,12 @@ export default function ChatSystem({ currentRoom, isOpen, onToggle, messages, on
             <div className="text-xs opacity-70">Salle: {currentRoom}</div>
             {activeTab === 'help' && (
               <div className="text-xs opacity-50">
-                💡 Aide: {helpRemaining}/{maxHelpAllowed} restants
+                💡 Aide: {helpRemaining}/5 restants
               </div>
             )}
           </div>
           <button
-            onClick={onToggle}
+            onClick={() => setIsOpen(false)}
             className="text-white hover:text-gray-300 text-xl"
           >
             ✕
