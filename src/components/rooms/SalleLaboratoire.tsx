@@ -1,9 +1,6 @@
 import { Room } from "../RoomsData";
 
 export const createSalleLaboratoire = (
-  setCurrentRoomIndex: (index: number) => void,
-  setChatMessages: (messages: any[]) => void,
-  socket: any,
   showModal: (content: string) => void,
   addToInventory: (item: string) => void
 ): Room => ({
@@ -13,18 +10,6 @@ export const createSalleLaboratoire = (
   description:
     "Laboratoire de recherche. Des éprouvettes et des rapports scientifiques jonchent les tables.",
   hotspots: [
-    {
-      id: "rapports",
-      x: 20,
-      y: 45,
-      width: 5,
-      height: 4,
-      label: "Pile de rapports",
-      action: () =>
-        showModal(
-          '📋 RAPPORTS DE RECHERCHE\n\nÉquations testées :\n- Équation A : ÉCHEC\n- Équation B : ÉCHEC\n- Équation C : SUCCÈS ✅\n\nDossier correspondant : "Équation_C_Succès"'
-        ),
-    },
     {
       id: "chimie",
       x: 60,

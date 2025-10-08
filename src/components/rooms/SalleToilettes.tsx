@@ -1,6 +1,8 @@
 import { Room } from "../RoomsData";
 
-export const createSalleToilettes = (): Room => ({
+export const createSalleToilettes = (
+  setChatMessages: (messages: any[]) => void
+): Room => ({
     id: 7,
     name: "Salle Toilettes",
     imageSrc: "/images/toilettes.jpg",

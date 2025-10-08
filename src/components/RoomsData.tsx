@@ -61,9 +61,6 @@ export const createRoomsData = ({
       accesAdmin
     ),
     createSalleLaboratoire(
-      setCurrentRoomIndex,
-      setChatMessages,
-      socket,
       showModal,
       addToInventory
     ),
@@ -88,8 +85,13 @@ export const createRoomsData = ({
       setAccesAdmin,
       inventory
     ),
-    createSalleToilettes(),
-    createSalleLaboratoireNiveau2()
+    createSalleToilettes(      
+      setChatMessages
+    ),
+    createSalleLaboratoireNiveau2(
+      setChatMessages,
+      showModal
+    )
   ];
 
   return rooms;
