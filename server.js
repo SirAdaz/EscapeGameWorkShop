@@ -20,8 +20,18 @@ let gameState = {
   gameEnded: false
 };
 
+// État des aides globales
+let helpState = {
+  helpMessages: {},
+  totalHelpUsed: 0,
+  helpCooldown: null
+};
+
 // Liste des joueurs connectés
 let players = {};
+
+// Compteur global pour les noms de joueurs
+let playerCounter = 0;
 
 // Timer global
 let gameTimer = null;
@@ -48,9 +58,10 @@ io.on('connection', (socket) => {
   console.log('Joueur connecté:', socket.id);
   
   // Ajouter le joueur à la liste
+  playerCounter++;
   const player = {
     id: socket.id,
-    name: `Joueur ${Object.keys(players).length + 1}`,
+    name: `Joueur ${playerCounter}`,
     room: 'Hall Principal'
   };
   
@@ -68,6 +79,13 @@ io.on('connection', (socket) => {
   
   // Envoyer l'état actuel au nouveau joueur
   socket.emit('gameState', gameState);
+  
+  // Envoyer l'état des aides au nouveau joueur
+  socket.emit('helpMessage', {
+    helpMessages: helpState.helpMessages,
+    totalHelpUsed: helpState.totalHelpUsed,
+    helpCooldown: helpState.helpCooldown
+  });
   
   // Rejoindre la room Socket.io correspondant à la salle
   socket.join(player.room);
@@ -106,6 +124,28 @@ io.on('connection', (socket) => {
   socket.on('setAccesAdmin', (value) => {
     gameState.accesAdmin = value;
     io.emit('gameState', gameState);
+  });
+  
+  // Gestion des messages d'aide
+  socket.on('helpMessage', (data) => {
+    console.log('Serveur reçoit helpMessage:', data);
+    // Mettre à jour l'état global des aides
+    helpState.helpMessages = data.helpMessages;
+    helpState.totalHelpUsed = data.totalHelpUsed;
+    helpState.helpCooldown = data.helpCooldown;
+    
+    console.log('Serveur diffuse helpMessage:', {
+      helpMessages: helpState.helpMessages,
+      totalHelpUsed: helpState.totalHelpUsed,
+      helpCooldown: helpState.helpCooldown
+    });
+    
+    // Diffuser à tous les joueurs
+    io.emit('helpMessage', {
+      helpMessages: helpState.helpMessages,
+      totalHelpUsed: helpState.totalHelpUsed,
+      helpCooldown: helpState.helpCooldown
+    });
   });
   
   socket.on('playerMove', (data) => {
@@ -156,6 +196,16 @@ io.on('connection', (socket) => {
         gameStarted: false,
         gameEnded: false
       };
+      
+      // Réinitialiser l'état des aides
+      helpState = {
+        helpMessages: {},
+        totalHelpUsed: 0,
+        helpCooldown: null
+      };
+      
+      // Réinitialiser le compteur de joueurs
+      playerCounter = 0;
     }
     
     io.emit('playerLeft', socket.id);

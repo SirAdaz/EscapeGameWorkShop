@@ -37,6 +37,12 @@ export default function Home() {
     setPlayers,
     chatMessages,
     setChatMessages,
+    helpMessages,
+    setHelpMessages,
+    totalHelpUsed,
+    setTotalHelpUsed,
+    helpCooldown,
+    setHelpCooldown,
     modalOpen,
     setModalOpen,
     modalContent,
@@ -58,6 +64,9 @@ export default function Home() {
     setGameEnded,
     setPlayers,
     setChatMessages,
+    setHelpMessages,
+    setTotalHelpUsed,
+    setHelpCooldown,
   });
 
   // Configuration des salles de Tchernobyl2
@@ -80,7 +89,7 @@ export default function Home() {
     return (
       <AccessCode
         timeLeft={timeLeft}
-        onAccessGranted={handleAccessGranted}
+        onAccessGranted={() => handleAccessGranted(socket)}
       />
     );
   }
@@ -128,7 +137,9 @@ export default function Home() {
         }}
         socket={socket}
         timeLeft={timeLeft}
-        initialHelpCooldown={initialHelpCooldown}
+        helpMessages={helpMessages}
+        totalHelpUsed={totalHelpUsed}
+        helpCooldown={helpCooldown}
       />
       {/* Modal pour les messages d'information */}
       <Modal

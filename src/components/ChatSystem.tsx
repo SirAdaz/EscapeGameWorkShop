@@ -16,16 +16,15 @@ interface ChatSystemProps {
   onSendMessage: (message: string) => void;
   socket: any;
   timeLeft: number;
-  initialHelpCooldown?: Date;
+  helpMessages: { [key: string]: string[] };
+  totalHelpUsed: number;
+  helpCooldown: Date | undefined;
 }
 
-export default function ChatSystem({ currentRoom, messages, onSendMessage, socket, timeLeft, initialHelpCooldown }: ChatSystemProps) {
+export default function ChatSystem({ currentRoom, messages, onSendMessage, socket, timeLeft, helpMessages, totalHelpUsed, helpCooldown }: ChatSystemProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [newMessage, setNewMessage] = useState('');
   const [activeTab, setActiveTab] = useState<'chat' | 'help'>('chat');
-  const [helpMessages, setHelpMessages] = useState<{ [key: string]: string[] }>({});
-  const [totalHelpUsed, setTotalHelpUsed] = useState(0);
-  const [helpCooldown, setHelpCooldown] = useState<Date | undefined>(initialHelpCooldown);
 
   // Mise à jour du cooldown d'aide en temps réel
   useEffect(() => {
@@ -33,7 +32,8 @@ export default function ChatSystem({ currentRoom, messages, onSendMessage, socke
 
     const interval = setInterval(() => {
       if (new Date() >= helpCooldown) {
-        setHelpCooldown(undefined);
+        // Le cooldown est géré par le serveur via Socket.io
+        // Pas besoin de mise à jour locale
       }
     }, 1000);
 
@@ -87,37 +87,71 @@ export default function ChatSystem({ currentRoom, messages, onSendMessage, socke
       // Vérifier si c'est un vrai indice ou un message de cooldown
       if (!helpCooldown || new Date() >= helpCooldown) {
         // C'est un vrai indice, incrémenter le compteur et définir le cooldown
-        setTotalHelpUsed((prev) => prev + 1);
+        const newTotalHelpUsed = totalHelpUsed + 1;
         const cooldownTime = new Date();
         cooldownTime.setMinutes(cooldownTime.getMinutes() + 5);
-        setHelpCooldown(cooldownTime);
         
         // Ajouter l'indice à l'historique d'aide de la salle
         const helpMessage = getHelpMessage(timeLeft);
-        setHelpMessages((prev) => ({
-          ...prev,
-          [currentRoom]: [...(prev[currentRoom] || []), helpMessage],
-        }));
+        const newHelpMessages = {
+          ...helpMessages,
+          [currentRoom]: [...(helpMessages[currentRoom] || []), helpMessage],
+        };
+        
+        // Émettre l'événement Socket.io (le serveur se chargera de la synchronisation)
+        if (socket) {
+          console.log('Émission helpMessage:', {
+            helpMessages: newHelpMessages,
+            totalHelpUsed: newTotalHelpUsed,
+            helpCooldown: cooldownTime.toISOString(),
+          });
+          socket.emit("helpMessage", {
+            helpMessages: newHelpMessages,
+            totalHelpUsed: newTotalHelpUsed,
+            helpCooldown: cooldownTime.toISOString(),
+          });
+        }
       } else {
         // Pendant le cooldown, afficher un message d'encouragement
         const cooldownMessage = "🔍 Continuez à chercher ! Vous pourrez obtenir de l'aide plus tard.";
-        setHelpMessages((prev) => ({
-          ...prev,
-          [currentRoom]: [...(prev[currentRoom] || []), cooldownMessage],
-        }));
+        const newHelpMessages = {
+          ...helpMessages,
+          [currentRoom]: [...(helpMessages[currentRoom] || []), cooldownMessage],
+        };
+        
+        // Émettre l'événement Socket.io (le serveur se chargera de la synchronisation)
+        if (socket) {
+          socket.emit("helpMessage", {
+            helpMessages: newHelpMessages,
+            totalHelpUsed,
+            helpCooldown: helpCooldown?.toISOString(),
+          });
+        }
       }
     } else {
       // Limite d'aide atteinte
       const limitMessage = "❌ Vous avez atteint la limite d'aide (5/5). Continuez à explorer !";
-      setHelpMessages((prev) => ({
-        ...prev,
-        [currentRoom]: [...(prev[currentRoom] || []), limitMessage],
-      }));
+      const newHelpMessages = {
+        ...helpMessages,
+        [currentRoom]: [...(helpMessages[currentRoom] || []), limitMessage],
+      };
+      
+      // Émettre l'événement Socket.io (le serveur se chargera de la synchronisation)
+      if (socket) {
+        socket.emit("helpMessage", {
+          helpMessages: newHelpMessages,
+          totalHelpUsed,
+          helpCooldown: helpCooldown?.toISOString(),
+        });
+      }
     }
   };
 
   const canUseHelp = totalHelpUsed < 5;
   const helpRemaining = 5 - totalHelpUsed;
+  
+  // Debug: afficher les valeurs
+  console.log('Debug aide:', { totalHelpUsed, helpCooldown, canUseHelp, helpRemaining });
   
   const getCooldownTime = () => {
     if (!helpCooldown) return 0;

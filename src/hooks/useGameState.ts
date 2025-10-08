@@ -15,6 +15,11 @@ export const useGameState = () => {
   // États des joueurs et communication
   const [players, setPlayers] = useState<any[]>([]);
   const [chatMessages, setChatMessages] = useState<any[]>([]);
+  
+  // États d'aide globale
+  const [helpMessages, setHelpMessages] = useState<{ [key: string]: string[] }>({});
+  const [totalHelpUsed, setTotalHelpUsed] = useState(0);
+  const [helpCooldown, setHelpCooldown] = useState<Date | undefined>(undefined);
 
   // États de l'interface
   const [modalOpen, setModalOpen] = useState(false);
@@ -36,17 +41,27 @@ export const useGameState = () => {
     }
   };
 
-  const handleAccessGranted = () => {
+  const handleAccessGranted = (socket: any) => {
     setAccessGranted(true);
     setTimeLeft(60 * 60); // Réinitialiser le timer à 60 minutes
     setInventory([]); // Réinitialiser l'inventaire
     setGameEnded(false); // Réinitialiser l'état de fin
     setDisjoncteurResolu(false); // Réinitialiser les états
     setAccesAdmin(false);
+    
     // Déclencher le cooldown initial de 5 minutes dès l'entrée du code
     const initialCooldown = new Date();
     initialCooldown.setMinutes(initialCooldown.getMinutes() + 5);
     setInitialHelpCooldown(initialCooldown);
+    
+    // Synchroniser le cooldown initial avec le serveur
+    if (socket) {
+      socket.emit("helpMessage", {
+        helpMessages: {},
+        totalHelpUsed: 0,
+        helpCooldown: initialCooldown.toISOString(),
+      });
+    }
   };
 
   return {
@@ -69,6 +84,12 @@ export const useGameState = () => {
     setPlayers,
     chatMessages,
     setChatMessages,
+    helpMessages,
+    setHelpMessages,
+    totalHelpUsed,
+    setTotalHelpUsed,
+    helpCooldown,
+    setHelpCooldown,
     modalOpen,
     setModalOpen,
     modalContent,

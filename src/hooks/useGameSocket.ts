@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import React from 'react';
 import { Socket } from 'socket.io-client';
 
 interface UseGameSocketProps {
@@ -8,8 +9,11 @@ interface UseGameSocketProps {
   setDisjoncteurResolu: (resolved: boolean) => void;
   setAccesAdmin: (admin: boolean) => void;
   setGameEnded: (ended: boolean) => void;
-  setPlayers: (players: any[]) => void;
-  setChatMessages: (messages: any[]) => void;
+  setPlayers: React.Dispatch<React.SetStateAction<any[]>>;
+  setChatMessages: React.Dispatch<React.SetStateAction<any[]>>;
+  setHelpMessages: React.Dispatch<React.SetStateAction<{ [key: string]: string[] }>>;
+  setTotalHelpUsed: React.Dispatch<React.SetStateAction<number>>;
+  setHelpCooldown: React.Dispatch<React.SetStateAction<Date | undefined>>;
 }
 
 export const useGameSocket = ({
@@ -21,6 +25,9 @@ export const useGameSocket = ({
   setGameEnded,
   setPlayers,
   setChatMessages,
+  setHelpMessages,
+  setTotalHelpUsed,
+  setHelpCooldown,
 }: UseGameSocketProps) => {
   useEffect(() => {
     if (!socket) return;
@@ -40,7 +47,14 @@ export const useGameSocket = ({
     });
 
     socketInstance.on("chatMessage", (message: any) => {
-      setChatMessages((prev) => [...prev, message]);
+      setChatMessages((prev: any[]) => [...prev, message]);
+    });
+
+    socketInstance.on("helpMessage", (data: any) => {
+      console.log('Réception helpMessage:', data);
+      setHelpMessages(data.helpMessages);
+      setTotalHelpUsed(data.totalHelpUsed);
+      setHelpCooldown(data.helpCooldown ? new Date(data.helpCooldown) : undefined);
     });
 
     socketInstance.on("playerJoined", (player: any) => {
@@ -55,8 +69,9 @@ export const useGameSocket = ({
       socketInstance.off("gameState");
       socketInstance.off("playersList");
       socketInstance.off("chatMessage");
+      socketInstance.off("helpMessage");
       socketInstance.off("playerJoined");
       socketInstance.off("playerLeft");
     };
-  }, [socket, setTimeLeft, setInventory, setDisjoncteurResolu, setAccesAdmin, setGameEnded, setPlayers, setChatMessages]);
+  }, [socket, setTimeLeft, setInventory, setDisjoncteurResolu, setAccesAdmin, setGameEnded, setPlayers, setChatMessages, setHelpMessages, setTotalHelpUsed, setHelpCooldown]);
 };
