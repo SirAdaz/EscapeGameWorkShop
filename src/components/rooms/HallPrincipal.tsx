@@ -13,10 +13,10 @@ export const createHallPrincipal = (
   hotspots: [
     {
       id: "porte_serveur",
-      x: 89,
-      y: 41,
-      width: 8,
-      height: 48,
+      x: 85,
+      y: 30,
+      width: 10,
+      height: 55,
       label: "🚪 Porte vers Salle Serveur",
       action: () => {
         setCurrentRoomIndex(1);
@@ -28,10 +28,10 @@ export const createHallPrincipal = (
     },
     {
       id: "porte_laboratoire",
-      x: 2,
-      y: 40,
-      width: 7,
-      height: 45,
+      x: 6,
+      y: 33,
+      width: 11,
+      height: 50,
       label: "🚪 Porte vers Salle Laboratoire",
       action: () => {
         setCurrentRoomIndex(2);
@@ -43,10 +43,10 @@ export const createHallPrincipal = (
     },
     {
       id: "porte_archives",
-      x: 81,
-      y: 45,
-      width: 4.5,
-      height: 38,
+      x: 71,
+      y: 41,
+      width: 5,
+      height: 35,
       label: "🚪 Porte vers Salle Archives",
       action: () => {
         setCurrentRoomIndex(3);
@@ -57,11 +57,35 @@ export const createHallPrincipal = (
       },
     },
     {
+      id: "porte_toilette",
+      x: 66,
+      y: 52,
+      width: 3,
+      height: 20,
+      label: "🚪 Porte vers les toilettes",
+      action: () => {
+        setCurrentRoomIndex(6);
+        setChatMessages([]);
+        if (socket) {
+          socket.emit("playerMove", { room: "Salle Toilettes" });
+        }
+      },
+    },
+    {
+      id: "porte_fermee",
+      x: 31,
+      y: 52,
+      width: 3,
+      height: 20,
+      label: "🚪 Porte fermée",
+      action: () => {},
+    },
+    {
       id: "porte_vestiaires",
-      x: 13,
+      x: 24,
       y: 45,
       width: 5,
-      height: 36,
+      height: 32,
       label: "🚪 Porte vers Salle Vestiaires",
       action: () => {
         setCurrentRoomIndex(4);
@@ -73,10 +97,10 @@ export const createHallPrincipal = (
     },
     {
       id: "porte_securise",
-      x: 40,
-      y: 21,
-      width: 19,
-      height: 33,
+      x: 43,
+      y: 48,
+      width: 14,
+      height: 25,
       label: "🚪 Porte vers Salle Sécurisée",
       action: () => {
         setCurrentRoomIndex(5);

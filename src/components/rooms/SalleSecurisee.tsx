@@ -65,20 +65,5 @@ export const createSalleSecurisee = (
           "🖥️ BUREAU ADMINISTRATEUR\n\nAccès aux fichiers système\nOutils de déchiffrage avancés\n\nCode final requis pour le coffre-fort !"
         ),
     },
-    {
-      id: "retour_hall",
-      x: 5,
-      y: 5,
-      width: 8,
-      height: 12,
-      label: "🚪 Retour au Hall Principal",
-      action: () => {
-        setCurrentRoomIndex(0);
-        setChatMessages([]);
-        if (socket) {
-          socket.emit("playerMove", { room: "Entrée - Hall Principal" });
-        }
-      },
-    },
   ],
 });

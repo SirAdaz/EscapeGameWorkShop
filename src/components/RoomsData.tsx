@@ -5,6 +5,7 @@ import { createSalleLaboratoire } from "./rooms/SalleLaboratoire";
 import { createSalleArchives } from "./rooms/SalleArchives";
 import { createSalleVestiaires } from "./rooms/SalleVestiaires";
 import { createSalleSecurisee } from "./rooms/SalleSecurisee";
+import { createSalleToilettes } from "./rooms/SalleToilettes";
 
 export interface Hotspot {
   id: string;
@@ -85,6 +86,12 @@ export const createRoomsData = ({
       showModal,
       setAccesAdmin,
       inventory
+    ),
+    createSalleToilettes(
+      setCurrentRoomIndex,
+      setChatMessages,
+      socket,
+      showModal
     ),
   ];
 

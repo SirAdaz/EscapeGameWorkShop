@@ -69,20 +69,5 @@ export const createSalleServeur = (
         );
       },
     },
-    {
-      id: "retour_hall",
-      x: 5,
-      y: 5,
-      width: 8,
-      height: 12,
-      label: "🚪 Retour au Hall Principal",
-      action: () => {
-        setCurrentRoomIndex(0);
-        setChatMessages([]);
-        if (socket) {
-          socket.emit("playerMove", { room: "Entrée - Hall Principal" });
-        }
-      },
-    },
   ],
 });
