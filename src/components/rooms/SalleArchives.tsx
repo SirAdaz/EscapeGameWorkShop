@@ -34,7 +34,7 @@ export const createSalleArchives = (
       label: 'Dossier "Produits chimiques"',
       action: () =>
         showModal(
-          "🧪 DOSSIER PRODUITS CHIMIQUES\n\nProduits listés :\n- Acide sulfurique (corrosif)\n- Hydroxyde de sodium (piquant)\n- Eau distillée (inodore)\n\nParticipants : Dr. Smith, Dr. Johnson"
+          "DOSSIER PRODUITS CHIMIQUES"
         ),
     },
   ],
