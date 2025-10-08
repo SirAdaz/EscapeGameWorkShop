@@ -68,17 +68,25 @@ export default function Room({
         return (
           <div
             key={hotspot.id}
-            className="absolute cursor-crosshair hover:bg-yellow-400 hover:bg-opacity-20 transition-all duration-200"
-            style={{
-              left: `${responsiveCoords.x}%`,
-              top: `${responsiveCoords.y}%`,
-              width: `${responsiveCoords.width}%`,
-              height: `${responsiveCoords.height}%`,
-              zIndex: 10
+            className="absolute cursor-crosshair transition-all duration-200"
+             style={{
+               left: `${responsiveCoords.x}%`,
+               top: `${responsiveCoords.y}%`,
+               width: `${responsiveCoords.width}%`,
+               height: `${responsiveCoords.height}%`,
+               zIndex: 5,
+               border: '2px solid transparent',
+               transition: 'border-color 1s ease-in-out'
+             }}
+             onMouseEnter={(e) => {
+               setHoveredArea(hotspot.id);
+               e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+             }}
+            onMouseLeave={(e) => {
+              setHoveredArea(null);
+              e.currentTarget.style.borderColor = 'transparent';
             }}
             onClick={hotspot.action}
-            onMouseEnter={() => setHoveredArea(hotspot.id)}
-            onMouseLeave={() => setHoveredArea(null)}
           />
         );
       })}
@@ -98,7 +106,7 @@ export default function Room({
 
       {/* Tooltip pour l'élément survolé */}
       {hoveredArea && (
-        <div className="absolute pointer-events-none z-20 bg-black bg-opacity-80 text-white px-3 py-2 rounded-lg text-sm font-bold animate-pulse">
+        <div className="absolute pointer-events-none z-10 bg-black bg-opacity-80 text-white px-3 py-2 rounded-lg text-sm font-bold animate-pulse">
           {hotspots.find(h => h.id === hoveredArea)?.label}
         </div>
       )}
