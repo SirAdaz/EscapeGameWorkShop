@@ -12,10 +12,10 @@ export const createSalleLaboratoire = (
   hotspots: [
     {
       id: "chimie",
-      x: 60,
-      y: 30,
-      width: 4,
-      height: 5,
+      x: 45,
+      y: 78,
+      width: 18,
+      height: 15,
       label: "Station de chimie",
       action: () =>
         showModal(
@@ -24,10 +24,10 @@ export const createSalleLaboratoire = (
     },
     {
       id: "equation",
-      x: 75,
-      y: 60,
-      width: 3,
-      height: 3,
+      x: 72,
+      y: 34,
+      width: 28,
+      height: 31,
       label: "Tableau d'équations",
       action: () => {
         addToInventory("Code [2]");
