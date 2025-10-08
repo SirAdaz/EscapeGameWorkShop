@@ -384,7 +384,7 @@ export default function Home() {
     {
       id: 6,
       name: "Salle Administrateur",
-      imageSrc: "/images/serveurOFF.png",
+      imageSrc: "/images/salleSeurise.png",
       description:
         "Bureau de l'administrateur. Une porte verrouillée par 3 jauges attend.",
       hotspots: [
