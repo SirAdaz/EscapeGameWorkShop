@@ -1,11 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 
 export const useSocket = () => {
-  const [socket, setSocket] = useState(null);
-  const [connected, setConnected] = useState(false);
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const [connected, setConnected] = useState<boolean>(false);
 
   useEffect(() => {
     const newSocket = io('http://localhost:3001');
@@ -29,4 +29,3 @@ export const useSocket = () => {
 
   return { socket, connected };
 };
-

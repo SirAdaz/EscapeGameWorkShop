@@ -1,0 +1,95 @@
+import { Socket } from "socket.io-client";
+import { createHallPrincipal } from "./rooms/HallPrincipal";
+import { createSalleServeur } from "./rooms/SalleServeur";
+import { createSalleLaboratoire } from "./rooms/SalleLaboratoire";
+import { createSalleArchives } from "./rooms/SalleArchives";
+import { createSalleVestiaires } from "./rooms/SalleVestiaires";
+import { createSalleSecurisee } from "./rooms/SalleSecurisee";
+
+export interface Hotspot {
+  id: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  label: string;
+  action: () => void;
+}
+
+export interface Room {
+  id: number;
+  name: string;
+  imageSrc: string;
+  description: string;
+  hotspots: Hotspot[];
+}
+
+export interface RoomsDataProps {
+  setCurrentRoomIndex: (index: number) => void;
+  setChatMessages: (messages: any[]) => void;
+  socket: Socket | null;
+  showModal: (content: string) => void;
+  setDisjoncteurOpen: (open: boolean) => void;
+  addToInventory: (item: string) => void;
+  setAccesAdmin: (admin: boolean) => void;
+  disjoncteurResolu: boolean;
+  accesAdmin: boolean;
+  inventory: string[];
+}
+
+export const createRoomsData = ({
+  setCurrentRoomIndex,
+  setChatMessages,
+  socket,
+  showModal,
+    setDisjoncteurOpen,
+    addToInventory,
+  setAccesAdmin,
+  disjoncteurResolu,
+  accesAdmin,
+  inventory,
+}: RoomsDataProps): Room[] => {
+  const rooms: Room[] = [
+    createHallPrincipal(setCurrentRoomIndex, setChatMessages, socket),
+    createSalleServeur(
+      setCurrentRoomIndex,
+      setChatMessages,
+      socket,
+      showModal,
+      setDisjoncteurOpen,
+      addToInventory,
+      disjoncteurResolu,
+      accesAdmin
+    ),
+    createSalleLaboratoire(
+      setCurrentRoomIndex,
+      setChatMessages,
+      socket,
+      showModal,
+      addToInventory
+    ),
+    createSalleArchives(
+      setCurrentRoomIndex,
+      setChatMessages,
+      socket,
+      showModal,
+      addToInventory
+    ),
+    createSalleVestiaires(
+      setCurrentRoomIndex,
+      setChatMessages,
+      socket,
+      showModal
+    ),
+    createSalleSecurisee(
+      setCurrentRoomIndex,
+      setChatMessages,
+      socket,
+      showModal,
+      setAccesAdmin,
+      inventory
+    ),
+  ];
+
+  return rooms;
+};
