@@ -103,13 +103,6 @@ export default function Room({
           </button>
         </div>
       )}
-
-      {/* Tooltip pour l'élément survolé */}
-      {hoveredArea && (
-        <div className="absolute pointer-events-none z-10 bg-black bg-opacity-80 text-white px-3 py-2 rounded-lg text-sm font-bold animate-pulse">
-          {hotspots.find(h => h.id === hoveredArea)?.label}
-        </div>
-      )}
     </div>
   );
 }
