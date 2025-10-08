@@ -11,12 +11,10 @@ export const useSocket = () => {
     const newSocket = io('http://localhost:3001');
     
     newSocket.on('connect', () => {
-      console.log('Connecté au serveur');
       setConnected(true);
     });
     
     newSocket.on('disconnect', () => {
-      console.log('Déconnecté du serveur');
       setConnected(false);
     });
     

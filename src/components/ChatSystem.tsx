@@ -92,11 +92,6 @@ export default function ChatSystem({ currentRoom, messages, onSendMessage, socke
         
         // Émettre l'événement Socket.io (le serveur se chargera de la synchronisation)
         if (socket) {
-          console.log('Émission helpMessage:', {
-            helpMessages: newHelpMessages,
-            totalHelpUsed: newTotalHelpUsed,
-            helpCooldown: cooldownTime.toISOString(),
-          });
           socket.emit("helpMessage", {
             helpMessages: newHelpMessages,
             totalHelpUsed: newTotalHelpUsed,

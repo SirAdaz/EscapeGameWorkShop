@@ -51,7 +51,6 @@ export const useGameSocket = ({
     });
 
     socketInstance.on("helpMessage", (data: any) => {
-      console.log('Réception helpMessage:', data);
       setHelpMessages(data.helpMessages);
       setTotalHelpUsed(data.totalHelpUsed);
       setHelpCooldown(data.helpCooldown ? new Date(data.helpCooldown) : undefined);
