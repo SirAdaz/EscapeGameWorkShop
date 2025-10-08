@@ -11,10 +11,12 @@ export default function Modal({ isOpen, content, onClose }: ModalProps) {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-base-300 rounded-lg shadow-2xl max-w-2xl w-full mx-4 p-6">
         <h3 className="font-bold text-lg mb-4 text-base-content">
-          Information
+          test
         </h3>
         <div className="whitespace-pre-line text-base-content mb-6">
-          {content}
+          {
+            content === "disjoncteur" && <div>zizi</div>
+            }
         </div>
         <div className="flex justify-end">
           <button

@@ -47,7 +47,7 @@ export const createSalleServeur = (
       width: 9,
       height: 37,
       label: "Tableau de disjoncteurs",
-      action: () => showModal("Le disjoncteur est ouvert ! Vous pouvez maintenant accéder aux serveurs."),
+      action: () => showModal("disjoncteur"),
     },
     {
       id: "serveur",
