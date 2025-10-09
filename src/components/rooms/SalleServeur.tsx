@@ -29,7 +29,7 @@ export const createSalleServeur = (
           );
           return;
         }
-        showModal("OrdinateurServerModal");
+        showModal("OrdinateurServeur");
       },
     },
     {
