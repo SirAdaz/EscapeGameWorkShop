@@ -1,62 +1,168 @@
-import { useState } from 'react';
+'use client';
+import { create } from 'zustand';
 
-export const useGameState = () => {
-  // États de base du jeu
-  const [currentRoomIndex, setCurrentRoomIndex] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(60 * 60); // 60 minutes en secondes
-  const [inventory, setInventory] = useState<string[]>([]);
-  const [gameEnded, setGameEnded] = useState(false);
-  const [gameWon, setGameWon] = useState(false);
-  const [accessGranted, setAccessGranted] = useState(false);
+interface GameState {
+  // --- États de base du jeu ---
+  currentRoomIndex: number;
+  setCurrentRoomIndex: (index: number) => void;
 
-  // États des puzzles
-  const [disjoncteurResolu, setDisjoncteurResolu] = useState(false);
-  const [accesAdmin, setAccesAdmin] = useState(false);
+  timeLeft: number;
+  setTimeLeft: (time: number) => void;
 
-  // États des joueurs et communication
-  const [players, setPlayers] = useState<any[]>([]);
-  const [chatMessages, setChatMessages] = useState<any[]>([]);
-  
-  // États d'aide globale
-  const [helpMessages, setHelpMessages] = useState<{ [key: string]: string[] }>({});
-  const [totalHelpUsed, setTotalHelpUsed] = useState(0);
-  const [helpCooldown, setHelpCooldown] = useState<Date | undefined>(undefined);
+  inventory: string[];
+  setInventory: (inv: string[]) => void;
 
-  // États de l'interface
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState("");
-  const [initialHelpCooldown, setInitialHelpCooldown] = useState<Date | undefined>(undefined);
+  gameEnded: boolean;
+  setGameEnded: (val: boolean) => void;
 
-  // Fonctions utilitaires
-  const showModal = (content: string) => {
-    setModalContent(content);
-    setModalOpen(true);
-  };
+  accessGranted: boolean;
+  setAccessGranted: (val: boolean) => void;
 
-  const addToInventory = (item: string, socket: any) => {
+  // --- États des puzzles ---
+  disjoncteurResolu: boolean;
+  setDisjoncteurResolu: (val: boolean) => void;
+
+  accesAdmin: boolean;
+  setAccesAdmin: (val: boolean) => void;
+
+  jaugesResolues: boolean;
+  setJaugesResolues: (val:boolean) => void;
+
+  // --- Solutions des énigmes ---
+  codeEquationRu: number;
+  codeEquationS: number;
+  codeEquationU: number;
+
+  // --- Obtention des codes pour porte sécurisée ---
+  codeLaboObtenu: boolean;
+  setCodeLaboObtenu: (val:boolean) => void;
+
+  // --- États des joueurs et communication ---
+  players: any[];
+  setPlayers: (players: any[]) => void;
+
+  chatMessages: any[];
+  setChatMessages: (messages: any[]) => void;
+
+  // --- États d'aide globale ---
+  helpMessages: { [key: string]: string[] };
+  setHelpMessages: (messages: { [key: string]: string[] }) => void;
+
+  totalHelpUsed: number;
+  setTotalHelpUsed: (val: number) => void;
+
+  helpCooldown?: Date;
+  setHelpCooldown: (val?: Date) => void;
+
+  // --- États de l'interface ---
+  modalOpen: boolean;
+  setModalOpen: (val: boolean) => void;
+
+  modalContent: string;
+  setModalContent: (val: string) => void;
+
+  initialHelpCooldown?: Date;
+  setInitialHelpCooldown: (val?: Date) => void;
+
+  // --- Fonctions utilitaires ---
+  showModal: (content: string) => void;
+  addToInventory: (item: string, socket?: any) => void;
+  handleAccessGranted: (socket?: any) => void;
+}
+
+export const useGameState = create<GameState>((set, get) => ({
+  // --- États de base du jeu ---
+  currentRoomIndex: 0,
+  setCurrentRoomIndex: (index) => set({ currentRoomIndex: index }),
+
+  timeLeft: 60 * 60,
+  setTimeLeft: (time) => set({ timeLeft: time }),
+
+  inventory: [],
+  setInventory: (inv) => set({ inventory: inv }),
+
+  gameEnded: false,
+  setGameEnded: (val) => set({ gameEnded: val }),
+
+  accessGranted: false,
+  setAccessGranted: (val) => set({ accessGranted: val }),
+
+  // --- États des puzzles ---
+  disjoncteurResolu: false,
+  setDisjoncteurResolu: (val) => set({ disjoncteurResolu: val }),
+
+  accesAdmin: false,
+  setAccesAdmin: (val) => set({ accesAdmin: val }),
+
+  jaugesResolues: false,
+  setJaugesResolues: (val) => set({ jaugesResolues: val }),
+
+  // --- Solutions des énigmes ---
+  codeEquationRu: 5,
+  codeEquationS: 8,
+  codeEquationU: 2,
+
+  // --- Obtention des codes pour porte sécurisée ---
+  codeLaboObtenu: false,
+  setCodeLaboObtenu: (val) => set({ codeLaboObtenu: val}),
+
+
+  // --- États des joueurs et communication ---
+  players: [],
+  setPlayers: (players) => set({ players }),
+
+  chatMessages: [],
+  setChatMessages: (messages) => set({ chatMessages: messages }),
+
+  // --- États d'aide globale ---
+  helpMessages: {},
+  setHelpMessages: (messages) => set({ helpMessages: messages }),
+
+  totalHelpUsed: 0,
+  setTotalHelpUsed: (val) => set({ totalHelpUsed: val }),
+
+  helpCooldown: undefined,
+  setHelpCooldown: (val) => set({ helpCooldown: val }),
+
+  // --- États de l'interface ---
+  modalOpen: false,
+  setModalOpen: (val) => set({ modalOpen: val }),
+
+  modalContent: "",
+  setModalContent: (val) => set({ modalContent: val }),
+
+  initialHelpCooldown: undefined,
+  setInitialHelpCooldown: (val) => set({ initialHelpCooldown: val }),
+
+  // --- Fonctions utilitaires ---
+  showModal: (content) => set({ modalOpen: true, modalContent: content }),
+
+  addToInventory: (item, socket) => {
+    const { inventory } = get();
     if (!inventory.includes(item)) {
-      setInventory((prev) => [...prev, item]);
+      const newInventory = [...inventory, item];
+      set({ inventory: newInventory });
       if (socket) {
         socket.emit("addToInventory", item);
       }
     }
-  };
+  },
 
-  const handleAccessGranted = (socket: any) => {
-    setAccessGranted(true);
-    setTimeLeft(60 * 60); // Réinitialiser le timer à 60 minutes
-    setInventory([]); // Réinitialiser l'inventaire
-    setGameEnded(false); // Réinitialiser l'état de fin
-    setGameWon(false); // Réinitialiser l'état de victoire
-    setDisjoncteurResolu(false); // Réinitialiser les états
-    setAccesAdmin(false);
-    
-    // Déclencher le cooldown initial de 5 minutes dès l'entrée du code
+  handleAccessGranted: (socket) => {
     const initialCooldown = new Date();
     initialCooldown.setMinutes(initialCooldown.getMinutes() + 5);
-    setInitialHelpCooldown(initialCooldown);
-    
-    // Synchroniser le cooldown initial avec le serveur
+
+    set({
+      accessGranted: true,
+      timeLeft: 60 * 60,
+      inventory: [],
+      gameEnded: false,
+      disjoncteurResolu: false,
+      jaugesResolues: false,
+      accesAdmin: false,
+      initialHelpCooldown: initialCooldown,
+    });
+
     if (socket) {
       socket.emit("helpMessage", {
         helpMessages: {},
@@ -64,46 +170,5 @@ export const useGameState = () => {
         helpCooldown: initialCooldown.toISOString(),
       });
     }
-  };
-
-  return {
-    // États
-    currentRoomIndex,
-    setCurrentRoomIndex,
-    timeLeft,
-    setTimeLeft,
-    inventory,
-    setInventory,
-    gameEnded,
-    setGameEnded,
-    gameWon,
-    setGameWon,
-    accessGranted,
-    setAccessGranted,
-    disjoncteurResolu,
-    setDisjoncteurResolu,
-    accesAdmin,
-    setAccesAdmin,
-    players,
-    setPlayers,
-    chatMessages,
-    setChatMessages,
-    helpMessages,
-    setHelpMessages,
-    totalHelpUsed,
-    setTotalHelpUsed,
-    helpCooldown,
-    setHelpCooldown,
-    modalOpen,
-    setModalOpen,
-    modalContent,
-    setModalContent,
-    initialHelpCooldown,
-    setInitialHelpCooldown,
-    
-    // Fonctions utilitaires
-    showModal,
-    addToInventory,
-    handleAccessGranted,
-  };
-};
+  },
+}));

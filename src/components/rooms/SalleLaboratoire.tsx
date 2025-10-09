@@ -13,15 +13,26 @@ export const createSalleLaboratoire = (
     {
       id: "chimie",
       x: 45,
-      y: 78,
+      y: 73,
       width: 18,
-      height: 15,
+      height: 20,
       label: "Station de chimie",
-      action: () =>
-        showModal(
-          "🧪 STATION DE CHIMIE\n\nProduits disponibles :\n- Acide chlorhydrique\n- Hydroxyde de sodium\n- Eau distillée\n\nMélange requis pour faire fondre la serrure !"
-        ),
+      action: () => {
+        showModal("Fioles");
+      }
     },
+      {
+          id: "recCle",
+          x: 40,
+          y: 57,
+          width: 5,
+          height: 10,
+          label: "Station de chimie",
+          action: () =>{
+              addToInventory("Clé du laboratoire");
+              showModal("RecupereFioleLabo");
+          }
+      },
     {
       id: "equation",
       x: 72,

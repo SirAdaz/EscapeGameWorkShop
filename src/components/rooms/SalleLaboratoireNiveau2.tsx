@@ -3,6 +3,7 @@ import { Room } from "../RoomsData";
 export const createSalleLaboratoireNiveau2 = (
   setChatMessages: (messages: any[]) => void,
   showModal: (content: string) => void,
+  codeLaboObtenu:boolean
 ): Room => ({
   id: 8,
   name: "Salle Laboratoire - Détail",
@@ -21,6 +22,21 @@ export const createSalleLaboratoireNiveau2 = (
         showModal(
           '📋 RAPPORTS DE RECHERCHE\n\nÉquations testées :\n- Équation A : ÉCHEC\n- Équation B : ÉCHEC\n- Équation C : SUCCÈS ✅\n\nDossier correspondant : "Équation_C_Succès"'
         ),
+    },
+    {
+      id: "niveaux",
+      x: 47,
+      y: 40,
+      width: 8,
+      height: 30,
+      label: "Armoire vérouillée",
+      action: () => {
+        if (codeLaboObtenu) {
+          showModal('jauges_confirmation')
+        } else {
+          showModal('jauges_equation')
+        }
+      }
     },
   ],
 });

@@ -1,30 +1,40 @@
 'use client'
 
 import {useGameState} from "@/hooks/useGameState";
+import { useSocket } from "@/hooks/useSocket";
 import clsx from "clsx";
 import {useEffect, useState} from "react";
 
 export default function DisjoncteurModal() {
 
-    const [disjoncteur, setDisjoncteur] = useState([[false,false,false,false],[false,false,false,false]]);
+    const { socket } = useSocket();
 
     const {
         disjoncteurResolu,
         setDisjoncteurResolu
     } = useGameState()
 
+    const tmp = disjoncteurResolu;
+
+    const [disjoncteur, setDisjoncteur] = useState<Array<Array<boolean>>>([
+                                                                            [tmp,tmp,tmp,tmp],
+                                                                            [tmp,tmp,tmp,tmp]
+                                                                        ]);
+
         function checkValide(){
         const allOff = disjoncteur.every(ligne => ligne.every(cell => cell))
-        if (allOff) setDisjoncteurResolu(true)
+        if (allOff) {
+            setDisjoncteurResolu(true)
+            if (socket) socket.emit("setDisjoncteurResolu", true );
+        }
     }
 
     useEffect(() => {
-        checkValide()
         if (disjoncteurResolu) {
             const inverse: Array<Array<boolean>> = [[true,true,true,true],[true,true,true,true]]
             setDisjoncteur(inverse)
         }
-    },[disjoncteurResolu])
+    },[])
 
     function handleCelluleClick(ligne:number, col:number) {
         const changement:Array<Array<boolean>> = disjoncteur.map(row => [...row])
@@ -67,7 +77,7 @@ export default function DisjoncteurModal() {
                 <div id = "statusLights" className="flex flex-col w-full h-full items-center justify-center gap-4">
                     <div id="offLight" className={clsx("shade2 w-20 h-20 rounded-full bg-gray-800", {'bg-red-500' : !disjoncteurResolu} )}></div>
                     <div id="onLight" className={clsx("shade2 w-20 h-20 rounded-full bg-gray-800", {'bg-green-500' : disjoncteurResolu} )}></div>
-                    <button className="w-full text-black border p-1 rounded-md bg-red-300" onClick={handleReset}>Reinitialiser</button>
+                    <button className="w-full text-black border p-1 rounded-md bg-red-300" disabled={disjoncteurResolu} onClick={handleReset}>Reinitialiser</button>
                 </div>
             </div>
         </div>

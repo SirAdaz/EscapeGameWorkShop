@@ -3,6 +3,9 @@ import ProduitsChimiquesRapportModal from './enigmes/ProduitsChimiquesRapportMod
 import OrdinateurServerModal from './enigmes/OrdinateurServerModal';
 import SalleSecuriseeModal from './enigmes/SalleSecuriseeModal';
 import DisjoncteurModal from './rooms/DisjoncteurModal';
+import Fiole from "@/components/Fiole";
+import RecupereFioleLabo from "@/components/enigmes/RecupereFioleLabo";
+import JaugesModal from './enigmes/modalsLabo/JaugesModal';
 
 interface ModalProps {
   isOpen: boolean;
@@ -14,35 +17,47 @@ interface ModalProps {
 export default function Modal({ isOpen, content, onClose, onVictory }: ModalProps) {
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-      <div className="bg-base-300 bg-black rounded-lg shadow-2xl max-w-2xl w-full mx-4 p-6">
-        <div className="whitespace-pre-line text-base-content mb-6">
-          {
-            content === "disjoncteur" && <DisjoncteurModal/> 
-          }
-          {
-            content === "DOSSIER PRODUITS CHIMIQUES" && <ProduitsChimiquesRapportModal />
-          }
-          {
-            content === "Casiers" && <CasiersModal />
-          }
-          {
-            content === "OrdinateurServeur" && <OrdinateurServerModal />
-          }
-          {
-            content === "SalleSecurisee" && <SalleSecuriseeModal onVictory={onVictory} />
-          }
+    return (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+            <div className="bg-base-300 bg-black rounded-lg shadow-2xl max-w-2xl w-full mx-4 p-6">
+                <div className="whitespace-pre-line text-base-content mb-6">
+                    {
+                        content === "disjoncteur" && <DisjoncteurModal/>
+                    }
+                    {
+                        content === "DOSSIER PRODUITS CHIMIQUES" && <ProduitsChimiquesRapportModal />
+                    }
+                    {
+                        content === "Casiers" && <CasiersModal />
+                    }
+                    {
+                        content === "OrdinateurServeur" && <OrdinateurServerModal />
+                    }
+                    {
+                        content === "SalleSecurisee" && <SalleSecuriseeModal onVictory={onVictory} />
+                    }
+                    {
+                        content === "jauges_equation" && <JaugesModal/>
+                    }
+                    {
+                        content === "jauges_confirmation" && <div>La porte est dévérouillée, Vous récupérez un morceau de code dans votre inventaire...</div>
+                    }
+                    {
+                        content === "Fioles" && <Fiole onClose={onClose}/>
+                    }
+                    {
+                        content === "RecupereFioleLabo" && <RecupereFioleLabo resolu={true} />
+                    }
+                </div>
+                <div className="flex justify-end">
+                    <button
+                        className="btn btn-primary"
+                        onClick={onClose}
+                    >
+                        OK
+                    </button>
+                </div>
+            </div>
         </div>
-        <div className="flex justify-end">
-          <button
-            className="btn btn-primary"
-            onClick={onClose}
-          >
-            OK
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+    );
 }

@@ -3,6 +3,7 @@ import React from 'react';
 interface LaboratoireNavigationProps {
   currentRoomIndex: number;
   onToggleView: () => void;
+
 }
 
 export const LaboratoireNavigation: React.FC<LaboratoireNavigationProps> = ({
