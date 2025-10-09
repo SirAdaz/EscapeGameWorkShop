@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 
-interface FioleProps {
-  onClose: () => void;
-}
-
-const Fiole: React.FC<FioleProps> = ({ onClose }) => {
+export default function Fiole({onClose}: {onClose: () => void}) {
   const [fiole1, setFiole1] = useState(false);
   const [hovered1, setHovered1] = useState(false);
   const [fiole2, setFiole2] = useState(false);
@@ -32,10 +28,13 @@ const Fiole: React.FC<FioleProps> = ({ onClose }) => {
   const [validationMsg, setValidationMsg] = useState("");
   const [indice1, setIndice1] = useState(false);
   const [hoveredIndice1, setHoveredIndice1] = useState(false);
+  const [popUpIndice1, setPopUpIndice1] = useState(false);
   const [indice2, setIndice2] = useState(false);
   const [hoveredIndice2, setHoveredIndice2] = useState(false);
+  const [popUpIndice2, setPopUpIndice2] = useState(false);
   const [indice3, setIndice3] = useState(false);
   const [hoveredIndice3, setHoveredIndice3] = useState(false);
+  const [popUpIndice3, setPopUpIndice3] = useState(false);
   const [indice4, setIndice4] = useState(false);
   const [hoveredIndice4, setHoveredIndice4] = useState(false);
 
@@ -264,8 +263,43 @@ const Fiole: React.FC<FioleProps> = ({ onClose }) => {
         cursor: "pointer",
         zIndex: 2,
         transition: "all 0.2s",
+        transitionDelay: hoveredIndice1 ? "0.5s" : "0s",
         opacity: hoveredIndice1 || indice1 ? 1 : 0,
     };
+
+    const indiceStyle2: React.CSSProperties = {
+        position: "absolute",
+        left: "710px",
+        top: "100px",
+        width: "62px",
+        height: "200px",
+        border: "1px solid #fff",
+        background: "rgba(255,255,255,0.2)",
+        borderRadius: "12px",
+        cursor: "pointer",
+        zIndex: 2,
+        transition: "all 0.2s",
+        transitionDelay: hoveredIndice2 ? "0.5s" : "0s",
+        opacity: hoveredIndice2 || indice2 ? 1 : 0,
+    };
+
+    const indiceStyle3: React.CSSProperties = {
+        position: "absolute",
+        left: "22px",
+        top: "310px",
+        width: "60px",
+        height: "30px",
+        border: "1px solid #fff",
+        background: "rgba(255,255,255,0.2)",
+        borderRadius: "12px",
+        cursor: "pointer",
+        zIndex: 2,
+        transition: "all 0.2s",
+        transitionDelay: hoveredIndice3 ? "0.5s" : "0s",
+        opacity: hoveredIndice3 || indice3 ? 1 : 0
+
+    };
+
 
 
   React.useEffect(() => {
@@ -354,9 +388,21 @@ const Fiole: React.FC<FioleProps> = ({ onClose }) => {
           />
           <div
               style={indiceStyle1}
-              onClick={() => setIndice1((prev) => !prev)}
+              onClick={() => setPopUpIndice1(true)}
               onMouseEnter={() => setHoveredIndice1(true)}
               onMouseLeave={() => setHoveredIndice1(false)}
+          />
+          <div
+            style={indiceStyle2}
+            onClick={() => setPopUpIndice2(true)}
+            onMouseEnter={() => setHoveredIndice2(true)}
+            onMouseLeave={() => setHoveredIndice2(false)}
+          />
+          <div
+            style={indiceStyle3}
+            onClick={() => setPopUpIndice3(true)}
+            onMouseEnter={() => setHoveredIndice3(true)}
+            onMouseLeave={() => setHoveredIndice3(false)}
           />
 
       </div>
@@ -390,8 +436,79 @@ const Fiole: React.FC<FioleProps> = ({ onClose }) => {
             {validationMsg}
           </div>
         )}
+        {popUpIndice1 && (
+            <div style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100vw",
+                height: "100vh",
+                background: "rgba(0,0,0,0.7)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                zIndex: 20
+            }}>
+                <div>
+                    <img src="/images/IndiceEnigmeFioles/IndiceFiole1.png" style={{ maxWidth: "400px", marginBottom: "20px" }} />
+                    <button
+                        onClick={() => setPopUpIndice1(false)}
+                        style={{ padding: "10px 20px", borderRadius: 8, cursor: "pointer", color: "black", backgroundColor: "#fff", border: "none", display: "flex", margin: "0 auto" }}
+                    >
+                        Retour
+                    </button>
+                </div>
+            </div>
+        )}
+        {popUpIndice2 && (
+            <div style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100vw",
+                height: "100vh",
+                background: "rgba(0,0,0,0.7)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                zIndex: 20
+            }}>
+                <div>
+                    <img src="/images/IndiceEnigmeFioles/IndiceFiole2.png" style={{ maxWidth: "400px", marginBottom: "20px" }} />
+                    <button
+                        onClick={() => setPopUpIndice2(false)}
+                        style={{ padding: "10px 20px", borderRadius: 8, cursor: "pointer", color: "black", backgroundColor: "#fff", border: "none", display: "flex", margin: "0 auto" }}
+                    >
+                        Retour
+                    </button>
+                </div>
+            </div>
+        )}
+        {popUpIndice3 && (
+            <div style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100vw",
+                height: "100vh",
+                background: "rgba(0,0,0,0.7)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                zIndex: 20
+            }}>
+                <div>
+                    <img src="/images/IndiceEnigmeFioles/IndiceFiole3.png" style={{ maxWidth: "400px", marginBottom: "20px" }} />
+                    <button
+                        onClick={() => setPopUpIndice3(false)}
+                        style={{ padding: "10px 20px", borderRadius: 8, cursor: "pointer", color: "black", backgroundColor: "#fff", border: "none", display: "flex", margin: "0 auto" }}
+                    >
+                        Retour
+                    </button>
+                </div>
+            </div>
+        )}
     </div>
   );
 };
 
-export default Fiole;

@@ -1,33 +1,36 @@
 'use client';
 
-import { useState } from 'react';
-
-interface Message {
-  id: number;
-  player: string;
-  message: string;
-  timestamp: string | Date;
-  room: string;
-}
+import { useState, useEffect } from 'react';
 
 interface ChatSystemProps {
   currentRoom: string;
-  isOpen: boolean;
-  onToggle: () => void;
-  socket?: any;
   messages: any[];
   onSendMessage: (message: string) => void;
-  helpMessages?: {[key: string]: string[]};
-  onSendHelpMessage?: (message: string) => void;
-  timeLeft?: number;
-  totalHelpUsed?: number;
-  maxHelpAllowed?: number;
-  helpCooldown?: Date;
+  socket: any;
+  timeLeft: number;
+  helpMessages: { [key: string]: string[] };
+  totalHelpUsed: number;
+  helpCooldown: Date | undefined;
 }
 
-export default function ChatSystem({ currentRoom, isOpen, onToggle, messages, onSendMessage, helpMessages, onSendHelpMessage, timeLeft = 60 * 60, totalHelpUsed = 0, maxHelpAllowed = 5, helpCooldown }: ChatSystemProps) {
+export default function ChatSystem({ currentRoom, messages, onSendMessage, socket, timeLeft, helpMessages, totalHelpUsed, helpCooldown }: ChatSystemProps) {
+  const [isOpen, setIsOpen] = useState(false);
   const [newMessage, setNewMessage] = useState('');
   const [activeTab, setActiveTab] = useState<'chat' | 'help'>('chat');
+
+  // Mise à jour du cooldown d'aide en temps réel
+  useEffect(() => {
+    if (!helpCooldown) return;
+
+    const interval = setInterval(() => {
+      if (new Date() >= helpCooldown) {
+        // Le cooldown est géré par le serveur via Socket.io
+        // Pas besoin de mise à jour locale
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [helpCooldown]);
 
   const sendMessage = () => {
     if (newMessage.trim()) {
@@ -71,21 +74,68 @@ export default function ChatSystem({ currentRoom, isOpen, onToggle, messages, on
   };
 
   const handleSendHelp = () => {
-    if (onSendHelpMessage && totalHelpUsed < maxHelpAllowed) {
+    // Vérifier si on peut encore utiliser l'aide
+    if (totalHelpUsed < 5) {
+      // Vérifier si c'est un vrai indice ou un message de cooldown
       if (!helpCooldown || new Date() >= helpCooldown) {
-        // Cooldown terminé, donner un vrai indice
+        // C'est un vrai indice, incrémenter le compteur et définir le cooldown
+        const newTotalHelpUsed = totalHelpUsed + 1;
+        const cooldownTime = new Date();
+        cooldownTime.setMinutes(cooldownTime.getMinutes() + 5);
+        
+        // Ajouter l'indice à l'historique d'aide de la salle
         const helpMessage = getHelpMessage(timeLeft);
-        onSendHelpMessage(helpMessage);
+        const newHelpMessages = {
+          ...helpMessages,
+          [currentRoom]: [...(helpMessages[currentRoom] || []), helpMessage],
+        };
+        
+        // Émettre l'événement Socket.io (le serveur se chargera de la synchronisation)
+        if (socket) {
+          socket.emit("helpMessage", {
+            helpMessages: newHelpMessages,
+            totalHelpUsed: newTotalHelpUsed,
+            helpCooldown: cooldownTime.toISOString(),
+          });
+        }
       } else {
-        // En cooldown, donner un message préfait
-        const cooldownMessage = "⏰ Vous ne pouvez pas avoir d'aide pour l'instant. Continuez de chercher !";
-        onSendHelpMessage(cooldownMessage);
+        // Pendant le cooldown, afficher un message d'encouragement
+        const cooldownMessage = "🔍 Continuez à chercher ! Vous pourrez obtenir de l'aide plus tard.";
+        const newHelpMessages = {
+          ...helpMessages,
+          [currentRoom]: [...(helpMessages[currentRoom] || []), cooldownMessage],
+        };
+        
+        // Émettre l'événement Socket.io (le serveur se chargera de la synchronisation)
+        if (socket) {
+          socket.emit("helpMessage", {
+            helpMessages: newHelpMessages,
+            totalHelpUsed,
+            helpCooldown: helpCooldown?.toISOString(),
+          });
+        }
+      }
+    } else {
+      // Limite d'aide atteinte
+      const limitMessage = "❌ Vous avez atteint la limite d'aide (5/5). Continuez à explorer !";
+      const newHelpMessages = {
+        ...helpMessages,
+        [currentRoom]: [...(helpMessages[currentRoom] || []), limitMessage],
+      };
+      
+      // Émettre l'événement Socket.io (le serveur se chargera de la synchronisation)
+      if (socket) {
+        socket.emit("helpMessage", {
+          helpMessages: newHelpMessages,
+          totalHelpUsed,
+          helpCooldown: helpCooldown?.toISOString(),
+        });
       }
     }
   };
 
-  const canUseHelp = totalHelpUsed < maxHelpAllowed;
-  const helpRemaining = maxHelpAllowed - totalHelpUsed;
+  const canUseHelp = totalHelpUsed < 5;
+  const helpRemaining = 5 - totalHelpUsed;
   
   const getCooldownTime = () => {
     if (!helpCooldown) return 0;
@@ -97,7 +147,7 @@ export default function ChatSystem({ currentRoom, isOpen, onToggle, messages, on
   if (!isOpen) {
     return (
       <button
-        onClick={onToggle}
+        onClick={() => setIsOpen(true)}
         className="fixed bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg hover:scale-110 transition-all duration-200"
         title="Ouvrir le chat d'équipe"
       >
@@ -107,21 +157,16 @@ export default function ChatSystem({ currentRoom, isOpen, onToggle, messages, on
   }
 
   return (
-    <div className="fixed bottom-4 right-4 bg-gray-800 rounded-lg shadow-2xl w-80 h-96 flex flex-col">
+    <div className="fixed z-40 bottom-4 right-4 bg-gray-800 rounded-lg shadow-2xl w-80 h-96 flex flex-col">
       {/* Header */}
       <div className="bg-blue-600 text-white p-3 rounded-t-lg">
         <div className="flex justify-between items-center mb-2">
           <div>
             <div className="font-bold">💬 Chat de Salle</div>
             <div className="text-xs opacity-70">Salle: {currentRoom}</div>
-            {activeTab === 'help' && (
-              <div className="text-xs opacity-50">
-                💡 Aide: {helpRemaining}/{maxHelpAllowed} restants
-              </div>
-            )}
           </div>
           <button
-            onClick={onToggle}
+            onClick={() => setIsOpen(false)}
             className="text-white hover:text-gray-300 text-xl"
           >
             ✕
