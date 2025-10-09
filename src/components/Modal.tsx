@@ -1,5 +1,6 @@
-import Casiers from './Casiers';
-import ProduitsChimiquesRapport from './ProduitsChimiquesRapport';
+import CasiersModal from './enigmes/CasiersModal';
+import ProduitsChimiquesRapportModal from './enigmes/ProduitsChimiquesRapportModal';
+import OrdinateurServerModal from './enigmes/OrdinateurServerModal';
 import DisjoncteurModal from './rooms/DisjoncteurModal';
 
 interface ModalProps {
@@ -14,18 +15,18 @@ export default function Modal({ isOpen, content, onClose }: ModalProps) {
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
       <div className="bg-base-300 bg-black rounded-lg shadow-2xl max-w-2xl w-full mx-4 p-6">
-        <h3 className="font-bold text-lg mb-4 text-base-content">
-          information
-        </h3>
         <div className="whitespace-pre-line text-base-content mb-6">
           {
             content === "disjoncteur" && <DisjoncteurModal/> 
           }
           {
-            content === "DOSSIER PRODUITS CHIMIQUES" && <ProduitsChimiquesRapport />
+            content === "DOSSIER PRODUITS CHIMIQUES" && <ProduitsChimiquesRapportModal />
           }
           {
-            content === "Casiers" && <Casiers />
+            content === "Casiers" && <CasiersModal />
+          }
+          {
+            content === "OrdinateurServerModal" && <OrdinateurServerModal />
           }
         </div>
         <div className="flex justify-end">
