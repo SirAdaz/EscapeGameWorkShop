@@ -124,6 +124,12 @@ io.on('connection', (socket) => {
     io.emit('gameState', gameState);
   });
   
+  // Gestion des pénalités de temps
+  socket.on('penaltyTime', (penaltySeconds) => {
+    gameState.timeLeft = Math.max(0, gameState.timeLeft - penaltySeconds);
+    io.emit('gameState', gameState);
+  });
+  
   // Gestion des messages d'aide
   socket.on('helpMessage', (data) => {
     // Mettre à jour l'état global des aides
