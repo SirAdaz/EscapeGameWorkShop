@@ -7,9 +7,10 @@ import { useSocket } from '@/hooks/useSocket';
 
 interface FinalCodeModalProps {
     onClose: () => void;
+    onVictory: () => void;
   }
 
-export default function FinalCodeModal({ onClose }: FinalCodeModalProps) {
+export default function FinalCodeModal({ onClose, onVictory }: FinalCodeModalProps) {
   const { socket } = useSocket();
   const [code, setCode] = useState(['', '', '', '']);
   const [attempts, setAttempts] = useState<string[]>([]);
@@ -40,6 +41,7 @@ export default function FinalCodeModal({ onClose }: FinalCodeModalProps) {
     
     if (currentCode === correctCode) {
       setGameWon(true);
+      onVictory(); // Déclencher la victoire globale
     } else {
       // Perdre 1 minute (60 secondes) pour chaque tentative incorrecte
       if (socket) {

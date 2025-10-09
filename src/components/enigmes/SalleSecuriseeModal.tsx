@@ -5,7 +5,11 @@ import FinalCodeModal from './modalsOrdi/FinalCodeModal';
 import BaseDeDonneesModal from './modalsOrdi/BaseDeDonneesModal';
 
 // Modal de la salle sécurisée
-export default function SalleSecuriseeModal() {
+interface SalleSecuriseeModalProps {
+  onVictory?: () => void;
+}
+
+export default function SalleSecuriseeModal({ onVictory }: SalleSecuriseeModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
 
@@ -98,7 +102,7 @@ export default function SalleSecuriseeModal() {
         </div>
       </div>
         {/* Modals */}
-        {selectedFile === "finalCode" && <FinalCodeModal onClose={() => setSelectedFile(null)} />}
+        {selectedFile === "finalCode" && <FinalCodeModal onClose={() => setSelectedFile(null)} onVictory={onVictory || (() => {})} />}
         {selectedFile === "baseDeDonnees" && <BaseDeDonneesModal onClose={() => setSelectedFile(null)} />}
     </div>
   );
