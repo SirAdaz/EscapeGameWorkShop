@@ -5,6 +5,7 @@ import Room from "@/components/Room";
 import ChatSystem from "@/components/ChatSystem";
 import DisjoncteurPuzzle from "@/components/DisjoncteurPuzzle";
 import CasierPuzzle from "@/components/CasierPuzzle";
+import Fiole from "@/components/Fiole";
 import { useSocket } from "@/hooks/useSocket";
 
 // Configuration des salles de Tchernobyl2 - sera définie dans le composant
@@ -35,6 +36,7 @@ export default function Home() {
   const [chatMessages, setChatMessages] = useState<any[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState("");
+  const [showFiole, setShowFiole] = useState(false);
 
   // Configuration des salles de Tchernobyl2
   const rooms = [
@@ -138,20 +140,14 @@ export default function Home() {
           label: "Ordinateur principal",
           action: () => {
             if (!disjoncteurResolu) {
-              showModal(
-                "💻 ORDINATEUR PRINCIPAL\n\n❌ Pas d'alimentation électrique !\n\nVous devez d'abord réparer le disjoncteur."
-              );
+              showModal("💻 ORDINATEUR PRINCIPAL\n\n❌ Pas d'alimentation électrique !\n\nVous devez d'abord réparer le disjoncteur.");
               return;
             }
             if (!accesAdmin) {
-              showModal(
-                "💻 ORDINATEUR PRINCIPAL\n\n❌ Accès administrateur requis !\n\nVous devez d'abord obtenir les droits d'accès dans la salle administrateur."
-              );
+              showModal("💻 ORDINATEUR PRINCIPAL\n\n❌ Accès administrateur requis !\n\nVous devez d'abord obtenir les droits d'accès dans la salle administrateur.");
               return;
             }
-            showModal(
-              "💻 ORDINATEUR PRINCIPAL\n\n✅ Accès administrateur confirmé !\n\nOutils disponibles :\n- Déchiffreur de fichiers\n- Lecteur d'archives\n- Accès aux dossiers"
-            );
+            showModal("💻 ORDINATEUR PRINCIPAL\n\n✅ Accès administrateur confirmé !\n\nOutils disponibles :\n- Déchiffreur de fichiers\n- Lecteur d'archives\n- Accès aux dossiers");
           },
         },
         {
@@ -172,15 +168,11 @@ export default function Home() {
           label: "Serveur de données",
           action: () => {
             if (!disjoncteurResolu) {
-              showModal(
-                "🖥️ SERVEUR DE DONNÉES\n\n❌ Pas d'alimentation électrique !\n\nVous devez d'abord réparer le disjoncteur pour accéder aux serveurs."
-              );
+              showModal("🖥️ SERVEUR DE DONNÉES\n\n❌ Pas d'alimentation électrique !\n\nVous devez d'abord réparer le disjoncteur pour accéder aux serveurs.");
               return;
             }
             addToInventory("Code [1]");
-            showModal(
-              "🖥️ SERVEUR DE DONNÉES\n\n✅ Alimentation rétablie !\nFichiers d'archives accessibles\nRapports de laboratoire disponibles\n\n✅ Code partiel trouvé : [1]"
-            );
+            showModal("🖥️ SERVEUR DE DONNÉES\n\n✅ Alimentation rétablie !\nFichiers d'archives accessibles\nRapports de laboratoire disponibles\n\n✅ Code partiel trouvé : [1]");
           },
         },
         {
@@ -215,22 +207,17 @@ export default function Home() {
           height: 4,
           label: "Pile de rapports",
           action: () =>
-            showModal(
-              '📋 RAPPORTS DE RECHERCHE\n\nÉquations testées :\n- Équation A : ÉCHEC\n- Équation B : ÉCHEC\n- Équation C : SUCCÈS ✅\n\nDossier correspondant : "Équation_C_Succès"'
-            ),
+            showModal('📋 RAPPORTS DE RECHERCHE\n\nÉquations testées :\n- Équation A : ÉCHEC\n- Équation B : ÉCHEC\n- Équation C : SUCCÈS ✅\n\nDossier correspondant : "Équation_C_Succès"'),
         },
-        {
-          id: "chimie",
-          x: 60,
-          y: 30,
-          width: 4,
-          height: 5,
-          label: "Station de chimie",
-          action: () =>
-            showModal(
-              "🧪 STATION DE CHIMIE\n\nProduits disponibles :\n- Acide chlorhydrique\n- Hydroxyde de sodium\n- Eau distillée\n\nMélange requis pour faire fondre la serrure !"
-            ),
-        },
+          {
+              id: "Fiole",
+              x: 46,
+              y: 72,
+              width: 15,
+              height: 17,
+              label: "Station de chimie",
+              action: () => setShowFiole(true),
+          },
         {
           id: "equation",
           x: 75,
@@ -240,9 +227,7 @@ export default function Home() {
           label: "Tableau d'équations",
           action: () => {
             addToInventory("Code [2]");
-            showModal(
-              "🧮 ÉQUATION VALIDE\n\nH₂SO₄ + 2NaOH → Na₂SO₄ + 2H₂O\n\nValeurs : H=1, S=16, O=8, Na=11\n\n✅ Code partiel trouvé : [2]"
-            );
+            showModal("🧮 ÉQUATION VALIDE\n\nH₂SO₄ + 2NaOH → Na₂SO₄ + 2H₂O\n\nValeurs : H=1, S=16, O=8, Na=11\n\n✅ Code partiel trouvé : [2]");
           },
         },
         {
@@ -277,9 +262,7 @@ export default function Home() {
           height: 15,
           label: 'Dossier "Équation_C_Succès"',
           action: () =>
-            showModal(
-              '📁 DOSSIER ÉQUATION\n\nFichier de sauvegarde : "equation_backup.txt"\nAccès via salle serveur\n\nContient les détails de l\'équation réussie !'
-            ),
+            showModal('📁 DOSSIER ÉQUATION\n\nFichier de sauvegarde : "equation_backup.txt"\nAccès via salle serveur\n\nContient les détails de l\'équation réussie !'),
         },
         {
           id: "produits_chimiques",
@@ -289,9 +272,7 @@ export default function Home() {
           height: 20,
           label: 'Dossier "Produits chimiques"',
           action: () =>
-            showModal(
-              "🧪 DOSSIER PRODUITS CHIMIQUES\n\nProduits listés :\n- Acide sulfurique (corrosif)\n- Hydroxyde de sodium (piquant)\n- Eau distillée (inodore)\n\nParticipants : Dr. Smith, Dr. Johnson"
-            ),
+            showModal("🧪 DOSSIER PRODUITS CHIMIQUES\n\nProduits listés :\n- Acide sulfurique (corrosif)\n- Hydroxyde de sodium (piquant)\n- Eau distillée (inodore)\n\nParticipants : Dr. Smith, Dr. Johnson"),
         },
         {
           id: "archives",
@@ -302,9 +283,7 @@ export default function Home() {
           label: "Archives générales",
           action: () => {
             addToInventory("Code [3]");
-            showModal(
-              "📚 ARCHIVES GÉNÉRALES\n\nDocuments de recherche\nRapports d'expériences\n\n✅ Code partiel trouvé : [3]"
-            );
+            showModal("📚 ARCHIVES GÉNÉRALES\n\nDocuments de recherche\nRapports d'expériences\n\n✅ Code partiel trouvé : [3]");
           },
         },
         {
@@ -339,9 +318,7 @@ export default function Home() {
           height: 4,
           label: "Blouses tachées",
           action: () =>
-            showModal(
-              "👕 BLOUSES DE LABORATOIRE\n\nBlouse A : Taches bleues (Dr. Smith)\nBlouse B : Taches rouges (Dr. Johnson)\nBlouse C : Taches vertes (Dr. Wilson)\n\nLes couleurs correspondent aux produits chimiques !"
-            ),
+            showModal("👕 BLOUSES DE LABORATOIRE\n\nBlouse A : Taches bleues (Dr. Smith)\nBlouse B : Taches rouges (Dr. Johnson)\nBlouse C : Taches vertes (Dr. Wilson)\n\nLes couleurs correspondent aux produits chimiques !"),
         },
         {
           id: "casiers",
@@ -360,9 +337,7 @@ export default function Home() {
           height: 10,
           label: "Indice sur le mur",
           action: () =>
-            showModal(
-              '💡 INDICE CASIER\n\n"2 chiffres pairs, 1 chiffre impair\nNe contient pas le chiffre 4"\n\nExemples : 268, 682, 826...'
-            ),
+            showModal('💡 INDICE CASIER\n\n"2 chiffres pairs, 1 chiffre impair\nNe contient pas le chiffre 4"\n\nExemples : 268, 682, 826...'),
         },
         {
           id: "retour_hall",
@@ -397,14 +372,10 @@ export default function Home() {
           label: "Serrure à 3 jauges",
           action: () => {
             if (inventory.length < 3) {
-              showModal(
-                "🔐 SERRURE À 3 JAUGES\n\n❌ Codes insuffisants !\n\nVous devez d'abord collecter au moins 3 codes dans les autres salles."
-              );
+              showModal("🔐 SERRURE À 3 JAUGES\n\n❌ Codes insuffisants !\n\nVous devez d'abord collecter au moins 3 codes dans les autres salles.");
               return;
             }
-            showModal(
-              "🔐 SERRURE À 3 JAUGES\n\n✅ Codes suffisants détectés !\n\nJauge 1 : H (Hydrogène) = 1\nJauge 2 : S (Soufre) = 16\nJauge 3 : O (Oxygène) = 8\n\nRéglez les valeurs selon l'équation trouvée !\n\n🎉 Accès administrateur obtenu !"
-            );
+            showModal("🔐 SERRURE À 3 JAUGES\n\n✅ Codes suffisants détectés !\n\nJauge 1 : H (Hydrogène) = 1\nJauge 2 : S (Soufre) = 16\nJauge 3 : O (Oxygène) = 8\n\nRéglez les valeurs selon l'équation trouvée !\n\n🎉 Accès administrateur obtenu !");
             setAccesAdmin(true);
           },
         },
@@ -417,14 +388,10 @@ export default function Home() {
           label: "Tiroir verrouillé",
           action: () => {
             if (!inventory.includes("Code [4]")) {
-              showModal(
-                "🗄️ TIROIR VERROUILLÉ\n\n❌ Clé du casier requise !\n\nVous devez d'abord résoudre l'énigme des casiers dans la salle vestiaires."
-              );
+              showModal("🗄️ TIROIR VERROUILLÉ\n\n❌ Clé du casier requise !\n\nVous devez d'abord résoudre l'énigme des casiers dans la salle vestiaires.");
               return;
             }
-            showModal(
-              "🗄️ TIROIR OUVERT !\n\n✅ Clé du casier trouvée !\n\nContient des documents importants sur la souche génétique !"
-            );
+            showModal("🗄️ TIROIR OUVERT !\n\n✅ Clé du casier trouvée !\n\nContient des documents importants sur la souche génétique !");
           },
         },
         {
@@ -435,9 +402,7 @@ export default function Home() {
           height: 12,
           label: "Bureau de l'admin",
           action: () =>
-            showModal(
-              "🖥️ BUREAU ADMINISTRATEUR\n\nAccès aux fichiers système\nOutils de déchiffrage avancés\n\nCode final requis pour le coffre-fort !"
-            ),
+            showModal("🖥️ BUREAU ADMINISTRATEUR\n\nAccès aux fichiers système\nOutils de déchiffrage avancés\n\nCode final requis pour le coffre-fort !"),
         },
         {
           id: "retour_hall",
@@ -536,7 +501,7 @@ export default function Home() {
       .padStart(2, "0")}`;
   };
 
-  const showModal = (content: string) => {
+  const showModal = (content: JSX.Element) => {
     setModalContent(content);
     setModalOpen(true);
   };
@@ -927,9 +892,7 @@ export default function Home() {
         onClose={() => setDisjoncteurOpen(false)}
         onSuccess={() => {
           setDisjoncteurResolu(true);
-          showModal(
-            "⚡ COURANT RÉTABLI !\n\nLe disjoncteur fonctionne à nouveau !\nVous pouvez maintenant accéder aux ordinateurs !"
-          );
+          showModal("⚡ COURANT RÉTABLI !\n\nLe disjoncteur fonctionne à nouveau !\nVous pouvez maintenant accéder aux ordinateurs !");
           setDisjoncteurOpen(false);
         }}
       />
@@ -939,12 +902,12 @@ export default function Home() {
         onClose={() => setCasierOpen(false)}
         onSuccess={() => {
           addToInventory("Code [4]");
-          showModal(
-            "🔐 CASIER OUVERT !\n\n✅ Code partiel trouvé : [4]\n\nVous avez trouvé la clé du casier !"
-          );
+          showModal("🔐 CASIER OUVERT !\n\n✅ Code partiel trouvé : [4]\n\nVous avez trouvé la clé du casier !");
           setCasierOpen(false);
         }}
       />
+
+      {showFiole && <Fiole onClose={() => setShowFiole(false)} />}
 
       {/* Modal pour les messages d'information */}
       {modalOpen && (
