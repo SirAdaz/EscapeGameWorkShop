@@ -64,7 +64,6 @@ export default function SalleSecuriseeModal() {
                 className="bg-black border-2 border-green-400 text-green-400 font-mono py-4 px-6 hover:bg-green-400 hover:text-black transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
               >
                 <div className="flex items-center justify-center gap-2">
-                    <span className="text-lg">🔐</span>
                     <span>CODE FINAL</span>
                 </div>
                 <div className="text-xs mt-1 opacity-70">
@@ -78,7 +77,6 @@ export default function SalleSecuriseeModal() {
                 className="bg-black border-2 border-green-400 text-green-400 font-mono py-4 px-6 hover:bg-green-400 hover:text-black transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
               >
                 <div className="flex items-center justify-center gap-2">
-                  <span className="text-lg">💾</span>
                   <span>BASE DE DONNÉES</span>
                 </div>
                 <div className="text-xs mt-1 opacity-70">

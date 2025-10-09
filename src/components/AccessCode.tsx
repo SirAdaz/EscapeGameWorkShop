@@ -21,7 +21,7 @@ export default function AccessCode({
         (blockedUntil.getTime() - new Date().getTime()) / 1000
       );
       setAccessError(
-        `🔒 Accès bloqué ! Réessayez dans ${remainingTime} secondes.`
+        `Accès bloqué ! Réessayez dans ${remainingTime} secondes.`
       );
       return;
     }
@@ -41,7 +41,7 @@ export default function AccessCode({
         blockTime.setMinutes(blockTime.getMinutes() + 1); // Bloquer pendant 1 minute
         setBlockedUntil(blockTime);
         setAccessError(
-          "⚠️ Trop de tentatives ! Accès bloqué pendant 1 minute."
+          "Trop de tentatives ! Accès bloqué pendant 1 minute."
         );
       } else {
         setAccessError(
@@ -75,7 +75,7 @@ export default function AccessCode({
 
         <div className="bg-black bg-opacity-50 p-8 rounded-lg mb-8">
           <h3 className="text-xl font-bold mb-4 text-yellow-400">
-            🔐 ACCÈS SÉCURISÉ
+            ACCÈS SÉCURISÉ
           </h3>
 
           {/* Timer d'urgence */}
@@ -87,7 +87,7 @@ export default function AccessCode({
               </div>
             </div>
             <div className="text-center text-red-200 text-sm mt-2">
-              ⚠️ TEMPS LIMITÉ - Radioactivité en cours !
+              TEMPS LIMITÉ - Radioactivité en cours !
             </div>
           </div>
 
@@ -101,7 +101,7 @@ export default function AccessCode({
 
           <div className="bg-red-900 bg-opacity-50 p-4 rounded border-l-4 border-red-500 mb-6">
             <p className="text-red-200 font-bold">
-              ⚠️ ATTENTION : Zone de haute sécurité
+              ATTENTION : Zone de haute sécurité
             </p>
             <p className="text-red-200 text-sm">
               Radioactivité détectée - Accès limité à 60 minutes
@@ -113,7 +113,7 @@ export default function AccessCode({
           {timeLeft < 300 && (
             <div className="bg-red-800 bg-opacity-70 p-3 rounded border-l-4 border-red-600 mb-4">
               <p className="text-red-300 font-bold animate-pulse">
-                🚨 URGENCE ! Moins de 5 minutes avant l'explosion !
+                URGENCE ! Moins de 5 minutes avant l'explosion !
               </p>
             </div>
           )}
@@ -123,7 +123,7 @@ export default function AccessCode({
                 className="text-red-400 font-bold animate-pulse"
                 style={{ animationDuration: "0.8s" }}
               >
-                💀 CRITIQUE ! Moins d'1 minute !
+                CRITIQUE ! Moins d'1 minute !
               </p>
             </div>
           )}
@@ -133,7 +133,7 @@ export default function AccessCode({
                 className="text-red-500 font-bold animate-pulse"
                 style={{ animationDuration: "0.4s" }}
               >
-                ⚡ EXPLOSION IMMINENTE !
+                EXPLOSION IMMINENTE !
               </p>
             </div>
           )}
@@ -143,7 +143,7 @@ export default function AccessCode({
                 className="text-red-600 font-bold animate-pulse"
                 style={{ animationDuration: "0.2s" }}
               >
-                💥 MISSION ÉCHOUÉE - EXPLOSION !
+                MISSION ÉCHOUÉE - EXPLOSION !
               </p>
             </div>
           )}
@@ -166,13 +166,13 @@ export default function AccessCode({
 
             {accessError && (
               <div className="text-red-400 text-sm animate-pulse">
-                ❌ {accessError}
+                {accessError}
               </div>
             )}
 
             {attempts > 0 && (
               <div className="text-yellow-400 text-xs">
-                🔒 Tentatives : {attempts}/3
+                Tentatives : {attempts}/3
               </div>
             )}
 
@@ -185,8 +185,8 @@ export default function AccessCode({
                   : "bg-red-600 hover:bg-red-700 text-white hover:scale-105"
               }`}
             >
-              {blockedUntil && new Date() < blockedUntil
-                ? `🔒 BLOQUÉ (${Math.ceil(
+              {blockedUntil && new Date() < blockedUntil ?
+                 `BLOQUÉ (${Math.ceil(
                     (blockedUntil.getTime() - new Date().getTime()) / 1000
                   )}s)`
                 : "ACCÉDER À LA MISSION"}

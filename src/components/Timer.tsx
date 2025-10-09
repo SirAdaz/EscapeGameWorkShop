@@ -23,27 +23,27 @@ export default function Timer({ timeLeft }: TimerProps) {
       {/* Messages d'urgence sous le timer */}
       {timeLeft < 300 && timeLeft >= 60 && (
         <div className="text-xs text-red-400 font-bold animate-pulse">
-          ⚠️ URGENCE ! Moins de 5 minutes !
+          URGENCE ! Moins de 5 minutes !
         </div>
       )}
       {timeLeft < 60 && timeLeft >= 10 && (
         <div className="text-xs text-red-600 font-bold animate-bounce">
-          🚨 CRITIQUE ! Moins d'1 minute !
+          CRITIQUE ! Moins d'1 minute !
         </div>
       )}
       {timeLeft < 10 && timeLeft >= 3 && (
         <div className="text-xs text-red-800 font-bold animate-ping">
-          💀 DERNIÈRES SECONDES !
+          DERNIÈRES SECONDES !
         </div>
       )}
       {timeLeft < 3 && timeLeft > 0 && (
         <div className="text-xs text-red-900 font-bold animate-spin">
-          ⚡ EXPLOSION IMMINENTE !
+          EXPLOSION IMMINENTE !
         </div>
       )}
       {timeLeft === 0 && (
         <div className="text-xs text-red-950 font-bold animate-pulse">
-          💥 MISSION ÉCHOUÉE !
+          MISSION ÉCHOUÉE !
         </div>
       )}
     </div>

@@ -1,13 +1,13 @@
 import { Room } from "../RoomsData";
 
-const disjoncteurResolu = true; // TODO mit à true pour résoudre l'enigme du disjoncteur et pouvoir tester le terminal mais il faudra le changer en fonction de l'enigme
 export const createSalleServeur = (
   setCurrentRoomIndex: (index: number) => void,
   setChatMessages: (messages: any[]) => void,
   socket: any,
   showModal: (content: string) => void,
   addToInventory: (item: string) => void,
-  accesAdmin: boolean
+  accesAdmin: boolean,
+  disjoncteurResolu: boolean
 ): Room => ({
   id: 2,
   name: "Salle Serveur",

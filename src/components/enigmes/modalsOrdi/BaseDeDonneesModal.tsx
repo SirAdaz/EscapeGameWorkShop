@@ -10,13 +10,13 @@ interface BaseDeDonneesModalProps {
 export default function BaseDeDonneesModal({ onClose }: BaseDeDonneesModalProps) {
 
   const hints = [
-    { code: '83576', result: '🧩 Un seul chiffre du nombre 83576 est au bon endroit dans le code final.' },
-    { code: 'pairs', result: '⚖️ La moitié des chiffres du code sont pairs. 2 sur 4 sont pairs donc 2 pairs et 2 impairs' },
-    { code: 'ordre', result: '🔢 Le premier chiffre est plus petit que le second, mais plus grand que le dernier.' },
-    { code: 'milieu', result: '🧮 La somme des deux chiffres du milieu est égale à 8.' },
-    { code: 'domaine', result: '🧭 Aucun chiffre du code nest supérieur à 8, et aucun ne se répète.' },
-    { code: 'structure', result: '⚙️ Si tu additionnes les chiffres pairs du code, tu obtiens la moitié de la somme totale.' },
-    { code: 'cinq', result: '😈 Le chiffre 5 est bien présent, mais il nest ni premier, ni dernier.' }
+    { code: '83576', result: 'Un seul chiffre du nombre 83576 est au bon endroit dans le code final.' },
+    { code: 'pairs', result: 'La moitié des chiffres du code sont pairs. 2 sur 4 sont pairs donc 2 pairs et 2 impairs' },
+    { code: 'ordre', result: 'Le premier chiffre est plus petit que le second, mais plus grand que le dernier.' },
+    { code: 'milieu', result: 'La somme des deux chiffres du milieu est égale à 8.' },
+    { code: 'domaine', result: 'Aucun chiffre du code nest supérieur à 8, et aucun ne se répète.' },
+    { code: 'structure', result: 'Si tu additionnes les chiffres pairs du code, tu obtiens la moitié de la somme totale.' },
+    { code: 'cinq', result: 'Le chiffre 5 est bien présent, mais il nest ni premier, ni dernier.' }
   ];
 
   return (

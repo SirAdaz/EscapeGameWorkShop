@@ -55,19 +55,6 @@ export default function FinalCodeModal({ onClose }: FinalCodeModalProps) {
     setCode(['', '', '', '']);
   };
 
-  const getDigitColor = (digit: string, position: number, attempt: string) => {
-    if (!attempt) return 'text-red-500';
-    
-    const correctDigit = correctCode[position];
-    if (digit === correctDigit) {
-      return 'text-green-500';
-    } else if (correctCode.includes(digit)) {
-      return 'text-yellow-500';
-    } else {
-      return 'text-red-500';
-    }
-  };
-
   return (
     <div className="absolute inset-0 bg-black/80 flex items-center justify-center z-50">
       {/* Contenu principal */}
@@ -75,7 +62,7 @@ export default function FinalCodeModal({ onClose }: FinalCodeModalProps) {
         {/* Message de pénalité */}
         {showPenalty && (
           <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-20 bg-red-600 text-white font-mono text-lg px-6 py-3 rounded-lg animate-pulse">
-            ⚠️ PÉNALITÉ: -1 MINUTE!
+            PÉNALITÉ: -1 MINUTE!
           </div>
         )}
         
@@ -87,7 +74,7 @@ export default function FinalCodeModal({ onClose }: FinalCodeModalProps) {
           {gameWon ? (
             <div className="text-center">
               <div className="text-green-400 font-mono text-xl mb-4">
-                ✓ ACCÈS AUTORISÉ
+                ACCÈS AUTORISÉ
               </div>
               <p className="text-green-300 font-mono">
                 Bravo tu as trouvé le code !
