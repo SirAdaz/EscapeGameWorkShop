@@ -8,9 +8,10 @@ interface ModalProps {
   isOpen: boolean;
   content: string;
   onClose: () => void;
+  onVictory?: () => void;
 }
 
-export default function Modal({ isOpen, content, onClose }: ModalProps) {
+export default function Modal({ isOpen, content, onClose, onVictory }: ModalProps) {
   if (!isOpen) return null;
 
   return (
@@ -30,7 +31,7 @@ export default function Modal({ isOpen, content, onClose }: ModalProps) {
             content === "OrdinateurServeur" && <OrdinateurServerModal />
           }
           {
-            content === "SalleSecurisee" && <SalleSecuriseeModal />
+            content === "SalleSecurisee" && <SalleSecuriseeModal onVictory={onVictory} />
           }
         </div>
         <div className="flex justify-end">
