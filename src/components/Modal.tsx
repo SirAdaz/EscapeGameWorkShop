@@ -1,6 +1,7 @@
 import CasiersModal from './enigmes/CasiersModal';
 import ProduitsChimiquesRapportModal from './enigmes/ProduitsChimiquesRapportModal';
 import OrdinateurServerModal from './enigmes/OrdinateurServerModal';
+import SalleSecuriseeModal from './enigmes/SalleSecuriseeModal';
 import DisjoncteurModal from './rooms/DisjoncteurModal';
 
 interface ModalProps {
@@ -26,7 +27,10 @@ export default function Modal({ isOpen, content, onClose }: ModalProps) {
             content === "Casiers" && <CasiersModal />
           }
           {
-            content === "OrdinateurServerModal" && <OrdinateurServerModal />
+            content === "OrdinateurServeur" && <OrdinateurServerModal />
+          }
+          {
+            content === "SalleSecurisee" && <SalleSecuriseeModal />
           }
         </div>
         <div className="flex justify-end">

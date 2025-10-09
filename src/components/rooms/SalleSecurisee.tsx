@@ -23,7 +23,7 @@ export const createSalleSecurisee = (
       label: "Ordinateur",
       action: () => {
         showModal(
-          "Ordinateur verrouillé, vous devez entrer le code"
+          "SalleSecurisee"
         );
         setAccesAdmin(true);
       },
