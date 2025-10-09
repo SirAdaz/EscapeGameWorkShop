@@ -15,9 +15,12 @@ let gameState = {
   players: [],
   inventory: [],
   disjoncteurResolu: false,
+  jaugesResolues: false,
   accesAdmin: false,
   gameStarted: false,
-  gameEnded: false
+  gameEnded: false,
+
+  codeLabo: false,
 };
 
 // État des aides globales
@@ -116,6 +119,12 @@ io.on('connection', (socket) => {
   
   socket.on('setDisjoncteurResolu', (value) => {
     gameState.disjoncteurResolu = value;
+    io.emit('gameState', gameState);
+  });
+
+    socket.on('setJaugesResolues', (value) => {
+    gameState.jaugesResolues = value;
+    gameState.codeLabo = value;
     io.emit('gameState', gameState);
   });
   
