@@ -136,13 +136,6 @@ export default function ChatSystem({ currentRoom, messages, onSendMessage, socke
 
   const canUseHelp = totalHelpUsed < 5;
   const helpRemaining = 5 - totalHelpUsed;
-  
-  const getCooldownTime = () => {
-    if (!helpCooldown) return 0;
-    const now = new Date();
-    const diff = helpCooldown.getTime() - now.getTime();
-    return Math.max(0, Math.ceil(diff / 1000));
-  };
 
   if (!isOpen) {
     return (

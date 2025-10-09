@@ -1,6 +1,7 @@
 import CasiersModal from './enigmes/CasiersModal';
 import ProduitsChimiquesRapportModal from './enigmes/ProduitsChimiquesRapportModal';
 import OrdinateurServerModal from './enigmes/OrdinateurServerModal';
+import SalleSecuriseeModal from './enigmes/SalleSecuriseeModal';
 import DisjoncteurModal from './rooms/DisjoncteurModal';
 import JaugesModal from './enigmes/modalsLabo/JaugesModal';
 
@@ -8,9 +9,10 @@ interface ModalProps {
   isOpen: boolean;
   content: string;
   onClose: () => void;
+  onVictory?: () => void;
 }
 
-export default function Modal({ isOpen, content, onClose }: ModalProps) {
+export default function Modal({ isOpen, content, onClose, onVictory }: ModalProps) {
   if (!isOpen) return null;
 
   return (
@@ -27,7 +29,10 @@ export default function Modal({ isOpen, content, onClose }: ModalProps) {
             content === "Casiers" && <CasiersModal />
           }
           {
-            content === "OrdinateurServerModal" && <OrdinateurServerModal />
+            content === "OrdinateurServeur" && <OrdinateurServerModal />
+          }
+          {
+            content === "SalleSecurisee" && <SalleSecuriseeModal onVictory={onVictory} />
           }
           {
             content === "jauges_equation" && <JaugesModal/>

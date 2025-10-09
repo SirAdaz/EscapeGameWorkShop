@@ -5,7 +5,7 @@ interface InventoryProps {
 export default function Inventory({ items }: InventoryProps) {
   return (
     <div className="absolute top-4 right-4 bg-black bg-opacity-80 text-white p-4 rounded-lg max-w-xs">
-      <div className="text-lg font-bold mb-2">🎒 INVENTAIRE</div>
+      <div className="text-lg font-bold mb-2">INVENTAIRE</div>
       {items.length === 0 ? (
         <div className="text-sm text-gray-400">Aucun objet collecté</div>
       ) : (

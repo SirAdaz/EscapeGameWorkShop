@@ -1,20 +1,13 @@
 import { Room } from "../RoomsData";
 
-import { create } from "zustand";
-
-export const useGameState = create((set) => ({
-  disjoncteurResolu: false,
-  setDisjoncteurResolu: (val: boolean) => set({ disjoncteurResolu: val }),
-}));
-
-const disjoncteurResolu = false;
 export const createSalleServeur = (
   setCurrentRoomIndex: (index: number) => void,
   setChatMessages: (messages: any[]) => void,
   socket: any,
   showModal: (content: string) => void,
   addToInventory: (item: string) => void,
-  accesAdmin: boolean
+  accesAdmin: boolean,
+  disjoncteurResolu: boolean
 ): Room => ({
   id: 2,
   name: "Salle Serveur",
@@ -36,7 +29,7 @@ export const createSalleServeur = (
           );
           return;
         }
-        showModal("OrdinateurServerModal");
+        showModal("OrdinateurServeur");
       },
     },
     {

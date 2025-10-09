@@ -14,7 +14,7 @@ export default function RapportModal({ onClose }: RapportModalProps) {
           <p>Date: {new Date().toLocaleDateString()}</p>
           <hr />
           <p>Ce rapport contient des informations sensibles sur la configuration du serveur principal.</p>
-          <p><strong>⚠️ ATTENTION:</strong> Ce document est classifié et ne doit pas être partagé.</p>
+          <p><strong>ATTENTION:</strong> Ce document est classifié et ne doit pas être partagé.</p>
           <div className="bg-yellow-100 p-3 rounded border-l-4 border-yellow-500">
             <p className="text-yellow-800"><strong>Note:</strong> Les codes d'accès sont stockés dans un fichier séparé.</p>
           </div>
