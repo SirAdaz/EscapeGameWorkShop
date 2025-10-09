@@ -22,5 +22,17 @@ export const createSalleLaboratoireNiveau2 = (
           '📋 RAPPORTS DE RECHERCHE\n\nÉquations testées :\n- Équation A : ÉCHEC\n- Équation B : ÉCHEC\n- Équation C : SUCCÈS ✅\n\nDossier correspondant : "Équation_C_Succès"'
         ),
     },
+    {
+      id: "niveaux",
+      x: 47,
+      y: 40,
+      width: 8,
+      height: 30,
+      label: "Armoire vérouillée",
+      action: () =>
+        showModal(
+          'jauges_equation'
+        ),
+    },
   ],
 });

@@ -2,6 +2,7 @@ import CasiersModal from './enigmes/CasiersModal';
 import ProduitsChimiquesRapportModal from './enigmes/ProduitsChimiquesRapportModal';
 import OrdinateurServerModal from './enigmes/OrdinateurServerModal';
 import DisjoncteurModal from './rooms/DisjoncteurModal';
+import JaugesModal from './enigmes/modalsLabo/JaugesModal';
 
 interface ModalProps {
   isOpen: boolean;
@@ -27,6 +28,9 @@ export default function Modal({ isOpen, content, onClose }: ModalProps) {
           }
           {
             content === "OrdinateurServerModal" && <OrdinateurServerModal />
+          }
+          {
+            content === "jauges_equation" && <JaugesModal/>
           }
         </div>
         <div className="flex justify-end">

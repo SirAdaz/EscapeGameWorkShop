@@ -56,19 +56,7 @@ export default function Home() {
   } = useGameState();
 
   // Gestion des événements Socket.io
-  useGameSocket({
-    socket,
-    setTimeLeft,
-    setInventory,
-    setDisjoncteurResolu,
-    setAccesAdmin,
-    setGameEnded,
-    setPlayers,
-    setChatMessages,
-    setHelpMessages,
-    setTotalHelpUsed,
-    setHelpCooldown,
-  });
+  useGameSocket(socket);
 
   // Configuration des salles de Tchernobyl2
   const { rooms } = useRooms({

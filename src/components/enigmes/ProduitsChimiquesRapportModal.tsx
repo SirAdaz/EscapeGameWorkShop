@@ -29,7 +29,7 @@ export default function ProduitsChimiquesRapport() {
           </tbody>
         </table>
         <div className="mt-3 p-3 bg-red-100 border-2 border-red-500 text-red-800 text-center font-bold">
-          ⚠️ ACCÈS RESTREINT – NE PAS DIFFUSER HORS DU SERVICE
+          ACCÈS RESTREINT – NE PAS DIFFUSER HORS DU SERVICE
         </div>
       </div>
 

@@ -1,6 +1,13 @@
 import { Room } from "../RoomsData";
 
-const disjoncteurResolu = true; // TODO mit à true pour résoudre l'enigme du disjoncteur et pouvoir tester le terminal mais il faudra le changer en fonction de l'enigme
+import { create } from "zustand";
+
+export const useGameState = create((set) => ({
+  disjoncteurResolu: false,
+  setDisjoncteurResolu: (val: boolean) => set({ disjoncteurResolu: val }),
+}));
+
+const disjoncteurResolu = false;
 export const createSalleServeur = (
   setCurrentRoomIndex: (index: number) => void,
   setChatMessages: (messages: any[]) => void,
