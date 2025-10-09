@@ -1,6 +1,6 @@
 export default function ProduitsChimiquesRapport() {
   return (
-    <div className="bg-white text-black p-8 max-w-4xl mx-auto shadow-lg max-h-200 overflow-y-auto margin-top-4" style={{fontFamily: 'Times New Roman, serif'}}>
+    <div className="bg-white text-black p-8 max-w-4xl mx-auto shadow-lg max-h-150 overflow-y-auto margin-top-4" style={{fontFamily: 'Times New Roman, serif'}}>
       {/* En-tête du document */}
       <div className="text-center mb-8">
         <div className="border-2 border-black p-4 mb-4">

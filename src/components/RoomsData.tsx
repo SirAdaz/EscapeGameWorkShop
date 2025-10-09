@@ -57,7 +57,7 @@ export const createRoomsData = ({
       socket,
       showModal,
       addToInventory,
-      disjoncteurResolu,
+      // disjoncteurResolu,
       accesAdmin
     ),
     createSalleLaboratoire(

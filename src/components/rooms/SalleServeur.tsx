@@ -1,12 +1,12 @@
 import { Room } from "../RoomsData";
 
+const disjoncteurResolu = true; // TODO mit à true pour résoudre l'enigme du disjoncteur et pouvoir tester le terminal mais il faudra le changer en fonction de l'enigme
 export const createSalleServeur = (
   setCurrentRoomIndex: (index: number) => void,
   setChatMessages: (messages: any[]) => void,
   socket: any,
   showModal: (content: string) => void,
   addToInventory: (item: string) => void,
-  disjoncteurResolu: boolean,
   accesAdmin: boolean
 ): Room => ({
   id: 2,
@@ -29,15 +29,7 @@ export const createSalleServeur = (
           );
           return;
         }
-        if (!accesAdmin) {
-          showModal(
-            "💻 ORDINATEUR PRINCIPAL\n\n❌ Accès administrateur requis !\n\nVous devez d'abord obtenir les droits d'accès dans la salle administrateur."
-          );
-          return;
-        }
-        showModal(
-          "💻 ORDINATEUR PRINCIPAL\n\n✅ Accès administrateur confirmé !\n\nOutils disponibles :\n- Déchiffreur de fichiers\n- Lecteur d'archives\n- Accès aux dossiers"
-        );
+        showModal("OrdinateurServerModal");
       },
     },
     {
