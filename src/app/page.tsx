@@ -8,6 +8,7 @@ import Inventory from "@/components/Inventory";
 import AccessCode from "@/components/AccessCode";
 import PlayersInRoom from "@/components/PlayersInRoom";
 import GameOver from "@/components/GameOver";
+import Victory from "@/components/Victory";
 import { LaboratoireNavigation } from "@/components/LaboratoireNavigation";
 import { useSocket } from "@/hooks/useSocket";
 import { useGameSocket } from "@/hooks/useGameSocket";
@@ -28,6 +29,8 @@ export default function Home() {
     setInventory,
     gameEnded,
     setGameEnded,
+    gameWon,
+    setGameWon,
     accessGranted,
     setAccessGranted,
     disjoncteurResolu,
@@ -100,6 +103,11 @@ export default function Home() {
     return <GameOver />;
   }
 
+  // Écran de victoire
+  if (gameWon) {
+    return <Victory />;
+  }
+
   return (
     <main className="h-screen w-screen overflow-hidden relative">
       <Room
@@ -169,6 +177,7 @@ export default function Home() {
         isOpen={modalOpen}
         content={modalContent}
         onClose={() => setModalOpen(false)}
+        onVictory={() => setGameWon(true)}
       />
     </main>
   );

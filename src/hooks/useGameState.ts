@@ -6,6 +6,7 @@ export const useGameState = () => {
   const [timeLeft, setTimeLeft] = useState(60 * 60); // 60 minutes en secondes
   const [inventory, setInventory] = useState<string[]>([]);
   const [gameEnded, setGameEnded] = useState(false);
+  const [gameWon, setGameWon] = useState(false);
   const [accessGranted, setAccessGranted] = useState(false);
 
   // États des puzzles
@@ -46,6 +47,7 @@ export const useGameState = () => {
     setTimeLeft(60 * 60); // Réinitialiser le timer à 60 minutes
     setInventory([]); // Réinitialiser l'inventaire
     setGameEnded(false); // Réinitialiser l'état de fin
+    setGameWon(false); // Réinitialiser l'état de victoire
     setDisjoncteurResolu(false); // Réinitialiser les états
     setAccesAdmin(false);
     
@@ -74,6 +76,8 @@ export const useGameState = () => {
     setInventory,
     gameEnded,
     setGameEnded,
+    gameWon,
+    setGameWon,
     accessGranted,
     setAccessGranted,
     disjoncteurResolu,
