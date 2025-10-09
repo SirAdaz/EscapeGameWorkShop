@@ -1,5 +1,6 @@
 import Casiers from './Casiers';
 import ProduitsChimiquesRapport from './ProduitsChimiquesRapport';
+import DisjoncteurModal from './rooms/DisjoncteurModal';
 
 interface ModalProps {
   isOpen: boolean;
@@ -18,7 +19,7 @@ export default function Modal({ isOpen, content, onClose }: ModalProps) {
         </h3>
         <div className="whitespace-pre-line text-base-content mb-6">
           {
-            content === "disjoncteur" && <div>zizi</div>
+            content === "disjoncteur" && <DisjoncteurModal/> 
           }
           {
             content === "DOSSIER PRODUITS CHIMIQUES" && <ProduitsChimiquesRapport />
