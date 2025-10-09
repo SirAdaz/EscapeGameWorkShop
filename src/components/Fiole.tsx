@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {createSalleLaboratoire} from "@/components/rooms/SalleLaboratoire";
 
 export default function Fiole({onClose}: {onClose: () => void}) {
   const [fiole1, setFiole1] = useState(false);
@@ -37,9 +38,11 @@ export default function Fiole({onClose}: {onClose: () => void}) {
   const [popUpIndice3, setPopUpIndice3] = useState(false);
   const [indice4, setIndice4] = useState(false);
   const [hoveredIndice4, setHoveredIndice4] = useState(false);
+  const [resolu, setResolu] = useState(false);
 
 
-  const modalStyle: React.CSSProperties = {
+
+    const modalStyle: React.CSSProperties = {
     position: "fixed",
     top: 0,
     left: 0,
@@ -421,7 +424,8 @@ export default function Fiole({onClose}: {onClose: () => void}) {
                     fiole1 && fiole3 && fiole11 &&
                     !fiole2 && !fiole4 && !fiole5 && !fiole6 && !fiole7 && !fiole8 && !fiole9 && !fiole10 && !fiole12
                   ) {
-                    setValidationMsg("Vous avez réussi l'énigme veuillez-vous rendre au niveau du PC!");
+                    setValidationMsg("Vous avez récupéré une fiole pour faire fondre le casier !");
+                    setResolu(true);
                   } else {
                     setValidationMsg("Ce n'est pas la bonne formule");
                   }
@@ -432,7 +436,7 @@ export default function Fiole({onClose}: {onClose: () => void}) {
             </button>
         </div>
         {validationMsg && (
-          <div style={{ marginTop: "20px", fontSize: "1.2rem", color: validationMsg === "Vous avez réussi l'énigme veuillez-vous rendre au niveau du PC!" ? "#22c55e" : "#ef4444", fontWeight: "bold" }}>
+          <div style={{ marginTop: "20px", fontSize: "1.2rem", color: validationMsg === "Vous avez récupéré une fiole pour faire fondre le casier !" ? "#22c55e" : "#ef4444", fontWeight: "bold" }}>
             {validationMsg}
           </div>
         )}
