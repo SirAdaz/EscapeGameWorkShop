@@ -26,6 +26,7 @@ export default function DisjoncteurModal() {
         if (allOff) {
             setDisjoncteurResolu(true)
             if (socket) socket.emit("setDisjoncteurResolu", true );
+            if (socket) socket.emit("addToInventory", "Code du disjoncteur [8]")
         }
     }
 

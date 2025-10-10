@@ -23,12 +23,6 @@ export const createSalleServeur = (
       height: 20,
       label: "Ordinateur principal",
       action: () => {
-        if (!disjoncteurResolu) {
-          showModal(
-            "💻 ORDINATEUR PRINCIPAL\n\n❌ Pas d'alimentation électrique !\n\nVous devez d'abord réparer le disjoncteur."
-          );
-          return;
-        }
         showModal("OrdinateurServeur");
       },
     },
