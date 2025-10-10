@@ -5,6 +5,9 @@ import SalleSecuriseeModal from './enigmes/SalleSecuriseeModal';
 import DisjoncteurModal from './rooms/DisjoncteurModal';
 import Fiole from "@/components/Fiole";
 import JaugesModal from './enigmes/modalsLabo/JaugesModal';
+import EquationRapportModal from './enigmes/EquationRapportModal';
+import TableauEqModal from './rooms/TableauEqModal';
+import ImprimanteModal from './enigmes/modalsArchive/ImprimanteModal';
 import Indice4Fiole from "@/components/enigmes/Indice4Fiole";
 import FauxCasierModal from './enigmes/FauxCasierModal';
 import PorteSecuriseeModal from './enigmes/PorteSecuriseeModal';
@@ -28,6 +31,12 @@ export default function Modal({ isOpen, content, onClose, onVictory }: ModalProp
                     }
                     {
                         content === "DOSSIER PRODUITS CHIMIQUES" && <ProduitsChimiquesRapportModal />
+                    }
+                    {
+                        content === "DOSSIER EQUATION" && <EquationRapportModal/>
+                    }
+                    {
+                        content === "archive_feuille_code" && <ImprimanteModal/>
                     }
                     {
                         content === "Casiers" && <CasiersModal />
