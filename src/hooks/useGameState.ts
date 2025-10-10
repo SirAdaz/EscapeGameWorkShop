@@ -49,6 +49,9 @@ interface GameState {
   codeLaboObtenu: boolean;
   setCodeLaboObtenu: (val:boolean) => void;
 
+  codeGeneralObtenu: boolean;
+  setCodeGeneralObtenu: (val: boolean) => void;
+
   // --- États des joueurs et communication ---
   players: any[];
   setPlayers: (players: any[]) => void;
@@ -130,6 +133,9 @@ export const useGameState = create<GameState>((set, get) => ({
   codeLaboObtenu: false,
   setCodeLaboObtenu: (val) => set({ codeLaboObtenu: val}),
 
+  codeGeneralObtenu: false,
+  setCodeGeneralObtenu: (val) => set({ codeGeneralObtenu: val }),
+
 
   // --- États des joueurs et communication ---
   players: [],
@@ -187,6 +193,7 @@ export const useGameState = create<GameState>((set, get) => ({
       casiersProgress: { current: 0, total: 5 },
       currentCasierNumber: "243",
       accesAdmin: false,
+      codeGeneralObtenu: false,
       initialHelpCooldown: initialCooldown,
     });
 

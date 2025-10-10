@@ -13,6 +13,7 @@ interface ServerGameState {
   gameEnded: boolean;
 
   codeLabo: boolean;
+  codeGeneral: boolean;
 }
 
 interface HelpMessageData {
@@ -38,7 +39,8 @@ export const useGameSocket = (socket: Socket | null) => {
     setTotalHelpUsed,
     setHelpCooldown,
 
-    setCodeLaboObtenu
+    setCodeLaboObtenu,
+    setCodeGeneralObtenu
   } = useGameState();
 
   useEffect(() => {
@@ -54,6 +56,7 @@ export const useGameSocket = (socket: Socket | null) => {
       setGameEnded(state.gameEnded);
 
       setCodeLaboObtenu(state.codeLabo);
+      setCodeGeneralObtenu(state.codeGeneral);
     });
 
     // --- Players list ---
@@ -73,13 +76,18 @@ export const useGameSocket = (socket: Socket | null) => {
       setHelpCooldown(data.helpCooldown ? new Date(data.helpCooldown) : undefined);
     });
 
+    // --- Code général débloqué ---
+    socket.on('codeGeneralUnlocked', () => {
+      setCodeGeneralObtenu(true);
+    });
+
     // --- Player join/leave events ---
     socket.on('playerJoined', (player: any) => {
-      console.log('Player joined:', player);
+      console.log('Player joined:', player, 'Stack trace:', new Error().stack);
     });
 
     socket.on('playerLeft', (playerId: any) => {
-      console.log('Player left:', playerId);
+      console.log('Player left:', playerId, 'Stack trace:', new Error().stack);
     });
 
     // --- Cleanup ---
@@ -88,6 +96,7 @@ export const useGameSocket = (socket: Socket | null) => {
       socket.off('playersList');
       socket.off('chatMessage');
       socket.off('helpMessage');
+      socket.off('codeGeneralUnlocked');
       socket.off('playerJoined');
       socket.off('playerLeft');
     };
@@ -108,6 +117,7 @@ export const useGameSocket = (socket: Socket | null) => {
     setTotalHelpUsed,
     setHelpCooldown,
 
-    setCodeLaboObtenu
+    setCodeLaboObtenu,
+    setCodeGeneralObtenu
   ]);
 };

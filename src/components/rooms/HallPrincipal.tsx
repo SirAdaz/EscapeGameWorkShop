@@ -2,12 +2,14 @@ import { useGameState } from "@/hooks/useGameState";
 import { Room } from "../RoomsData";
 
 export const createHallPrincipal = (
-
+  showModal: (content: string) => void,
   setCurrentRoomIndex: (index: number) => void,
   setChatMessages: (messages: any[]) => void,
   socket: any,
-  disjoncteurResolu:boolean
-): Room => ({
+  disjoncteurResolu: boolean,
+  codeGeneralObtenu: boolean
+): Room => {
+  return {
   id: 1,
   name: "Entrée - Hall Principal",
   imageSrc: "/images/Hall.png",
@@ -22,9 +24,9 @@ export const createHallPrincipal = (
       height: 55,
       label: "Porte vers Salle Serveur",
       action: () => {
-        setCurrentRoomIndex(1);
         setChatMessages([]);
         if (socket) {
+          setCurrentRoomIndex(1);
           socket.emit("playerMove", { room: "Salle Serveur" });
         }
       },
@@ -37,9 +39,9 @@ export const createHallPrincipal = (
       height: 50,
       label: "Porte vers Salle Laboratoire",
       action: () => {
-        setCurrentRoomIndex(2);
         setChatMessages([]);
         if (socket && disjoncteurResolu) {
+          setCurrentRoomIndex(2);
           socket.emit("playerMove", { room: "Salle Laboratoire" });
         }
       },
@@ -47,14 +49,14 @@ export const createHallPrincipal = (
     {
       id: "porte_archives",
       x: 71,
-      y: 41,
+      y: 46,
       width: 5,
       height: 35,
       label: "Porte vers Salle Archives",
       action: () => {
-        setCurrentRoomIndex(3);
         setChatMessages([]);
         if (socket && disjoncteurResolu) {
+          setCurrentRoomIndex(4);
           socket.emit("playerMove", { room: "Salle Archives" });
         }
       },
@@ -62,14 +64,14 @@ export const createHallPrincipal = (
     {
       id: "porte_toilette",
       x: 66,
-      y: 52,
+      y: 54,
       width: 3,
-      height: 20,
+      height: 24,
       label: "Porte vers les toilettes",
       action: () => {
-        setCurrentRoomIndex(6);
         setChatMessages([]);
         if (socket && disjoncteurResolu) {
+          setCurrentRoomIndex(6);
           socket.emit("playerMove", { room: "Salle Toilettes" });
         }
       },
@@ -77,23 +79,23 @@ export const createHallPrincipal = (
     {
       id: "porte_fermee",
       x: 31,
-      y: 52,
+      y: 55,
       width: 3,
-      height: 20,
+      height: 22,
       label: "Porte fermée",
       action: () => {},
     },
     {
       id: "porte_vestiaires",
       x: 24,
-      y: 45,
+      y: 47,
       width: 5,
       height: 32,
       label: "Porte vers Salle Vestiaires",
       action: () => {
-        setCurrentRoomIndex(4);
         setChatMessages([]);
-        if (socket && disjoncteurResolu) {
+        if (socket && disjoncteurResolu) { 
+          setCurrentRoomIndex(4);
           socket.emit("playerMove", { room: "Salle Vestiaires" });
         }
       },
@@ -101,20 +103,22 @@ export const createHallPrincipal = (
     {
       id: "porte_securise",
       x: 43,
-      y: 48,
+      y: 52,
       width: 14,
       height: 25,
       label: "Porte vers Salle Sécurisée",
       action: () => {
-        setCurrentRoomIndex(5);
-        setChatMessages([]);
-            if (socket && disjoncteurResolu) {
-              // if (codeObtenus)
-              socket.emit("playerMove", { room: "Salle Sécurisée" });
-              // else
-              // showModal(PorteSecuriseeModal)
-            }
+        if (socket && (disjoncteurResolu || true)) { // Temporaire pour test
+          if (codeGeneralObtenu) {
+            setChatMessages([]);
+            setCurrentRoomIndex(5);
+            socket.emit("playerMove", { room: "Salle Sécurisée" });
+          } else {
+            showModal("PorteSecuriseeModal");
+          }
+        }
       },
     },
   ],
-});
+  };
+};
