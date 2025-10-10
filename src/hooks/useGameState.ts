@@ -15,12 +15,24 @@ interface GameState {
   gameEnded: boolean;
   setGameEnded: (val: boolean) => void;
 
+  gameWon: boolean;
+  setGameWon: (val: boolean) => void;
+
   accessGranted: boolean;
   setAccessGranted: (val: boolean) => void;
 
   // --- États des puzzles ---
   disjoncteurResolu: boolean;
   setDisjoncteurResolu: (val: boolean) => void;
+
+  casiersResolu: boolean;
+  setCasiersResolu: (val: boolean) => void;
+
+  casiersProgress: { current: number; total: number };
+  setCasiersProgress: (progress: { current: number; total: number }) => void;
+
+  currentCasierNumber: string | null;
+  setCurrentCasierNumber: (number: string | null) => void;
 
   accesAdmin: boolean;
   setAccesAdmin: (val: boolean) => void;
@@ -72,12 +84,24 @@ export const useGameState = create<GameState>((set, get) => ({
   gameEnded: false,
   setGameEnded: (val) => set({ gameEnded: val }),
 
+  gameWon: false,
+  setGameWon: (val) => set({ gameWon: val }),
+
   accessGranted: false,
   setAccessGranted: (val) => set({ accessGranted: val }),
 
   // --- États des puzzles ---
   disjoncteurResolu: false,
   setDisjoncteurResolu: (val) => set({ disjoncteurResolu: val }),
+
+  casiersResolu: false,
+  setCasiersResolu: (val) => set({ casiersResolu: val }),
+
+  casiersProgress: { current: 0, total: 5 },
+  setCasiersProgress: (progress) => set({ casiersProgress: progress }),
+
+  currentCasierNumber: "243",
+  setCurrentCasierNumber: (number) => set({ currentCasierNumber: number }),
 
   accesAdmin: false,
   setAccesAdmin: (val) => set({ accesAdmin: val }),
@@ -133,6 +157,9 @@ export const useGameState = create<GameState>((set, get) => ({
       inventory: [],
       gameEnded: false,
       disjoncteurResolu: false,
+      casiersResolu: false,
+      casiersProgress: { current: 0, total: 5 },
+      currentCasierNumber: "243",
       accesAdmin: false,
       initialHelpCooldown: initialCooldown,
     });
