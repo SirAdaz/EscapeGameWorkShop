@@ -19,9 +19,6 @@ export const createSalleLaboratoire = (
       height: 20,
       label: "Station de chimie",
       action: () => {
-          if (resolu) {
-              addToInventory("Fiole pour faire fondre des matériaux");
-          }
           showModal("Fioles");
       }
     },
@@ -31,25 +28,11 @@ export const createSalleLaboratoire = (
           y: 57,
           width: 5,
           height: 10,
-          label: "Station de chimie",
-          action: () =>{
-              addToInventory("Clé du laboratoire");
-              showModal("RecupereFioleLabo");
+          label: "Indice 4 fiole",
+          action: () => {
+                 showModal("Indice4Fiole");
           }
+
       },
-    {
-      id: "equation",
-      x: 72,
-      y: 34,
-      width: 28,
-      height: 31,
-      label: "Tableau d'équations",
-      action: () => {
-        addToInventory("Code [2]");
-        showModal(
-          "🧮 ÉQUATION VALIDE\n\nH₂SO₄ + 2NaOH → Na₂SO₄ + 2H₂O\n\nValeurs : H=1, S=16, O=8, Na=11\n\n✅ Code partiel trouvé : [2]"
-        );
-      },
-    },
   ],
 });

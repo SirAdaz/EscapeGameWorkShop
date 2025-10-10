@@ -4,8 +4,8 @@ import OrdinateurServerModal from './enigmes/OrdinateurServerModal';
 import SalleSecuriseeModal from './enigmes/SalleSecuriseeModal';
 import DisjoncteurModal from './rooms/DisjoncteurModal';
 import Fiole from "@/components/Fiole";
-import RecupereFioleLabo from "@/components/enigmes/RecupereFioleLabo";
 import JaugesModal from './enigmes/modalsLabo/JaugesModal';
+import Indice4Fiole from "@/components/enigmes/Indice4Fiole";
 
 interface ModalProps {
   isOpen: boolean;
@@ -43,7 +43,7 @@ export default function Modal({ isOpen, content, onClose, onVictory }: ModalProp
                         content === "Fioles" && <Fiole onClose={onClose}/>
                     }
                     {
-                        content === "RecupereFioleLabo" && <RecupereFioleLabo resolu={true} />
+                        content === "Indice4Fiole" && <Indice4Fiole onRetour={onClose}/>
                     }
                 </div>
                 <div className="flex justify-end">
