@@ -2,9 +2,17 @@
 
 import { useState, useEffect } from 'react';
 
+interface ChatMessage {
+  id: string;
+  player: string;
+  message: string;
+  timestamp: number;
+  room: string;
+}
+
 interface ChatSystemProps {
   currentRoom: string;
-  messages: any[];
+  messages: ChatMessage[] | undefined;
   onSendMessage: (message: string) => void;
   socket: any;
   timeLeft: number;
@@ -195,7 +203,7 @@ export default function ChatSystem({ currentRoom, messages, onSendMessage, socke
       <div className="flex-1 overflow-y-auto p-3 space-y-2 bg-gray-700">
         {activeTab === 'chat' ? (
           // Messages normaux
-          messages.map((msg) => (
+          Array.isArray(messages) ? messages.map((msg) => (
             <div key={msg.id} className="text-sm">
               <div className="flex justify-between items-center mb-1">
                 <span className="font-bold text-blue-400">{msg.player}</span>
@@ -212,7 +220,11 @@ export default function ChatSystem({ currentRoom, messages, onSendMessage, socke
                 </div>
               )}
             </div>
-          ))
+          )) : (
+            <div className="text-center text-gray-400 text-sm">
+              Aucun message pour le moment
+            </div>
+          )
         ) : (
           // Messages d'aide de la salle actuelle uniquement
           helpMessages && helpMessages[currentRoom] && helpMessages[currentRoom].length > 0 ? (

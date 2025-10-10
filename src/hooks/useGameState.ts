@@ -15,12 +15,24 @@ interface GameState {
   gameEnded: boolean;
   setGameEnded: (val: boolean) => void;
 
+  gameWon: boolean;
+  setGameWon: (val: boolean) => void;
+
   accessGranted: boolean;
   setAccessGranted: (val: boolean) => void;
 
   // --- États des puzzles ---
   disjoncteurResolu: boolean;
   setDisjoncteurResolu: (val: boolean) => void;
+
+  casiersResolu: boolean;
+  setCasiersResolu: (val: boolean) => void;
+
+  casiersProgress: { current: number; total: number };
+  setCasiersProgress: (progress: { current: number; total: number }) => void;
+
+  currentCasierNumber: string | null;
+  setCurrentCasierNumber: (number: string | null) => void;
 
   accesAdmin: boolean;
   setAccesAdmin: (val: boolean) => void;
@@ -37,12 +49,15 @@ interface GameState {
   codeLaboObtenu: boolean;
   setCodeLaboObtenu: (val:boolean) => void;
 
+  codeGeneralObtenu: boolean;
+  setCodeGeneralObtenu: (val: boolean) => void;
+
   // --- États des joueurs et communication ---
   players: any[];
   setPlayers: (players: any[]) => void;
 
   chatMessages: any[];
-  setChatMessages: (messages: any[]) => void;
+  setChatMessages: (messages: any[] | ((prev: any[]) => any[])) => void;
 
   // --- États d'aide globale ---
   helpMessages: { [key: string]: string[] };
@@ -84,12 +99,24 @@ export const useGameState = create<GameState>((set, get) => ({
   gameEnded: false,
   setGameEnded: (val) => set({ gameEnded: val }),
 
+  gameWon: false,
+  setGameWon: (val) => set({ gameWon: val }),
+
   accessGranted: false,
   setAccessGranted: (val) => set({ accessGranted: val }),
 
   // --- États des puzzles ---
   disjoncteurResolu: false,
   setDisjoncteurResolu: (val) => set({ disjoncteurResolu: val }),
+
+  casiersResolu: false,
+  setCasiersResolu: (val) => set({ casiersResolu: val }),
+
+  casiersProgress: { current: 0, total: 5 },
+  setCasiersProgress: (progress) => set({ casiersProgress: progress }),
+
+  currentCasierNumber: "243",
+  setCurrentCasierNumber: (number) => set({ currentCasierNumber: number }),
 
   accesAdmin: false,
   setAccesAdmin: (val) => set({ accesAdmin: val }),
@@ -106,13 +133,22 @@ export const useGameState = create<GameState>((set, get) => ({
   codeLaboObtenu: false,
   setCodeLaboObtenu: (val) => set({ codeLaboObtenu: val}),
 
+  codeGeneralObtenu: false,
+  setCodeGeneralObtenu: (val) => set({ codeGeneralObtenu: val }),
+
 
   // --- États des joueurs et communication ---
   players: [],
   setPlayers: (players) => set({ players }),
 
   chatMessages: [],
-  setChatMessages: (messages) => set({ chatMessages: messages }),
+  setChatMessages: (messages) => {
+    if (typeof messages === 'function') {
+      set((state) => ({ chatMessages: messages(state.chatMessages) }));
+    } else {
+      set({ chatMessages: messages });
+    }
+  },
 
   // --- États d'aide globale ---
   helpMessages: {},
@@ -159,7 +195,11 @@ export const useGameState = create<GameState>((set, get) => ({
       gameEnded: false,
       disjoncteurResolu: false,
       jaugesResolues: false,
+      casiersResolu: false,
+      casiersProgress: { current: 0, total: 5 },
+      currentCasierNumber: "243",
       accesAdmin: false,
+      codeGeneralObtenu: false,
       initialHelpCooldown: initialCooldown,
     });
 
