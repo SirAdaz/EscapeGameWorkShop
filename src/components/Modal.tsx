@@ -4,11 +4,8 @@ import OrdinateurServerModal from './enigmes/OrdinateurServerModal';
 import SalleSecuriseeModal from './enigmes/SalleSecuriseeModal';
 import DisjoncteurModal from './rooms/DisjoncteurModal';
 import Fiole from "@/components/Fiole";
-import RecupereFioleLabo from "@/components/enigmes/RecupereFioleLabo";
 import JaugesModal from './enigmes/modalsLabo/JaugesModal';
-import EquationRapportModal from './enigmes/EquationRapportModal';
-import TableauEqModal from './rooms/TableauEqModal';
-import FauxCasierModal from './enigmes/FauxCasierModal';
+import Indice4Fiole from "@/components/enigmes/Indice4Fiole";
 
 interface ModalProps {
   isOpen: boolean;
@@ -31,34 +28,22 @@ export default function Modal({ isOpen, content, onClose, onVictory }: ModalProp
                         content === "DOSSIER PRODUITS CHIMIQUES" && <ProduitsChimiquesRapportModal />
                     }
                     {
-                        content === "DOSSIER EQUATION" && <EquationRapportModal/>
-                    }
-                    {
                         content === "Casiers" && <CasiersModal />
                     }
                     {
                         content === "OrdinateurServeur" && <OrdinateurServerModal />
                     }
                     {
-                        content === "SalleSecurisee" && <SalleSecuriseeModal onVictory={onVictory} />
+                      content === "SalleSecurisee" && <SalleSecuriseeModal onVictory={onVictory} />
                     }
                     {
-                        content === "jauges_equation" && <JaugesModal/>
-                    }
-                    {
-                        content === "jauges_confirmation" && <div>La porte est dévérouillée, Vous récupérez un morceau de code dans votre inventaire...</div>
-                    }
-                    {
-                        content === "tableauNiv2" && <TableauEqModal/>
+                      content === "jauges_equation" && <JaugesModal/>
                     }
                     {
                         content === "Fioles" && <Fiole onClose={onClose}/>
                     }
                     {
-                        content === "RecupereFioleLabo" && <RecupereFioleLabo resolu={true} />
-                    }
-                    {
-                        content === "FauxCasier" && <FauxCasierModal/>
+                        content === "Indice4Fiole" && <Indice4Fiole onRetour={onClose}/>
                     }
                 </div>
                 <div className="flex justify-end">
