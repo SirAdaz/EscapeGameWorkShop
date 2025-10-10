@@ -35,25 +35,5 @@ export const createSalleServeur = (
       label: "Tableau de disjoncteurs",
       action: () => showModal("disjoncteur"),
     },
-    {
-      id: "serveur",
-      x: 80,
-      y: 20,
-      width: 18,
-      height: 78,
-      label: "Serveur de données",
-      action: () => {
-        if (!disjoncteurResolu) {
-          showModal(
-            "🖥️ SERVEUR DE DONNÉES\n\n❌ Pas d'alimentation électrique !\n\nVous devez d'abord réparer le disjoncteur pour accéder aux serveurs."
-          );
-          return;
-        }
-        addToInventory("Code [1]");
-        showModal(
-          "🖥️ SERVEUR DE DONNÉES\n\n✅ Alimentation rétablie !\nFichiers d'archives accessibles\nRapports de laboratoire disponibles\n\n✅ Code partiel trouvé : [1]"
-        );
-      },
-    },
   ],
 });

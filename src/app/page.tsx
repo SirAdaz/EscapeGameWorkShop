@@ -9,14 +9,17 @@ import AccessCode from "@/components/AccessCode";
 import PlayersInRoom from "@/components/PlayersInRoom";
 import GameOver from "@/components/GameOver";
 import Victory from "@/components/Victory";
+import WelcomeScreen from "@/components/WelcomeScreen";
 import { LaboratoireNavigation } from "@/components/LaboratoireNavigation";
 import { useSocket } from "@/hooks/useSocket";
 import { useGameSocket } from "@/hooks/useGameSocket";
 import { useGameState } from "@/hooks/useGameState";
 import { useRooms } from "@/hooks/useRooms";
+import { useState } from "react";
 
 
 export default function Home() {
+  const [showWelcome, setShowWelcome] = useState(true);
   const { socket } = useSocket();
   
   // Gestion centralisée de tous les états du jeu
@@ -62,6 +65,8 @@ export default function Home() {
     showModal,
     addToInventory,
     handleAccessGranted,
+    codeLaboObtenu,
+    codeGeneralObtenu,
   } = useGameState();
 
   // Gestion des événements Socket.io
@@ -84,9 +89,16 @@ export default function Home() {
     setCurrentCasierNumber,
     accesAdmin,
     inventory,
+    codeLaboObtenu,
+    codeGeneralObtenu,
   });
 
   const currentRoom = rooms[currentRoomIndex];
+
+  // Écran d'accueil avec le code 113
+  if (showWelcome) {
+    return <WelcomeScreen onComplete={() => setShowWelcome(false)} />;
+  }
 
   // Écran de code d'accès
   if (!accessGranted) {
