@@ -37,6 +37,18 @@ interface GameState {
   accesAdmin: boolean;
   setAccesAdmin: (val: boolean) => void;
 
+  jaugesResolues: boolean;
+  setJaugesResolues: (val:boolean) => void;
+
+  // --- Solutions des énigmes ---
+  codeEquationRu: number;
+  codeEquationS: number;
+  codeEquationU: number;
+
+  // --- Obtention des codes pour porte sécurisée ---
+  codeLaboObtenu: boolean;
+  setCodeLaboObtenu: (val:boolean) => void;
+
   // --- États des joueurs et communication ---
   players: any[];
   setPlayers: (players: any[]) => void;
@@ -106,6 +118,19 @@ export const useGameState = create<GameState>((set, get) => ({
   accesAdmin: false,
   setAccesAdmin: (val) => set({ accesAdmin: val }),
 
+  jaugesResolues: false,
+  setJaugesResolues: (val) => set({ jaugesResolues: val }),
+
+  // --- Solutions des énigmes ---
+  codeEquationRu: 5,
+  codeEquationS: 8,
+  codeEquationU: 2,
+
+  // --- Obtention des codes pour porte sécurisée ---
+  codeLaboObtenu: false,
+  setCodeLaboObtenu: (val) => set({ codeLaboObtenu: val}),
+
+
   // --- États des joueurs et communication ---
   players: [],
   setPlayers: (players) => set({ players }),
@@ -157,6 +182,7 @@ export const useGameState = create<GameState>((set, get) => ({
       inventory: [],
       gameEnded: false,
       disjoncteurResolu: false,
+      jaugesResolues: false,
       casiersResolu: false,
       casiersProgress: { current: 0, total: 5 },
       currentCasierNumber: "243",

@@ -8,8 +8,11 @@ interface ServerGameState {
   timeLeft: number;
   inventory: string[];
   disjoncteurResolu: boolean;
+  jaugesResolues: boolean;
   accesAdmin: boolean;
   gameEnded: boolean;
+
+  codeLabo: boolean;
 }
 
 interface HelpMessageData {
@@ -22,14 +25,20 @@ export const useGameSocket = (socket: Socket | null) => {
   const {
     setTimeLeft,
     setInventory,
+
     setDisjoncteurResolu,
+    setJaugesResolues,
     setAccesAdmin,
+    
     setGameEnded,
     setPlayers,
     setChatMessages,
+    
     setHelpMessages,
     setTotalHelpUsed,
     setHelpCooldown,
+
+    setCodeLaboObtenu
   } = useGameState();
 
   useEffect(() => {
@@ -40,8 +49,11 @@ export const useGameSocket = (socket: Socket | null) => {
       setTimeLeft(state.timeLeft);
       setInventory(state.inventory);
       setDisjoncteurResolu(state.disjoncteurResolu);
+      setJaugesResolues(state.jaugesResolues);
       setAccesAdmin(state.accesAdmin);
       setGameEnded(state.gameEnded);
+
+      setCodeLaboObtenu(state.codeLabo);
     });
 
     // --- Players list ---
@@ -83,13 +95,19 @@ export const useGameSocket = (socket: Socket | null) => {
     socket,
     setTimeLeft,
     setInventory,
+
     setDisjoncteurResolu,
+    setJaugesResolues,
     setAccesAdmin,
+    
     setGameEnded,
     setPlayers,
     setChatMessages,
+    
     setHelpMessages,
     setTotalHelpUsed,
     setHelpCooldown,
+
+    setCodeLaboObtenu
   ]);
 };

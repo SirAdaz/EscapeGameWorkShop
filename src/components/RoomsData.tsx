@@ -42,6 +42,8 @@ export interface RoomsDataProps {
   setCurrentCasierNumber: (number: string | null) => void;
   accesAdmin: boolean;
   inventory: string[];
+
+  codeLaboObtenu: boolean;
 }
 
 export const createRoomsData = ({
@@ -49,7 +51,7 @@ export const createRoomsData = ({
   setChatMessages,
   socket,
   showModal,
-    addToInventory,
+  addToInventory,
   setAccesAdmin,
   setCasiersResolu,
   disjoncteurResolu,
@@ -60,17 +62,18 @@ export const createRoomsData = ({
   setCurrentCasierNumber,
   accesAdmin,
   inventory,
+  codeLaboObtenu
 }: RoomsDataProps): Room[] => {
   const rooms: Room[] = [
-    createHallPrincipal(setCurrentRoomIndex, setChatMessages, socket),
+    createHallPrincipal(setCurrentRoomIndex, setChatMessages, socket, disjoncteurResolu),
     createSalleServeur(
       setCurrentRoomIndex,
       setChatMessages,
       socket,
       showModal,
       addToInventory,
-      accesAdmin,
-      disjoncteurResolu
+      disjoncteurResolu,
+      accesAdmin
     ),
     createSalleLaboratoire(
       showModal,
@@ -110,7 +113,8 @@ export const createRoomsData = ({
     ),
     createSalleLaboratoireNiveau2(
       setChatMessages,
-      showModal
+      showModal,
+      codeLaboObtenu
     )
   ];
 

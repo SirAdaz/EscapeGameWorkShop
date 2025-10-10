@@ -35,10 +35,13 @@ export default function Modal({ isOpen, content, onClose, onVictory }: ModalProp
                         content === "OrdinateurServeur" && <OrdinateurServerModal />
                     }
                     {
-                      content === "SalleSecurisee" && <SalleSecuriseeModal onVictory={onVictory} />
+                        content === "SalleSecurisee" && <SalleSecuriseeModal onVictory={onVictory} />
                     }
                     {
-                      content === "jauges_equation" && <JaugesModal/>
+                        content === "jauges_equation" && <JaugesModal/>
+                    }
+                    {
+                        content === "jauges_confirmation" && <div>La porte est dévérouillée, Vous récupérez un morceau de code dans votre inventaire...</div>
                     }
                     {
                         content === "Fioles" && <Fiole onClose={onClose}/>
