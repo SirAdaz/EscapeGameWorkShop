@@ -33,7 +33,13 @@ export interface RoomsDataProps {
   showModal: (content: string) => void;
   addToInventory: (item: string) => void;
   setAccesAdmin: (admin: boolean) => void;
+  setCasiersResolu: (val: boolean) => void;
   disjoncteurResolu: boolean;
+  casiersResolu: boolean;
+  casiersProgress: { current: number; total: number };
+  setCasiersProgress: (progress: { current: number; total: number }) => void;
+  currentCasierNumber: string | null;
+  setCurrentCasierNumber: (number: string | null) => void;
   accesAdmin: boolean;
   inventory: string[];
 
@@ -47,7 +53,13 @@ export const createRoomsData = ({
   showModal,
   addToInventory,
   setAccesAdmin,
+  setCasiersResolu,
   disjoncteurResolu,
+  casiersResolu,
+  casiersProgress,
+  setCasiersProgress,
+  currentCasierNumber,
+  setCurrentCasierNumber,
   accesAdmin,
   inventory,
   codeLaboObtenu
@@ -65,7 +77,8 @@ export const createRoomsData = ({
     ),
     createSalleLaboratoire(
       showModal,
-      addToInventory
+      addToInventory,
+      false
     ),
     createSalleArchives(
       setCurrentRoomIndex,
@@ -79,7 +92,13 @@ export const createRoomsData = ({
       setChatMessages,
       socket,
       showModal,
-      addToInventory
+      addToInventory,
+      setCasiersResolu,
+      casiersResolu,
+      casiersProgress,
+      setCasiersProgress,
+      currentCasierNumber,
+      setCurrentCasierNumber
     ),
     createSalleSecurisee(
       setCurrentRoomIndex,

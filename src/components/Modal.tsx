@@ -8,6 +8,7 @@ import RecupereFioleLabo from "@/components/enigmes/RecupereFioleLabo";
 import JaugesModal from './enigmes/modalsLabo/JaugesModal';
 import EquationRapportModal from './enigmes/EquationRapportModal';
 import TableauEqModal from './rooms/TableauEqModal';
+import FauxCasierModal from './enigmes/FauxCasierModal';
 
 interface ModalProps {
   isOpen: boolean;
@@ -55,6 +56,9 @@ export default function Modal({ isOpen, content, onClose, onVictory }: ModalProp
                     }
                     {
                         content === "RecupereFioleLabo" && <RecupereFioleLabo resolu={true} />
+                    }
+                    {
+                        content === "FauxCasier" && <FauxCasierModal/>
                     }
                 </div>
                 <div className="flex justify-end">
