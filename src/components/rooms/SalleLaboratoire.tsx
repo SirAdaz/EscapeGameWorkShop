@@ -19,20 +19,20 @@ export const createSalleLaboratoire = (
       label: "Station de chimie",
       action: () => {
         showModal("Fioles");
-      }
-    },
-      {
-          id: "recCle",
-          x: 40,
-          y: 57,
-          width: 5,
-          height: 10,
-          label: "Station de chimie",
-          action: () =>{
-              addToInventory("Clé du laboratoire");
-              showModal("RecupereFioleLabo");
-          }
       },
+    },
+    {
+      id: "recCle",
+      x: 40,
+      y: 57,
+      width: 5,
+      height: 10,
+      label: "Station de chimie",
+      action: () => {
+        addToInventory("Clé du laboratoire");
+        showModal("RecupereFioleLabo");
+      },
+    },
     {
       id: "equation",
       x: 72,

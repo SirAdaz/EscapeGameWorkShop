@@ -30,7 +30,7 @@ export const createSalleVestiaires = (
       if (newProgress >= sequence.length) {
         // Séquence complète
         setCasiersResolu(true);
-        addToInventory("clef");
+        addToInventory("Code des vestiaires [7]");
         if (socket) socket.emit("setCasiersResolu", true);
         setCurrentCasierNumber(null);
       } else {
@@ -198,17 +198,6 @@ export const createSalleVestiaires = (
       width: 4,
       height: 30,
       label: "Faux Casier 8",
-      action: () => {
-        showModal("FauxCasier");
-      }
-    },
-    {
-      id: "FauxCasier9",
-      x: 83,
-      y: 22,
-      width: 6,
-      height: 33,
-      label: "Faux Casier 9",
       action: () => {
         showModal("FauxCasier");
       }
