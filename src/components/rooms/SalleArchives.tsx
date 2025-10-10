@@ -37,5 +37,17 @@ export const createSalleArchives = (
           "DOSSIER PRODUITS CHIMIQUES"
         ),
     },
+        {
+      id: "code_imprimante",
+      x: 5,
+      y: 75,
+      width: 20,
+      height: 25,
+      label: "Feuille retournée dans l'imprimante",
+      action: () =>
+        showModal(
+          "archive_feuille_code"
+        ),
+    },
   ],
 });

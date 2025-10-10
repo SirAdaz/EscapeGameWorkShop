@@ -8,6 +8,7 @@ import RecupereFioleLabo from "@/components/enigmes/RecupereFioleLabo";
 import JaugesModal from './enigmes/modalsLabo/JaugesModal';
 import EquationRapportModal from './enigmes/EquationRapportModal';
 import TableauEqModal from './rooms/TableauEqModal';
+import ImprimanteModal from './enigmes/modalsArchive/ImprimanteModal';
 
 interface ModalProps {
   isOpen: boolean;
@@ -31,6 +32,9 @@ export default function Modal({ isOpen, content, onClose, onVictory }: ModalProp
                     }
                     {
                         content === "DOSSIER EQUATION" && <EquationRapportModal/>
+                    }
+                    {
+                        content === "archive_feuille_code" && <ImprimanteModal/>
                     }
                     {
                         content === "Casiers" && <CasiersModal />
