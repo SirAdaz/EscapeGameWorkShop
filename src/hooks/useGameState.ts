@@ -57,7 +57,7 @@ interface GameState {
   setPlayers: (players: any[]) => void;
 
   chatMessages: any[];
-  setChatMessages: (messages: any[]) => void;
+  setChatMessages: (messages: any[] | ((prev: any[]) => any[])) => void;
 
   // --- États d'aide globale ---
   helpMessages: { [key: string]: string[] };
@@ -142,7 +142,13 @@ export const useGameState = create<GameState>((set, get) => ({
   setPlayers: (players) => set({ players }),
 
   chatMessages: [],
-  setChatMessages: (messages) => set({ chatMessages: messages }),
+  setChatMessages: (messages) => {
+    if (typeof messages === 'function') {
+      set((state) => ({ chatMessages: messages(state.chatMessages) }));
+    } else {
+      set({ chatMessages: messages });
+    }
+  },
 
   // --- États d'aide globale ---
   helpMessages: {},

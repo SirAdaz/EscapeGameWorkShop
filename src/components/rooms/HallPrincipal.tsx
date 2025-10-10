@@ -108,7 +108,7 @@ export const createHallPrincipal = (
       height: 25,
       label: "Porte vers Salle Sécurisée",
       action: () => {
-        if (socket && (disjoncteurResolu || true)) { // Temporaire pour test
+        if (socket && (disjoncteurResolu)) { 
           if (codeGeneralObtenu) {
             setChatMessages([]);
             setCurrentRoomIndex(5);

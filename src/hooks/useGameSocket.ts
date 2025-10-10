@@ -66,7 +66,7 @@ export const useGameSocket = (socket: Socket | null) => {
 
     // --- Chat messages ---
     socket.on('chatMessage', (message: any) => {
-      setChatMessages((prev: any) => [...prev, message]);
+      setChatMessages((prev: any[]) => [...(prev || []), message]);
     });
 
     // --- Help system ---
