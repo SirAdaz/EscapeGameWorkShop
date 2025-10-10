@@ -21,6 +21,7 @@ let gameState = {
   gameEnded: false,
 
   codeLabo: false,
+  codeGeneral: false,
 };
 
 // État des aides globales
@@ -130,6 +131,11 @@ io.on('connection', (socket) => {
   
   socket.on('setAccesAdmin', (value) => {
     gameState.accesAdmin = value;
+    io.emit('gameState', gameState);
+  });
+  
+  socket.on('setCodeGeneralObtenu', (value) => {
+    gameState.codeGeneral = value;
     io.emit('gameState', gameState);
   });
   

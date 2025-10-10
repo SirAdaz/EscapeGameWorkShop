@@ -4,11 +4,13 @@ import OrdinateurServerModal from './enigmes/OrdinateurServerModal';
 import SalleSecuriseeModal from './enigmes/SalleSecuriseeModal';
 import DisjoncteurModal from './rooms/DisjoncteurModal';
 import Fiole from "@/components/Fiole";
-import RecupereFioleLabo from "@/components/enigmes/RecupereFioleLabo";
 import JaugesModal from './enigmes/modalsLabo/JaugesModal';
 import EquationRapportModal from './enigmes/EquationRapportModal';
 import TableauEqModal from './rooms/TableauEqModal';
 import ImprimanteModal from './enigmes/modalsArchive/ImprimanteModal';
+import Indice4Fiole from "@/components/enigmes/Indice4Fiole";
+import FauxCasierModal from './enigmes/FauxCasierModal';
+import PorteSecuriseeModal from './enigmes/PorteSecuriseeModal';
 
 interface ModalProps {
   isOpen: boolean;
@@ -22,7 +24,7 @@ export default function Modal({ isOpen, content, onClose, onVictory }: ModalProp
 
     return (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-            <div className="bg-base-300 bg-black rounded-lg shadow-2xl max-w-2xl w-full mx-4 p-6">
+            <div className="bg-black rounded-lg shadow-2xl max-w-2xl w-full mx-4 p-6">
                 <div className="whitespace-pre-line text-base-content mb-6">
                     {
                         content === "disjoncteur" && <DisjoncteurModal/>
@@ -43,22 +45,19 @@ export default function Modal({ isOpen, content, onClose, onVictory }: ModalProp
                         content === "OrdinateurServeur" && <OrdinateurServerModal />
                     }
                     {
-                        content === "SalleSecurisee" && <SalleSecuriseeModal onVictory={onVictory} />
+                      content === "SalleSecurisee" && <SalleSecuriseeModal onVictory={onVictory} />
                     }
                     {
-                        content === "jauges_equation" && <JaugesModal/>
-                    }
-                    {
-                        content === "jauges_confirmation" && <div>La porte est dévérouillée, Vous récupérez un morceau de code dans votre inventaire...</div>
-                    }
-                    {
-                        content === "tableauNiv2" && <TableauEqModal/>
+                      content === "jauges_equation" && <JaugesModal/>
                     }
                     {
                         content === "Fioles" && <Fiole onClose={onClose}/>
                     }
                     {
-                        content === "RecupereFioleLabo" && <RecupereFioleLabo resolu={true} />
+                        content === "Indice4Fiole" && <Indice4Fiole onRetour={onClose}/>
+                    }
+                    {
+                        content === "PorteSecuriseeModal" && <PorteSecuriseeModal/>
                     }
                 </div>
                 <div className="flex justify-end">

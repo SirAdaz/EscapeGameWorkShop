@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {createSalleLaboratoire} from "@/components/rooms/SalleLaboratoire";
+import {useSocket} from "@/hooks/useSocket";
 
 export default function Fiole({onClose}: {onClose: () => void}) {
   const [fiole1, setFiole1] = useState(false);
@@ -36,9 +36,7 @@ export default function Fiole({onClose}: {onClose: () => void}) {
   const [indice3, setIndice3] = useState(false);
   const [hoveredIndice3, setHoveredIndice3] = useState(false);
   const [popUpIndice3, setPopUpIndice3] = useState(false);
-  const [indice4, setIndice4] = useState(false);
-  const [hoveredIndice4, setHoveredIndice4] = useState(false);
-  const [resolu, setResolu] = useState(false);
+  const {socket } = useSocket();
 
 
 
@@ -420,20 +418,33 @@ export default function Fiole({onClose}: {onClose: () => void}) {
             </button>
             <button
                 onClick={() => {
-                  if (
-                    fiole1 && fiole3 && fiole11 &&
-                    !fiole2 && !fiole4 && !fiole5 && !fiole6 && !fiole7 && !fiole8 && !fiole9 && !fiole10 && !fiole12
-                  ) {
-                    setValidationMsg("Vous avez récupéré une fiole pour faire fondre le casier !");
-                    setResolu(true);
-                  } else {
-                    setValidationMsg("Ce n'est pas la bonne formule");
-                  }
+                    if (
+                        fiole1 && fiole3 && fiole11 &&
+                        !fiole2 && !fiole4 && !fiole5 && !fiole6 &&
+                        !fiole7 && !fiole8 && !fiole9 && !fiole10 && !fiole12
+                    ) {
+                        setValidationMsg("Vous avez récupéré une fiole pour faire fondre le casier !");
+                        if (socket) {
+                            socket.emit("addToInventory", "Code fiole [5]");
+                        }
+                    } else {
+                        setValidationMsg("Ce n'est pas la bonne formule");
+                    }
                 }}
-                style={{ marginTop: "20px", padding: "10px 20px", fontSize: "1.2rem", borderRadius: "8px", background: "#fff", border: "none", cursor: "pointer", color: "black" }}
+                style={{
+                    marginTop: "20px",
+                    padding: "10px 20px",
+                    fontSize: "1.2rem",
+                    borderRadius: "8px",
+                    background: "#fff",
+                    border: "none",
+                    cursor: "pointer",
+                    color: "black"
+                }}
             >
                 Valider
             </button>
+
         </div>
         {validationMsg && (
           <div style={{ marginTop: "20px", fontSize: "1.2rem", color: validationMsg === "Vous avez récupéré une fiole pour faire fondre le casier !" ? "#22c55e" : "#ef4444", fontWeight: "bold" }}>
