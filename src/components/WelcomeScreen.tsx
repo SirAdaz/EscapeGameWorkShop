@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 interface WelcomeScreenProps {
   onComplete: () => void;
@@ -8,13 +8,16 @@ interface WelcomeScreenProps {
 
 export default function WelcomeScreen({ onComplete }: WelcomeScreenProps) {
   const [countdown, setCountdown] = useState(10);
+  const onCompleteRef = useRef(onComplete);
+
+  onCompleteRef.current = onComplete;
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          onComplete();
+          onCompleteRef.current();
           return 0;
         }
         return prev - 1;
@@ -22,7 +25,7 @@ export default function WelcomeScreen({ onComplete }: WelcomeScreenProps) {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [onComplete]);
+  }, []); 
 
   return (
     <main className="h-screen w-screen bg-gradient-to-br from-black via-red-950 to-black flex items-center justify-center">
