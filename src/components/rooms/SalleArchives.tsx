@@ -19,10 +19,10 @@ export const createSalleArchives = (
       y: 52,
       width: 6,
       height: 10,
-      label: 'Dossier "Équation_C_Succès"',
+      label: 'Dossier "Equations"',
       action: () =>
         showModal(
-          '📁 DOSSIER ÉQUATION\n\nFichier de sauvegarde : "equation_backup.txt"\nAccès via salle serveur\n\nContient les détails de l\'équation réussie !'
+          'DOSSIER EQUATION'
         ),
     },
     {
