@@ -3,6 +3,7 @@ import { Room } from "../RoomsData";
 export const createSalleLaboratoireNiveau2 = (
   setChatMessages: (messages: any[]) => void,
   showModal: (content: string) => void,
+  codeLaboObtenu:boolean
 ): Room => ({
   id: 8,
   name: "Salle Laboratoire - Détail",
@@ -29,10 +30,13 @@ export const createSalleLaboratoireNiveau2 = (
       width: 8,
       height: 30,
       label: "Armoire vérouillée",
-      action: () =>
-        showModal(
-          'jauges_equation'
-        ),
+      action: () => {
+        if (codeLaboObtenu) {
+          showModal('jauges_confirmation')
+        } else {
+          showModal('jauges_equation')
+        }
+      }
     },
   ],
 });

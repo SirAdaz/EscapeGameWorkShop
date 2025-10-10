@@ -6,6 +6,7 @@ import DisjoncteurModal from './rooms/DisjoncteurModal';
 import Fiole from "@/components/Fiole";
 import RecupereFioleLabo from "@/components/enigmes/RecupereFioleLabo";
 import JaugesModal from './enigmes/modalsLabo/JaugesModal';
+import FauxCasierModal from './enigmes/FauxCasierModal';
 
 interface ModalProps {
   isOpen: boolean;
@@ -34,16 +35,22 @@ export default function Modal({ isOpen, content, onClose, onVictory }: ModalProp
                         content === "OrdinateurServeur" && <OrdinateurServerModal />
                     }
                     {
-                      content === "SalleSecurisee" && <SalleSecuriseeModal onVictory={onVictory} />
+                        content === "SalleSecurisee" && <SalleSecuriseeModal onVictory={onVictory} />
                     }
                     {
-                      content === "jauges_equation" && <JaugesModal/>
+                        content === "jauges_equation" && <JaugesModal/>
+                    }
+                    {
+                        content === "jauges_confirmation" && <div>La porte est dévérouillée, Vous récupérez un morceau de code dans votre inventaire...</div>
                     }
                     {
                         content === "Fioles" && <Fiole onClose={onClose}/>
                     }
                     {
                         content === "RecupereFioleLabo" && <RecupereFioleLabo resolu={true} />
+                    }
+                    {
+                        content === "FauxCasier" && <FauxCasierModal/>
                     }
                 </div>
                 <div className="flex justify-end">

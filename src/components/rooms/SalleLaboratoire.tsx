@@ -2,8 +2,7 @@ import { Room } from "../RoomsData";
 
 export const createSalleLaboratoire = (
   showModal: (content: string) => void,
-  addToInventory: (item: string) => void,
-  resolu: boolean
+  addToInventory: (item: string) => void
 ): Room => ({
   id: 3,
   name: "Salle Laboratoire",
@@ -19,10 +18,7 @@ export const createSalleLaboratoire = (
       height: 20,
       label: "Station de chimie",
       action: () => {
-          if (resolu) {
-              addToInventory("Fiole pour faire fondre des matériaux");
-          }
-          showModal("Fioles");
+        showModal("Fioles");
       }
     },
       {

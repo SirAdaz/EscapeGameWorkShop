@@ -15,6 +15,9 @@ interface GameState {
   gameEnded: boolean;
   setGameEnded: (val: boolean) => void;
 
+  gameWon: boolean;
+  setGameWon: (val: boolean) => void;
+
   accessGranted: boolean;
   setAccessGranted: (val: boolean) => void;
 
@@ -22,8 +25,29 @@ interface GameState {
   disjoncteurResolu: boolean;
   setDisjoncteurResolu: (val: boolean) => void;
 
+  casiersResolu: boolean;
+  setCasiersResolu: (val: boolean) => void;
+
+  casiersProgress: { current: number; total: number };
+  setCasiersProgress: (progress: { current: number; total: number }) => void;
+
+  currentCasierNumber: string | null;
+  setCurrentCasierNumber: (number: string | null) => void;
+
   accesAdmin: boolean;
   setAccesAdmin: (val: boolean) => void;
+
+  jaugesResolues: boolean;
+  setJaugesResolues: (val:boolean) => void;
+
+  // --- Solutions des énigmes ---
+  codeEquationRu: number;
+  codeEquationS: number;
+  codeEquationU: number;
+
+  // --- Obtention des codes pour porte sécurisée ---
+  codeLaboObtenu: boolean;
+  setCodeLaboObtenu: (val:boolean) => void;
 
   // --- États des joueurs et communication ---
   players: any[];
@@ -72,6 +96,9 @@ export const useGameState = create<GameState>((set, get) => ({
   gameEnded: false,
   setGameEnded: (val) => set({ gameEnded: val }),
 
+  gameWon: false,
+  setGameWon: (val) => set({ gameWon: val }),
+
   accessGranted: false,
   setAccessGranted: (val) => set({ accessGranted: val }),
 
@@ -79,8 +106,30 @@ export const useGameState = create<GameState>((set, get) => ({
   disjoncteurResolu: false,
   setDisjoncteurResolu: (val) => set({ disjoncteurResolu: val }),
 
+  casiersResolu: false,
+  setCasiersResolu: (val) => set({ casiersResolu: val }),
+
+  casiersProgress: { current: 0, total: 5 },
+  setCasiersProgress: (progress) => set({ casiersProgress: progress }),
+
+  currentCasierNumber: "243",
+  setCurrentCasierNumber: (number) => set({ currentCasierNumber: number }),
+
   accesAdmin: false,
   setAccesAdmin: (val) => set({ accesAdmin: val }),
+
+  jaugesResolues: false,
+  setJaugesResolues: (val) => set({ jaugesResolues: val }),
+
+  // --- Solutions des énigmes ---
+  codeEquationRu: 5,
+  codeEquationS: 8,
+  codeEquationU: 2,
+
+  // --- Obtention des codes pour porte sécurisée ---
+  codeLaboObtenu: false,
+  setCodeLaboObtenu: (val) => set({ codeLaboObtenu: val}),
+
 
   // --- États des joueurs et communication ---
   players: [],
@@ -133,6 +182,10 @@ export const useGameState = create<GameState>((set, get) => ({
       inventory: [],
       gameEnded: false,
       disjoncteurResolu: false,
+      jaugesResolues: false,
+      casiersResolu: false,
+      casiersProgress: { current: 0, total: 5 },
+      currentCasierNumber: "243",
       accesAdmin: false,
       initialHelpCooldown: initialCooldown,
     });

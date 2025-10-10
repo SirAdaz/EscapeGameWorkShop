@@ -33,9 +33,17 @@ export interface RoomsDataProps {
   showModal: (content: string) => void;
   addToInventory: (item: string) => void;
   setAccesAdmin: (admin: boolean) => void;
+  setCasiersResolu: (val: boolean) => void;
   disjoncteurResolu: boolean;
+  casiersResolu: boolean;
+  casiersProgress: { current: number; total: number };
+  setCasiersProgress: (progress: { current: number; total: number }) => void;
+  currentCasierNumber: string | null;
+  setCurrentCasierNumber: (number: string | null) => void;
   accesAdmin: boolean;
   inventory: string[];
+
+  codeLaboObtenu: boolean;
 }
 
 export const createRoomsData = ({
@@ -43,26 +51,34 @@ export const createRoomsData = ({
   setChatMessages,
   socket,
   showModal,
-    addToInventory,
+  addToInventory,
   setAccesAdmin,
+  setCasiersResolu,
   disjoncteurResolu,
+  casiersResolu,
+  casiersProgress,
+  setCasiersProgress,
+  currentCasierNumber,
+  setCurrentCasierNumber,
   accesAdmin,
   inventory,
+  codeLaboObtenu
 }: RoomsDataProps): Room[] => {
   const rooms: Room[] = [
-    createHallPrincipal(setCurrentRoomIndex, setChatMessages, socket),
+    createHallPrincipal(setCurrentRoomIndex, setChatMessages, socket, disjoncteurResolu),
     createSalleServeur(
       setCurrentRoomIndex,
       setChatMessages,
       socket,
       showModal,
       addToInventory,
-      // disjoncteurResolu,
+      disjoncteurResolu,
       accesAdmin
     ),
     createSalleLaboratoire(
       showModal,
-      addToInventory
+      addToInventory,
+      false
     ),
     createSalleArchives(
       setCurrentRoomIndex,
@@ -76,7 +92,13 @@ export const createRoomsData = ({
       setChatMessages,
       socket,
       showModal,
-      addToInventory
+      addToInventory,
+      setCasiersResolu,
+      casiersResolu,
+      casiersProgress,
+      setCasiersProgress,
+      currentCasierNumber,
+      setCurrentCasierNumber
     ),
     createSalleSecurisee(
       setCurrentRoomIndex,
@@ -91,7 +113,8 @@ export const createRoomsData = ({
     ),
     createSalleLaboratoireNiveau2(
       setChatMessages,
-      showModal
+      showModal,
+      codeLaboObtenu
     )
   ];
 
