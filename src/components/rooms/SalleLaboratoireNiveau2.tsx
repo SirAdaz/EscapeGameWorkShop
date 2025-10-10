@@ -20,7 +20,7 @@ export const createSalleLaboratoireNiveau2 = (
       label: "Tableau d'équations d'élément périodique",
       action: () =>
         showModal(
-          'tableauNiv2'
+          'tabNiv2'
         ),
     },
     {

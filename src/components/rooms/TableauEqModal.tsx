@@ -1,3 +1,5 @@
+'use client'
+
 export default function TableauEqModal() {
     return (
         <div id="tableau" className="rounded-lg bg-gray-700 text-gray-100 flex justify-center">

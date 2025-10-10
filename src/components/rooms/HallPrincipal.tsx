@@ -56,7 +56,7 @@ export const createHallPrincipal = (
       action: () => {
         setChatMessages([]);
         if (socket && disjoncteurResolu) {
-          setCurrentRoomIndex(4);
+          setCurrentRoomIndex(3);
           socket.emit("playerMove", { room: "Salle Archives" });
         }
       },

@@ -51,6 +51,9 @@ export default function Modal({ isOpen, content, onClose, onVictory }: ModalProp
                       content === "jauges_equation" && <JaugesModal/>
                     }
                     {
+                        content === "tabNiv2" && <TableauEqModal/>
+                    }
+                    {
                         content === "Fioles" && <Fiole onClose={onClose}/>
                     }
                     {
@@ -58,6 +61,9 @@ export default function Modal({ isOpen, content, onClose, onVictory }: ModalProp
                     }
                     {
                         content === "PorteSecuriseeModal" && <PorteSecuriseeModal/>
+                    }
+                    {
+                        content === "FauxCasier" && <FauxCasierModal/>
                     }
                 </div>
                 <div className="flex justify-end">
