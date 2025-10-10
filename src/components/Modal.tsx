@@ -6,6 +6,8 @@ import DisjoncteurModal from './rooms/DisjoncteurModal';
 import Fiole from "@/components/Fiole";
 import RecupereFioleLabo from "@/components/enigmes/RecupereFioleLabo";
 import JaugesModal from './enigmes/modalsLabo/JaugesModal';
+import EquationRapportModal from './enigmes/EquationRapportModal';
+import TableauEqModal from './rooms/TableauEqModal';
 
 interface ModalProps {
   isOpen: boolean;
@@ -28,6 +30,9 @@ export default function Modal({ isOpen, content, onClose, onVictory }: ModalProp
                         content === "DOSSIER PRODUITS CHIMIQUES" && <ProduitsChimiquesRapportModal />
                     }
                     {
+                        content === "DOSSIER EQUATION" && <EquationRapportModal/>
+                    }
+                    {
                         content === "Casiers" && <CasiersModal />
                     }
                     {
@@ -41,6 +46,9 @@ export default function Modal({ isOpen, content, onClose, onVictory }: ModalProp
                     }
                     {
                         content === "jauges_confirmation" && <div>La porte est dévérouillée, Vous récupérez un morceau de code dans votre inventaire...</div>
+                    }
+                    {
+                        content === "tableauNiv2" && <TableauEqModal/>
                     }
                     {
                         content === "Fioles" && <Fiole onClose={onClose}/>

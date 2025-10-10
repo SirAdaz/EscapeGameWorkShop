@@ -41,17 +41,18 @@ export default function JaugesModal() {
             setJaugesResolues(true)
             console.log(jaugesResolues)
             if (socket) socket.emit("setJaugesResolues",true)
-            if (socket) socket.emit("addToInventory", "Code du laboratoire [6]")
+            if (socket) socket.emit("addToInventory", "Code des équations [6]")
         }
     }
 
 
     return (
         <div id="panneauJauges" className="w-full h-120 bg-cyan-800 gap-4 flex p-4 rounded-lg flex flex-col">
+            <h2 className="">Des Jauges semblent verrouiller l'armoire...</h2>
             <div className="w-full h-full flex flex-row gap-4">
                 <div className="jaugePanel w-1/3">
                     <div className="w-full bg-gray-800 text-gray-100 text-center rounded-t-full">Ru</div>
-                    <div className="jauge border h-5/6">
+                    <div className="jauge border shade3 h-5/6">
                         {
                             [...Array(10).keys()].map(i => (
                                 <div key={i} className={clsx("fuelcell", {'bg-gray-400':i>valeurRu})}></div>
@@ -71,7 +72,7 @@ export default function JaugesModal() {
                 </div>
                 <div className="jaugePanel w-1/3">
                     <div className="w-full bg-gray-800 text-gray-100 text-center rounded-t-full">S</div>
-                    <div className="jauge border h-5/6">
+                    <div className="jauge border shade3 h-5/6">
                         {
                             [...Array(10).keys()].map(i => (
                                 <div key={i} className={clsx("fuelcell", {'bg-yellow-400':i>valeurS})}></div>
@@ -92,7 +93,7 @@ export default function JaugesModal() {
 
                 <div className="jaugePanel w-1/3">
                     <div className="w-full bg-gray-800 text-gray-100 text-center rounded-t-full">U</div>
-                    <div className="jauge border h-5/6">
+                    <div className="jauge border shade3 h-5/6">
                         {
                             [...Array(10).keys()].map(i => (
                                 <div key={i} className={clsx("fuelcell", {'bg-green-400':i>valeurU})}></div>
